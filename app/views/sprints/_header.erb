@@ -1,0 +1,13 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "jquery-ui-1.8.12.custom.css", :plugin => "redmine_scrum" %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.js" %>
+  <script>
+  	$(function() {
+      jQuery.noConflict();
+      var $j = jQuery;
+  		$j( "#sprint_start_date" ).datepicker();
+  		$j( "#sprint_end_date" ).datepicker();
+  	});
+  </script>
+<% end %>

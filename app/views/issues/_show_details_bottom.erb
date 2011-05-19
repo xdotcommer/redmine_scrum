@@ -1,0 +1,23 @@
+<%# if ["Story", "Tech Debt", "Systems", "Epic"].include? issue.tracker.name  %>
+
+  <tr>
+    <th><%= l :field_sprint %>:</th>
+    <td><%= issue.sprint.try(:name) %></td>
+  </tr>
+  
+  <tr>
+    <th><%= l :field_qa %>:</th>
+    <td><%= issue.qa %></td>
+  </tr>
+
+  <tr>
+    <th><%= l :field_story_points %>:</th>
+    <td><%= issue.estimation.try(:name) %></td>
+  </tr>
+
+  <tr>
+    <th><%= l :field_backlog_rank %>:</th>
+    <td><%= issue.backlog_rank %></td>
+  </tr>
+
+<%# end %>

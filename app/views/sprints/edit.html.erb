@@ -1,0 +1,14 @@
+<h2>Edit Sprint</h2>
+
+<%= render :partial => 'header' %>
+
+<%= error_messages_for :sprint %>
+
+<% form_for @sprint, :url => project_sprint_path(@project, @sprint) do |f| %>
+
+  <%= render :partial => 'form', :locals => { :project => @project, :versions => @versions, :f => f } %>
+  
+  <p>
+    <%= f.submit "Update Sprint" %>
+  </p>
+<% end %>

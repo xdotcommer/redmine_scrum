@@ -1,0 +1,18 @@
+<%# if ["Story", "Tech Debt", "Systems", "Epic"].include? issue.tracker.name  %>
+  <p>
+    <%= form.select :sprint_id, sprints.map {|s| [s.name, s.id]}, :required => true %>
+  </p>
+
+  <p>
+    <%= form.select :qa, Sprint::QA_STATUSES, :required => true %>
+  </p>
+  
+  <p>
+    <%= form.select :estimation_id, estimations.map {|e| [e.name, e.id]}, :required => true %>
+  </p>
+  
+  <p>
+    <%= form.text_field :backlog_rank %>
+  </p>
+  
+<%# end %>

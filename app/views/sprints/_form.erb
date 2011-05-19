@@ -1,0 +1,14 @@
+
+  <%= hidden_field_tag :project_id, project.id %>
+  <p>
+    <%= f.label :start_date %><br>
+    <%= f.text_field :start_date %>
+  </p>
+  <p>
+    <%= f.label :end_date %><br>
+    <%= f.text_field :end_date %>
+  </p>
+  <p>
+    <%= f.label :version %><br>
+    <%= f.select :version_id, versions.map {|version| [version.name, version.id] } %>
+  </p>

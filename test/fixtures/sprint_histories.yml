@@ -1,0 +1,27 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+  status: MyString
+  qa_status: MyString
+  sprint: MyString
+  issue_id: 1
+  issue_number: MyString
+  defect_count: 1
+  comment: 
+  pre_sprint: false
+  post_sprint: false
+  developer: MyString
+  story_points: 1
+two:
+  id: 2
+  status: MyString
+  qa_status: MyString
+  sprint: MyString
+  issue_id: 1
+  issue_number: MyString
+  defect_count: 1
+  comment: 
+  pre_sprint: false
+  post_sprint: false
+  developer: MyString
+  story_points: 1

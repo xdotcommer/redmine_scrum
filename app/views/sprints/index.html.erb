@@ -1,0 +1,104 @@
+<% html_title "Sprint Dashboard" -%>
+
+<% content_for :header_tags do %>
+  <style>
+    table.list tr td { text-align:center;}
+    table.list tr.highlight { background-color: #ccc;}
+  </style>
+<% end %>
+
+<h2>Sprint Dashboard</h2>
+
+<table class="list">
+  <tr>
+    <th>Sprint</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Version</th>
+    <th>Commitments</th>
+    <th>Open<br>Stories</th>
+    <th>Total<br>Stories</th>
+    <th>Open<br>Bugs</th>
+    <th>Total<br>Bugs</th>
+    <th>Actions</th>
+  </tr>
+<% @sprints.each do |sprint| %>
+  <tr class="<%= 'highlight' if this_sprint(sprint) %>">
+    <td><%= link_to sprint.name, edit_project_sprint_path(@project, sprint) %></td>
+    <td><%= sprint.start_date %></td>
+    <td><%= sprint.end_date %></td>
+    <td>
+      <% if sprint.version %>
+        <%= link_to sprint.version.name, edit_project_version_path(@project, sprint.version) %>
+      <% end %>
+    </td>
+    <td>
+      <% if sprint.commitments.count == 0 %>
+        <%= link_to "Setup Sprint", project_sprint_commitments_path(@project, sprint) %>
+      <% else %>
+        <%= link_to "#{sprint.commitments.count}", project_sprint_commitments_path(@project, sprint) %>
+      <% end %>
+    </td>
+    <td>
+      
+      <% if sprint.story_count > 0 %>
+        <%= link_to "#{sprint.open_story_count}", 
+              issues_path(:project_id => @project.id, "group_by" => "category", "set_filter" => "1", 
+              "fields"    => ["sprint_name", "status_id", "tracker_id", ""], 
+              "operators" => {"sprint_name" => "=", "tracker_id" => "=", "status_id" => "o"}, 
+              "values"    => {"sprint_name" => [sprint.name], "tracker_id" => @story_trackers, "status_id"=>["1"]},
+              "query"     => {"column_names" => ["tracker", "status", "priority", "subject", "assigned_to", "backlog_rank"]}) %>
+      <% end %>
+              
+    </td>
+    <td>
+
+      <% if sprint.story_count > 0 %>
+        <%= link_to "#{sprint.story_count}", 
+              issues_path(:project_id => @project.id, 
+              "group_by"  => "category", "set_filter" => "1", 
+              "fields"    => ["sprint_name", "tracker_id"],
+              "order"     => ["priority DESC", "backlog_rank ASC"],
+              "operators" => {"sprint_name"  => "=", "tracker_id"  => "="},
+              "values"    => {"sprint_name"  => [sprint.name], "tracker_id" => @story_trackers}, 
+              "query"     => {"column_names" => ["tracker", "status", "priority", "subject", "assigned_to", "backlog_rank"]}) %>
+
+      <% end %>
+
+    </td>
+    <td>
+      
+      <% if sprint.bug_count > 0 %>
+        <%= link_to "#{sprint.open_bug_count}", 
+              issues_path(:project_id => @project.id,
+              "group_by"  => "category", "set_filter" => "1", 
+              "fields"    => ["sprint_name", "tracker_id", "status_id", ""],
+              "order"     => ["priority DESC", "backlog_rank ASC"],
+              "operators" => {"sprint_name" => "=", "tracker_id" => "=", "status_id" => "o"}, 
+              "values"    => {"sprint_name"  => [sprint.name], "tracker_id" => @bug_trackers, "status_id"=>["1"]}, 
+              "query"     => {"column_names" => ["tracker", "status", "priority", "subject", "assigned_to", "backlog_rank"]}) %>
+      <% end %>
+
+    </td>
+    <td>
+
+      <% if sprint.bug_count > 0 %>
+        <%= link_to "#{sprint.bug_count}", 
+              issues_path(:project_id => @project.id,
+              "group_by"  => "category", "set_filter" => "1", 
+              "fields"    => ["sprint_name", "tracker_id"],
+              "order"     => ["priority DESC", "backlog_rank ASC"],
+              "operators" => {"sprint_name"  => "=", "tracker_id"  => "="},
+              "values"    => {"sprint_name"  => [sprint.name], "tracker_id" => @bug_trackers}, 
+              "query"     => {"column_names" => ["tracker", "status", "priority", "subject", "assigned_to", "backlog_rank"]}) %>
+      <% end %>
+    </td>
+    <td><%= link_to "Delete", project_sprint_path(@project, sprint, :method => :delete) %></td>
+  </tr>
+<% end %>
+</table>
+
+<br>
+<br>
+
+<%= link_to "New Sprint", new_project_sprint_path(@project) %> | <%= link_to "Show All Sprints", project_sprints_path(@project, :all => true) %>

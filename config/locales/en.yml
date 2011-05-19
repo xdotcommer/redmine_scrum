@@ -1,0 +1,9 @@
+# English strings go here for Rails i18n
+en:
+  field_end_date: End Date
+  field_sprint: Sprint
+  field_estimation: Estimation
+  field_sprint_name: Sprint Name
+  field_story_points: Story Points
+  field_backlog_rank: Backlog Rank
+  field_qa: QA

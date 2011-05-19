@@ -1,0 +1,28 @@
+<tr class="<%= 'red' if commitment.new_record? %>">
+  <%= f.hidden_field :issue_id, :value => commitment.story.id %>
+  <td>
+    <%= link_to commitment.story.id, issue_path(:project_id => @project, :id => commitment.story.id) %>
+  </td>
+  <td class="left">
+    <%= link_to commitment.story.subject, "#", :id => "link_#{dom_id(commitment.story)}" %>
+  </td>
+  <td>
+    <%= f.select :sprint_id, Sprint.all.map {|u| [u.name, u.id] }, :selected => commitment.story.sprint_id %>
+  </td>
+  <td>
+    <%= f.select :estimation_id, Estimation.all.map {|u| [u.name, u.id] }, :selected => commitment.story.estimation_id %>
+  </td>
+  <td>
+    <%= f.select :user_id, User.active.map {|u| [u.name, u.id] }, :selected => commitment.story.assigned_to_id, :include_blank => true %>
+  </td>
+</tr>
+
+<tr style="display:none" id="<%= dom_id(commitment.story) %>">
+  <td><%= link_to "edit", edit_issue_path(:project_id => @project, :id => commitment.story.id) %></td>
+  <td class="left">
+      <%= simple_format commitment.story.description %>
+  </td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr>

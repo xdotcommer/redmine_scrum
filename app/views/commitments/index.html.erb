@@ -1,0 +1,54 @@
+<% html_title "#{@sprint.name} Commitments" -%>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+  
+  <script type="text/javascript" charset="utf-8">
+    $(function() {
+      jQuery.noConflict();
+    	var $j = jQuery;
+    	
+    	<% @commitments.map(&:story).each do |story| %>
+    	  $j("#link_<%= dom_id(story) %>").click(function() {
+    	    $j("#<%= dom_id(story) %>").toggle();
+    	  });
+    	<% end %>
+  	});
+  </script>
+  
+  <style>
+    table.list tr td { text-align:center;}
+    table.list tr.red td { color:#903; font-weight:bold;}
+    table.list tr td.left { text-align:left;}
+  </style>
+<% end %>
+
+<h2>Commitments for the <%= @sprint.name %> sprint</h2>
+
+<% form_for @sprint, :url => bulk_update_project_sprint_commitments_path(@project, @sprint) do |f| %>
+  <table class="list">
+    <tr>
+      <th>Tracker</th>
+      <th>Title</th>
+      <th>Sprint</th>
+      <th>Story Points</th>
+      <th>Developer</th>
+    </tr>
+  
+    <% @commitments.select {|c| c.new_record?}.each do |commitment| %>
+      <% fields_for "new_commitment_attributes[]", commitment do |f| %>
+        <%= render :partial => 'commitment', :locals => {:commitment => commitment, :f => f} %>
+      <% end %>
+    <% end %>
+
+    <% @commitments.reject {|c| c.new_record?}.each do |commitment| %>
+      <% fields_for "commitment_attributes[]", commitment do |f| %>
+        <%= render :partial => 'commitment', :locals => {:commitment => commitment, :f => f} %>
+      <% end %>
+    <% end %>
+    
+  </table>
+
+  <br>
+  <center><%= f.submit "Update Commitments" %></center>
+<% end %>

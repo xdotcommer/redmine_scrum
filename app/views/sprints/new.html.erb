@@ -1,0 +1,14 @@
+<h2>New Sprint</h2>
+
+<%= render :partial => 'header' %>
+
+<%= error_messages_for :sprint %>
+
+<% form_for @sprint, :url => project_sprints_path(@project) do |f| %>
+
+  <%= render :partial => 'form', :locals => { :project => @project, :versions => @versions, :f => f } %>
+  
+  <p>
+    <%= f.submit "Create Sprint" %>
+  </p>
+<% end %>
