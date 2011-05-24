@@ -1,0 +1,2 @@
+module SprintHistoriesHelper
+end

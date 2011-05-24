@@ -4,6 +4,8 @@ require 'redmine'
 require 'dispatcher'
 Dispatcher.to_prepare :redmine_scrum do
   require_dependency 'issue'
+  require_dependency 'journal'
+  require_dependency 'journal_detail'
   require_dependency 'query'
   require_dependency 'redmine_scrum/hooks'
 
@@ -13,6 +15,7 @@ Dispatcher.to_prepare :redmine_scrum do
   # and registering multiple callbacks
   Issue.send(:include, RedmineScrum::IssuePatch) unless Issue.included_modules.include? RedmineScrum::IssuePatch
   Query.send(:include, RedmineScrum::QueryPatch) unless Query.included_modules.include? RedmineScrum::QueryPatch
+  Journal.send(:include, RedmineScrum::JournalPatch) unless Journal.included_modules.include? RedmineScrum::JournalPatch
 end
 
 Redmine::Plugin.register :redmine_scrum do

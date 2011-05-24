@@ -5,18 +5,8 @@ namespace :redmine do
     desc "Create Defaults (Backlog sprint, Estimations, etc.)"
     task :create_defaults => :environment do
       
-      if Estimation.count == 0
-        [1, 2, 3, 5, 8, 13].each do |number|
-          Estimation.create(:name => number.to_s, :value => number)
-        end
-        Estimation.create(:name => "Spike", :value => 0)
-      end
-
-      if Sprint.count == 0
-        ['Backlog', 'Icebox'].each do |name|
-          Sprint.new(:name => name).save(false)
-        end
-      end
+      Estimation.create_defaults
+      Sprint.create_defaults
       
     end
     
@@ -31,36 +21,12 @@ namespace :redmine do
     desc "Update issue qa status from custom value"
     task :migrate_issues => [:create_defaults, :environment] do
       # CREATE ESTIMATIONS
-      p Time.now
-      
-      spike = nil
-      Estimation.all.each do |e|
-        if e.spiked?
-          spike = e
-        else
-          Issue.update_all "estimation_id=#{e.id}", "story_points=#{e.value}"
-        end
-      end
-      
-      Issue.update_all "estimation_id=#{spike.id}, story_points=0", "story_points=0 OR story_points IS NULL"
+      Estimation.create_and_migrate
       
       # CREATE SPRINTS
-      p Time.now
-      
-      existing_sprint_list = CustomField.find_by_name("Sprint").possible_values
-      existing_sprint_list.each do |sprint_name|
-        unless sprint_name =~ /^9999/
-          unless Sprint.exists? :name => sprint_name
-            end_date   = Date.parse sprint_name
-            start_date = end_date - 13
-            Sprint.create! :name => sprint_name, :end_date => end_date, :start_date => start_date
-          end
-        end
-      end
+      Sprint.migrate_existing
       
       # MIGRATE ISSUES TO SPRINTS W/ BACKLOG_RANK, QA, ETC.
-      p Time.now
-      
       qa_field     = CustomField.find_by_name("QA")
       backlog_rank_field = CustomField.find_by_name("Backlog Rank")
       
@@ -86,8 +52,6 @@ namespace :redmine do
       
       # TODO: SET VERSIONS && FIX SPRINT START DATES FOR EARLY SPRINTS
       # TODO: BE SURE, WHEN REMOVING REDMINE_BACKLOGS, NOT TO REMOVE STORY_POINTS IN MIGRATION
-      
-      p Time.now
     end
   end
 end

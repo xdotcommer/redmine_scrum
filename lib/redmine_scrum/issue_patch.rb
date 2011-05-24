@@ -1,5 +1,4 @@
 module RedmineScrum
-  # Patches Redmine's Issues dynamically.  Adds a +after_save+ filter.
   module IssuePatch
     def self.included(base) # :nodoc:
       base.extend(ClassMethods)

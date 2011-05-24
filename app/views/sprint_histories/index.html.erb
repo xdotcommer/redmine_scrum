@@ -1,0 +1,23 @@
+<h2>Charts for <%= @sprint.name %></h2>
+
+<%= flot_includes %>
+
+  <h2>Graph the following items</h2>
+
+  <div class='flot_dataset_picker'>
+        <%= flot_selections %>
+  </div>
+
+  <h2>My Graph</h2>
+
+  <%= flot_canvas("graph") %>
+
+  <h2>Zoom In / Out</h2>
+
+  <%= flot_overview("asdflkjasdf") %>
+
+  <!-- do the actual plotting... -->
+  <% flot_graph("graph", @flot) do %>
+        <%= flot_plot(:dynamic => true, :overview => true) %>
+        <%= flot_tooltip %>
+  <% end %>
