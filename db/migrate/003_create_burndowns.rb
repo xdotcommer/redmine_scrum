@@ -3,10 +3,13 @@ class CreateBurndowns < ActiveRecord::Migration
     create_table :burndowns do |t|
       t.column :type, :string
       t.column :date, :date
+      t.column :sprint_day, :integer # day in the sprint excluding weekends
       t.column :sprint_id, :integer
       t.column :sprint_name, :string
       t.column :user_id, :integer
       t.column :user_name, :string
+      t.column :committed_count, :integer, :default => 0
+      t.column :committed_point_count, :integer, :default => 0
       t.column :open_count, :integer, :default => 0
       t.column :open_point_count, :integer, :default => 0
       t.column :pending_count, :integer, :default => 0

@@ -1,6 +1,6 @@
 <%# if ["Story", "Tech Debt", "Systems", "Epic"].include? issue.tracker.name  %>
   <p>
-    <%= form.select :sprint_id, sprints.map {|s| [s.name, s.id]}, {:selected => Sprint.backlog.id, :required => true} %>
+    <%= form.select :sprint_id, sprints.map {|s| [s.name, s.id]}, {:default => Sprint.backlog.id, :required => true} %>
   </p>
 
   <p>

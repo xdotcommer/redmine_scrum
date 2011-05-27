@@ -13,7 +13,7 @@ module RedmineScrum
         belongs_to    :estimation
         has_one       :commitment
         
-        after_save    :create_scrum_issue_stats
+        after_create  :update_burndown
         before_save   :denormalize_data, :set_next_backlog_rank
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
@@ -29,6 +29,23 @@ module RedmineScrum
     end
     
     module ClassMethods
+      # def snapshot_all
+      #   Issue.find_in_batches do |group|
+      #     group.each do |issue|
+      #       Burndown.update_from_issue issue
+      #     end
+      #   end
+      # end
+      # 
+      # def create_snapshots_for(date)
+      #   occurring_between(date.beginning_of_day, date.end_of_day).each do |issue|
+      #     Burndown.update_from_issue issue
+      #   end
+      # end
+      # 
+      # def occurring_between(from, to)
+      #   find(:all, :conditions => ["created_on >= ? AND created_on < ?", from, to])
+      # end      
     end
     
     module InstanceMethods
@@ -43,9 +60,9 @@ module RedmineScrum
         end
       end
       
-      def create_scrum_issue_stats
-        self.reload
-        Burndown.log_from_issue self
+      def update_burndown
+        reload
+        # Burndown.update_from_issue self
         return true
       end
     end    

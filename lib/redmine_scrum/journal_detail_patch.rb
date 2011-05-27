@@ -30,6 +30,10 @@ module RedmineScrum
       def status_change?
         property == "attr" && prop_key == "status_id"
       end
+      
+      def sprint_change?
+        property == "attr" && prop_key == "sprint_id"
+      end
     end    
   end
 end

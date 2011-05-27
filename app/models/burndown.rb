@@ -14,6 +14,11 @@ class Burndown < ActiveRecord::Base
     "Reopened"         => FIELD_PREFIXES[7]
   }
   
+  belongs_to      :sprint
+  belongs_to      :user
+
+  before_save     :update_sprint_day
+
   def self.field_for_status_id(id)
     NAMES_TO_FIELDS[ name_for_status_id(id) ]
   end
@@ -43,17 +48,34 @@ class Burndown < ActiveRecord::Base
   # Graph of bugs over time (daily) by priority (stacked graph)
   # Graph of bugs over time (daily) by resolution (include open)
   
-  def self.log_from_issue(issue)
-    raise issue.inspect
+  def self.update_from_issue(issue, date = nil)
+    if Sprint::STORY_TRACKERS.include? issue.tracker_id
+      Burndown::Story.log(date || issue.created_on.to_date, issue.sprint, issue.assigned_to)
+    elsif Sprint::BUG_TRACKERS.include? issue.tracker_id
+      # Burndown::Bug.log(date || issue.created_on.to_date, issue.sprint, issue.assigned_to)
+    end
   end
   
-  def self.log_from_journal(journal)
-    return unless journal.details.any? {|detail| detail.status_change? || detail.qa_change? }
+  def self.update_from_journal(journal)
+    return unless journal.details.any? {|detail| detail.status_change? || detail.qa_change? || detail.sprint_change? }
+    update_from_issue(journal.issue, journal.created_on.to_date)
+  end
   
-    if Sprint::STORY_TRACKERS.include? journal.issue.tracker_id
-      Burndown::Story.log(Date.yesterday, journal.issue.sprint, journal.issue.assigned_to)
-    elsif Sprint::BUG_TRACKERS.include? journal.issue.tracker_id
-      # Burndown::Bug.log(Date.yesterday, journal.issue.sprint, journal.issue.assigned_to)
+private
+  def update_sprint_day
+    # TODO: Check for between start and end date - what if it isn't???
+    counter_date    = sprint.start_date
+    self.sprint_day = 1
+    
+    while (counter_date < date)
+      if counter_date.wday == 0 || counter_date.wday == 6
+        counter_date += 1
+        next
+      else
+        counter_date += 1
+      end
+
+      self.sprint_day += 1
     end
   end
 end

@@ -5,6 +5,7 @@ class CreateCommitments < ActiveRecord::Migration
       t.column :user_id, :integer
       t.column :issue_id, :integer
       t.column :estimation_id, :integer
+      t.column :story_points, :integer, :default => 0
       t.timestamps
     end
   end

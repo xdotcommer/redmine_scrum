@@ -6,7 +6,7 @@ module RedmineScrum
     # render_on :view_issues_form_details_top, :partial => 'issues/form_details_bottom'
 
     def view_issues_form_details_bottom(context={})
-      sprints = Sprint.all(:order => 'name DESC')
+      sprints     = Sprint.all(:order => 'is_backlog DESC, name DESC')
       estimations = Estimation.all(:order => 'value ASC')
       context[:controller].send(:render_to_string, {:partial => "issues/form_details_bottom", 
                                 :locals => context.merge(:sprints => sprints, :estimations => estimations)})

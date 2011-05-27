@@ -2,6 +2,7 @@ class Estimation < ActiveRecord::Base
   unloadable
   
   has_many  :issues
+  has_many  :commitments
 
   def self.create_defaults
     if count == 0

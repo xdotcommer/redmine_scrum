@@ -11,6 +11,7 @@ class Sprint < ActiveRecord::Base
   mattr_accessor  :backlog
   
   has_many  :issues
+  has_many  :assigned_tos, :through => :issues
   has_many  :commitments
   has_many  :sprint_histories
   
@@ -31,11 +32,16 @@ class Sprint < ActiveRecord::Base
     @@backlog ||= find_by_name("Backlog")
   end
 
+  def self.update_burndown_for(date)
+    if current_sprint = Sprint.find(:first, :conditions => ["start_date <= ? AND end_date >= ?", date, date])
+      Burndown::Story.snapshot_users_for current_sprint, date
+    end
+  end
+
   def self.create_defaults
     if count == 0
-      ['Backlog', 'Icebox'].each do |name|
-        new(:name => name).save(false)
-      end
+      new(:name => 'Backlog', :is_backlog => true).save(false)
+      new(:name => 'Icebox', :is_backlog => false).save(false)
     end
   end
 

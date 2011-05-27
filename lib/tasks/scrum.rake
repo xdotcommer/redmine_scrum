@@ -2,17 +2,51 @@ require 'YAML'
 
 namespace :redmine do
   namespace :scrum do
+    task :csp => :environment do
+      Estimation.all.each do |e|
+        Commitment.update_all({:story_points => e.value}, {:estimation_id => e.id})
+      end
+    end
+    
     desc "Full snapshot from issues, etc."
-    task :full_snapshot => :environment do
+    task :migrate_burndown => :environment do
       
-      Issue.snapshot_all
+      # Historical or not?
+      # 
+      
+      #Issue.snapshot_all
+      #Journal.snapshot_all
       
     end
     
-    desc "Update Daily Snapshots"
-    task :snapshot_yesterday => :environment do
+    desc "Update Burndown for Yesterday"
+    task :update_burndown => :environment do
+      if ENV['DAYS_AGO']
+        date = ENV['DAYS_AGO'].to_i.days.ago.to_date
+      else
+        date = Date.yesterday
+      end
       
-      Journal.create_snapshots_for_yesterday
+      Sprint.update_burndown_for date
+    end
+    
+    desc "Update Daily Snapshots"
+    task :snapshot => :environment do
+      
+      if ENV['DAYS_AGO']
+        date = ENV['DAYS_AGO'].to_i.days.ago.to_date
+      else
+        date = Date.yesterday
+      end
+      
+      # new issues
+      Issue.create_snapshots_for date
+      
+      # # new commitments 
+      # Commitment.create_snapshots_for date
+
+      # status changes, sprint changes, qa changes
+      Journal.create_snapshots_for date
       
     end
     

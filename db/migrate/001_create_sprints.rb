@@ -6,6 +6,7 @@ class CreateSprints < ActiveRecord::Migration
       t.column :release, :string
       t.column :start_date, :date
       t.column :end_date, :date
+      t.column :is_backlog, :boolean, :default => false
       t.timestamps
     end
     

@@ -16,30 +16,29 @@ module RedmineScrum
     end
     
     module ClassMethods
-      def create_snapshots_for_yesterday
-        last_id      = nil
-        
-        for_yesterday.each do |journal|
-          
-          # don't re-run for the same issue (or same developer?)
-          next if journal.journalized_id == last_id
-          last_id = journal.journalized_id
-
-          Burndown.log_from_journal journal
-        end
-      end
-      
-      def for_yesterday
-        find(:all, :conditions => ["created_on >= ? AND created_on < ? AND journalized_type='Issue'", 1.day.ago.beginning_of_day, Time.now.beginning_of_day], :include => [:details, :issue], :order => 'journalized_id ASC')
-      end      
+      # def create_snapshots_for(date)
+      #   last_id      = nil
+      #   
+      #   occurring_between(date.beginning_of_day, date.end_of_day).each do |journal|
+      #     # don't re-run for the same issue (or same developer?)
+      #     next if journal.journalized_id == last_id
+      #     last_id = journal.journalized_id
+      # 
+      #     Burndown.update_from_journal journal
+      #   end
+      # end
+      # 
+      # def occurring_between(from, to)
+      #   find(:all, :conditions => ["created_on >= ? AND created_on < ? AND journalized_type='Issue'", from, to], :include => [:details, :issue], :order => 'journalized_id ASC')
+      # end      
     end
     
     module InstanceMethods
       def log_stats
-        return unless jouranlized_type == "Issue"
+        return unless journalized_type == "Issue"
         
         reload
-        Burndown.log_from_journal self
+        # Burndown.update_from_journal self
         return true
       end
     end    

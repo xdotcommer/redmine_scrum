@@ -14,15 +14,14 @@ class Commitment < ActiveRecord::Base
 
   after_save    :update_story
   after_destroy :update_story
-  
+
   def self.from_stories(stories)
     commitments = []
-    debugger
     stories.each do |story|
       if story.commitment
         commitments << story.commitment
       else
-        commitments << Commitment.new(:sprint => story.sprint, :user => story.assigned_to, :issue => story, :estimation => story.estimation)
+        commitments << Commitment.new(:sprint => story.sprint, :user => story.assigned_to, :issue => story, :estimation => story.estimation, :story_points => story.estimation.value)
       end
     end
     commitments
