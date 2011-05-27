@@ -16,6 +16,7 @@ Dispatcher.to_prepare :redmine_scrum do
   Issue.send(:include, RedmineScrum::IssuePatch) unless Issue.included_modules.include? RedmineScrum::IssuePatch
   Query.send(:include, RedmineScrum::QueryPatch) unless Query.included_modules.include? RedmineScrum::QueryPatch
   Journal.send(:include, RedmineScrum::JournalPatch) unless Journal.included_modules.include? RedmineScrum::JournalPatch
+  JournalDetail.send(:include, RedmineScrum::JournalDetailPatch) unless JournalDetail.included_modules.include? RedmineScrum::JournalDetailPatch
 end
 
 Redmine::Plugin.register :redmine_scrum do

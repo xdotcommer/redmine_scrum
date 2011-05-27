@@ -12,13 +12,12 @@ module RedmineScrum
         belongs_to    :sprint
         belongs_to    :estimation
         has_one       :commitment
-        has_many      :sprint_histories
         
         after_save    :create_scrum_issue_stats
         before_save   :denormalize_data, :set_next_backlog_rank
-        after_destroy :remove_scrum_issue_stats
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
+        named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
 
         # Add visible to Redmine 0.8.x
         unless respond_to?(:visible)
@@ -46,12 +45,8 @@ module RedmineScrum
       
       def create_scrum_issue_stats
         self.reload
-        SprintHistory.create_from_issue self
+        Burndown.log_from_issue self
         return true
-      end
-
-      def remove_scrum_issue_stats
-        SprintHistory.destroy_all(['issue_id = (?)', self.id]) if self.id
       end
     end    
   end

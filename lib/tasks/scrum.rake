@@ -2,20 +2,26 @@ require 'YAML'
 
 namespace :redmine do
   namespace :scrum do
+    desc "Full snapshot from issues, etc."
+    task :full_snapshot => :environment do
+      
+      Issue.snapshot_all
+      
+    end
+    
+    desc "Update Daily Snapshots"
+    task :snapshot_yesterday => :environment do
+      
+      Journal.create_snapshots_for_yesterday
+      
+    end
+    
     desc "Create Defaults (Backlog sprint, Estimations, etc.)"
     task :create_defaults => :environment do
       
       Estimation.create_defaults
       Sprint.create_defaults
       
-    end
-    
-    desc "Create sprint histories for every issue without one"
-    task :create_histories => :environment do
-      Issue.all.each do |issue|
-        next unless issue.sprint_histories.empty?
-        SprintHistory.create_from_issue issue
-      end
     end
     
     desc "Update issue qa status from custom value"
