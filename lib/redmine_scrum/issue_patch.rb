@@ -29,23 +29,6 @@ module RedmineScrum
     end
     
     module ClassMethods
-      # def snapshot_all
-      #   Issue.find_in_batches do |group|
-      #     group.each do |issue|
-      #       Burndown.update_from_issue issue
-      #     end
-      #   end
-      # end
-      # 
-      # def create_snapshots_for(date)
-      #   occurring_between(date.beginning_of_day, date.end_of_day).each do |issue|
-      #     Burndown.update_from_issue issue
-      #   end
-      # end
-      # 
-      # def occurring_between(from, to)
-      #   find(:all, :conditions => ["created_on >= ? AND created_on < ?", from, to])
-      # end      
     end
     
     module InstanceMethods

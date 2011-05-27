@@ -30,26 +30,6 @@ namespace :redmine do
       Sprint.update_burndown_for date
     end
     
-    desc "Update Daily Snapshots"
-    task :snapshot => :environment do
-      
-      if ENV['DAYS_AGO']
-        date = ENV['DAYS_AGO'].to_i.days.ago.to_date
-      else
-        date = Date.yesterday
-      end
-      
-      # new issues
-      Issue.create_snapshots_for date
-      
-      # # new commitments 
-      # Commitment.create_snapshots_for date
-
-      # status changes, sprint changes, qa changes
-      Journal.create_snapshots_for date
-      
-    end
-    
     desc "Create Defaults (Backlog sprint, Estimations, etc.)"
     task :create_defaults => :environment do
       

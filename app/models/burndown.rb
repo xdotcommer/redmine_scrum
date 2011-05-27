@@ -48,18 +48,6 @@ class Burndown < ActiveRecord::Base
   # Graph of bugs over time (daily) by priority (stacked graph)
   # Graph of bugs over time (daily) by resolution (include open)
   
-  def self.update_from_issue(issue, date = nil)
-    if Sprint::STORY_TRACKERS.include? issue.tracker_id
-      Burndown::Story.log(date || issue.created_on.to_date, issue.sprint, issue.assigned_to)
-    elsif Sprint::BUG_TRACKERS.include? issue.tracker_id
-      # Burndown::Bug.log(date || issue.created_on.to_date, issue.sprint, issue.assigned_to)
-    end
-  end
-  
-  def self.update_from_journal(journal)
-    return unless journal.details.any? {|detail| detail.status_change? || detail.qa_change? || detail.sprint_change? }
-    update_from_issue(journal.issue, journal.created_on.to_date)
-  end
   
 private
   def update_sprint_day
