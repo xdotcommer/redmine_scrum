@@ -8,6 +8,8 @@ class Sprint < ActiveRecord::Base
   
   QA_STATUSES     = ["Needed", "Not Needed", "Succeeded", "Failed"]
   
+  mattr_accessor  :backlog
+  
   has_many  :issues
   has_many  :commitments
   has_many  :sprint_histories
@@ -24,6 +26,10 @@ class Sprint < ActiveRecord::Base
   before_save :set_name
   
   belongs_to  :version
+
+  def self.backlog
+    @@backlog ||= find_by_name("Backlog")
+  end
 
   def self.create_defaults
     if count == 0
