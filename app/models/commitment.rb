@@ -12,6 +12,7 @@ class Commitment < ActiveRecord::Base
   validates_presence_of   :sprint, :user, :issue, :estimation
 #  validates_uniqueness_of :sprint, :issue
 
+  before_save   :denormalize_data
   after_save    :update_story
   after_destroy :update_story
 
@@ -52,6 +53,11 @@ class Commitment < ActiveRecord::Base
   end
   
 private
+  def denormalize_data
+    self.sprint_name  = sprint.try(:name)
+    self.user_name    = user.try(:name)
+  end
+  
   def update_story
     story.update_attributes(:assigned_to_id => user_id, :estimation_id => estimation_id, :sprint_id => sprint_id)
   end

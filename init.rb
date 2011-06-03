@@ -4,6 +4,7 @@ require 'redmine'
 require 'dispatcher'
 Dispatcher.to_prepare :redmine_scrum do
   require_dependency 'issue'
+  require_dependency 'issue_status'
   require_dependency 'journal'
   require_dependency 'journal_detail'
   require_dependency 'query'
@@ -14,6 +15,7 @@ Dispatcher.to_prepare :redmine_scrum do
   # Guards against including the module multiple time (like in tests)
   # and registering multiple callbacks
   Issue.send(:include, RedmineScrum::IssuePatch) unless Issue.included_modules.include? RedmineScrum::IssuePatch
+  IssueStatus.send(:include, RedmineScrum::IssueStatusPatch) unless IssueStatus.included_modules.include? RedmineScrum::IssueStatusPatch
   Query.send(:include, RedmineScrum::QueryPatch) unless Query.included_modules.include? RedmineScrum::QueryPatch
   Journal.send(:include, RedmineScrum::JournalPatch) unless Journal.included_modules.include? RedmineScrum::JournalPatch
   JournalDetail.send(:include, RedmineScrum::JournalDetailPatch) unless JournalDetail.included_modules.include? RedmineScrum::JournalDetailPatch

@@ -3,9 +3,7 @@ class Sprint < ActiveRecord::Base
 
   STORY_TRACKERS  = ["Story", "Systems", "TechDebt"].map {|type| Tracker.find_by_name(type).id}
   BUG_TRACKERS    = ["Bug"].map {|type| Tracker.find_by_name(type).id}
-  CLOSED_STATUSES = IssueStatus.find_all_by_is_closed(true).map(&:id)
-  OPEN_STATUSES   = IssueStatus.find_all_by_is_closed(false).map(&:id)
-  
+
   QA_STATUSES     = ["Needed", "Not Needed", "Succeeded", "Failed"]
   
   mattr_accessor  :backlog
@@ -13,7 +11,7 @@ class Sprint < ActiveRecord::Base
   has_many  :issues
   has_many  :assigned_tos, :through => :issues
   has_many  :commitments
-  has_many  :sprint_histories
+  has_many  :burndowns, :order => 'sprint_day ASC'
   
   named_scope :recent, lambda { {:conditions => ["end_date >= ? OR name='Backlog' OR name='Icebox'", 14.days.ago], :order => 'name ASC' } }
   
@@ -67,19 +65,19 @@ class Sprint < ActiveRecord::Base
   end
   
   def open_story_count
-    issues.count(:conditions => {:tracker_id => STORY_TRACKERS, :status_id => OPEN_STATUSES})
+    issues.count(:conditions => {:tracker_id => STORY_TRACKERS, :status_id => IssueStatus.open_ids})
   end
   
   def closed_story_count
-    issues.count(:conditions => {:tracker_id => STORY_TRACKERS, :status_id => CLOSED_STATUSES})
+    issues.count(:conditions => {:tracker_id => STORY_TRACKERS, :status_id => IssueStatus.closed_ids})
   end
   
   def open_bug_count
-    issues.count(:conditions => {:tracker_id => BUG_TRACKERS, :status_id => OPEN_STATUSES})
+    issues.count(:conditions => {:tracker_id => BUG_TRACKERS, :status_id => IssueStatus.open_ids})
   end
   
   def closed_bug_count
-    issues.count(:conditions => {:tracker_id => BUG_TRACKERS, :status_id => CLOSED_STATUSES})
+    issues.count(:conditions => {:tracker_id => BUG_TRACKERS, :status_id => IssueStatus.closed_ids})
   end
   
   def bug_count

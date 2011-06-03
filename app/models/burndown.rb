@@ -1,6 +1,14 @@
 class Burndown < ActiveRecord::Base
   unloadable
 
+  DAY_MAPPINGS = {
+    "Mon" => [3,8],
+    "Tue" => [4,9],
+    "Wed" => [0,5],
+    "Thu" => [1,6],
+    "Fri" => [2,7]
+  }
+
   FIELD_PREFIXES  = %w(open pending invalid complete verified duplicate wont reopened)
   STATUSES        = IssueStatus.all
   NAMES_TO_FIELDS = {
@@ -19,6 +27,16 @@ class Burndown < ActiveRecord::Base
 
   before_save     :update_sprint_day
 
+  def self.day_labels
+    labels = []
+    DAY_MAPPINGS.each do |k,v|
+      v.each do |value|
+        labels << [value, k]
+      end
+    end
+    labels
+  end
+  
   def self.field_for_status_id(id)
     NAMES_TO_FIELDS[ name_for_status_id(id) ]
   end

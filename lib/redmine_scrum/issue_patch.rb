@@ -14,7 +14,8 @@ module RedmineScrum
         has_one       :commitment
         
         after_create  :update_burndown
-        before_save   :denormalize_data, :set_next_backlog_rank
+        before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa
+        after_save    :update_developer_stats
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
@@ -32,6 +33,9 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def update_developer_stats
+      end
+      
       def denormalize_data
         self.sprint_name  = sprint.try(:name)
         self.story_points = estimation.try(:value)
@@ -47,6 +51,21 @@ module RedmineScrum
         reload
         # Burndown.update_from_issue self
         return true
+      end
+      
+      def reset_qa
+        return true unless status_id_changed?# || new_record?
+
+        if status.is_pending?
+          if qa_used_to_be == "Needed" || qa_used_to_be == "Not Needed"
+            self.qa = qa_used_to_be
+          else # just to make sure
+            self.qa = "Needed"
+          end
+        elsif ! status.is_closed?
+          # set this so we know what to reset the qa status to
+          self.qa_used_to_be = qa if qa == "Needed" || qa == "Not Needed"
+        end
       end
     end    
   end
