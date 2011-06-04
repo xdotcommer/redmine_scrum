@@ -84,23 +84,3 @@
   <% end %>
 
   <br>
-
-  <h2>Closed Stories for <%= @sprint.name %></h2>
-
-  <div class='flot_dataset_picker'>
-        <%#= flot_selections %>
-  </div>
-
-  <%= flot_canvas("closed_stories") %>
-
-  <!-- do the actual plotting... -->
-  <% flot_graph("closed_stories", @closed_stories) do %>
-        <%= flot_plot("closed_stories") %>
-        <%= flot_tooltip("closed_stories") %>
-
-        closed_stories_flotomatic.labelFormatter = function(label, series) {
-            // series is the series object for the label
-            return '<a href="#' + label + '">' + label + '</a>';
-        };
-  <% end %>
-

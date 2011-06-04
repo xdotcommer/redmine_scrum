@@ -22,12 +22,6 @@ class SprintHistoriesController < RedmineScrumController
       end
     end
     
-    @closed_stories = BurndownFlot.stacked_bar('closed_stories') do |f|
-      @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :complete_count)
-      end
-    end
-    
     @reopened_stories = BurndownFlot.stacked_bar('reopened_stories') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
         f.series_for(user, days, :x => :sprint_day, :y => :reopened_count)
