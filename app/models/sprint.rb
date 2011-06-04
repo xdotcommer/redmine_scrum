@@ -61,27 +61,27 @@ class Sprint < ActiveRecord::Base
   end
   
   def story_count
-    issues.count(:conditions => {:tracker_id => STORY_TRACKERS})
+    issues.stories.count
   end
   
   def open_story_count
-    issues.count(:conditions => {:tracker_id => STORY_TRACKERS, :status_id => IssueStatus.open_ids})
+    issues.stories.open.count - issues.stories.pending.count
   end
   
   def closed_story_count
-    issues.count(:conditions => {:tracker_id => STORY_TRACKERS, :status_id => IssueStatus.closed_ids})
+    issues.stories.closed.count
   end
   
   def open_bug_count
-    issues.count(:conditions => {:tracker_id => BUG_TRACKERS, :status_id => IssueStatus.open_ids})
+    issues.bugs.open.count - issues.bugs.pending.count
   end
   
   def closed_bug_count
-    issues.count(:conditions => {:tracker_id => BUG_TRACKERS, :status_id => IssueStatus.closed_ids})
+    issues.bugs.closed.count
   end
   
   def bug_count
-    issues.count(:conditions => {:tracker_id => BUG_TRACKERS})
+    issues.bugs.count
   end
   
   def commitable?
@@ -94,6 +94,28 @@ class Sprint < ActiveRecord::Base
   
   def icebox?
     name == "Icebox"
+  end
+  
+  def sprint_day(date)
+    return 0 unless start_date && end_date
+    return -1 if date < start_date
+    return 10 if date > end_date
+
+    counter_date = start_date
+    day          = 1
+    
+    while (counter_date < date)
+      if counter_date.wday == 0 || counter_date.wday == 6
+        counter_date += 1
+        next
+      else
+        counter_date += 1
+      end
+
+      day += 1
+    end
+    
+    day
   end
 
 private

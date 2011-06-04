@@ -18,6 +18,10 @@ module RedmineScrum
     end
     
     module ClassMethods
+      def pending
+        find_by_name("Pending Approval")
+      end
+      
       def open_ids
         find_all_by_is_closed(false).map(&:id)
       end
@@ -30,6 +34,10 @@ module RedmineScrum
     module InstanceMethods
       def is_pending?
         name == "Pending Approval"
+      end
+      
+      def is_reopened?
+        name == "Reopened"
       end
     end
   end

@@ -66,22 +66,8 @@ class Burndown < ActiveRecord::Base
   # Graph of bugs over time (daily) by priority (stacked graph)
   # Graph of bugs over time (daily) by resolution (include open)
   
-  
 private
   def update_sprint_day
-    # TODO: Check for between start and end date - what if it isn't???
-    counter_date    = sprint.start_date
-    self.sprint_day = 1
-    
-    while (counter_date < date)
-      if counter_date.wday == 0 || counter_date.wday == 6
-        counter_date += 1
-        next
-      else
-        counter_date += 1
-      end
-
-      self.sprint_day += 1
-    end
+    self.sprint_day = sprint.sprint_day(date)
   end
 end

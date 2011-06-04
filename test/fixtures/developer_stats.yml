@@ -1,0 +1,33 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+  sprint_id: 1
+  sprint_name: MyString
+  user_id: 1
+  user_name: MyString
+  committed_stories: 1
+  committed_points: 1
+  completed_stories: 1
+  completed_points: 1
+  pending_story_submissions: 1
+  story_reopens: 1
+  days_until_first_story_pending: 1
+  days_until_first_story_complete: 1
+  carryover_stories: 1
+  carryover_points: 1
+two:
+  id: 2
+  sprint_id: 1
+  sprint_name: MyString
+  user_id: 1
+  user_name: MyString
+  committed_stories: 1
+  committed_points: 1
+  completed_stories: 1
+  completed_points: 1
+  pending_story_submissions: 1
+  story_reopens: 1
+  days_until_first_story_pending: 1
+  days_until_first_story_complete: 1
+  carryover_stories: 1
+  carryover_points: 1

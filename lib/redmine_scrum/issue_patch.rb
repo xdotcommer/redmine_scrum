@@ -19,6 +19,10 @@ module RedmineScrum
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
+        named_scope   :for_sprint_and_developer, lambda { |s,d| {:conditions => {:sprint_id => s, :assigned_to_id => d}} }
+        named_scope   :open, :conditions => ["issue_statuses.is_closed = ?", false], :include => :status
+        named_scope   :pending, :conditions => {:status_id => IssueStatus.pending.try(:id)}
+        named_scope   :closed, :conditions => ["issue_statuses.is_closed = ?", true], :include => :status
 
         # Add visible to Redmine 0.8.x
         unless respond_to?(:visible)
@@ -34,6 +38,9 @@ module RedmineScrum
     
     module InstanceMethods
       def update_developer_stats
+        developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
+        developer_stat.update_details_for(self)
+        developer_stat.save
       end
       
       def denormalize_data

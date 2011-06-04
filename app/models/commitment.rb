@@ -54,8 +54,7 @@ class Commitment < ActiveRecord::Base
   
 private
   def denormalize_data
-    self.sprint_name  = sprint.try(:name)
-    self.user_name    = user.try(:name)
+    self.story_points = estimation.try(:value)
   end
   
   def update_story
