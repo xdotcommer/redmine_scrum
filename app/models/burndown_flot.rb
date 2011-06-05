@@ -6,6 +6,12 @@ class BurndownFlot < Flot
     flot
   end
   
+  def self.area(canvas = nil, &block)
+    flot = self.new(canvas, &block)
+    flot.options[:series] = {:stack => 0, :lines => {:show => true, :fill => true, :steps => true}}
+    flot
+  end
+  
   def self.stacked_bar(canvas = nil, &block)
     flot = self.new(canvas, &block)
     flot.options[:series] = {:stack => 0, :bars => {:show => true, :barWidth => 0.5, :align => "center"}}

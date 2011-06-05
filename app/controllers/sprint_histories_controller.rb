@@ -4,13 +4,13 @@ class SprintHistoriesController < RedmineScrumController
   def index
     @sprint      = Sprint.find(params[:sprint_id])
 
-    @open_points = BurndownFlot.line('open_points') do |f|
+    @open_points = BurndownFlot.area('open_points') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
         f.series_for(user, days, :x => :sprint_day, :y => :open_point_count)
       end
     end
     
-    @pending_story_points = BurndownFlot.line('pending_story_points') do |f|
+    @pending_story_points = BurndownFlot.area('pending_story_points') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
         f.series_for(user, days, :x => :sprint_day, :y => lambda {|r| r.open_point_count - r.pending_point_count })
       end
