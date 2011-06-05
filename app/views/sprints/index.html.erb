@@ -12,7 +12,6 @@
 <table class="list">
   <tr>
     <th></th>
-    <th></th>
     <th>Sprint</th>
     <th>Start Date</th>
     <th>End Date</th>
@@ -25,7 +24,6 @@
   </tr>
 <% @sprints.each do |sprint| %>
   <tr class="<%= 'highlight' if this_sprint(sprint) %>">
-    <td><%= link_to "Delete", project_sprint_path(@project, sprint, :method => :delete), :alt =>  "Delete", :confirm => "Are you sure you want to delete this sprint?  All data will be lost!!!" %></td>
     <td><%= link_to "Charts", project_sprint_histories_path(@project, sprint, :tab => 'Sprints') %></td>
     <td><%= link_to sprint.name, edit_project_sprint_path(@project, sprint) %></td>
     <td><%= sprint.start_date %></td>
