@@ -1,5 +1,7 @@
 class CreateSprints < ActiveRecord::Migration
   def self.up
+    drop_table :sprints if table_exists?("sprints") 
+    
     create_table :sprints do |t|
       t.column :name, :string
       t.column :version_id, :integer
