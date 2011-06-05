@@ -38,6 +38,7 @@ module RedmineScrum
     
     module InstanceMethods
       def update_developer_stats
+        return true unless assigned_to && sprint.commitable?
         developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
         developer_stat.update_details_for(self)
         developer_stat.save
