@@ -11,6 +11,6 @@ class CommitmentsController < RedmineScrumController
     Commitment.bulk_create(params[:new_commitment_attributes]) if params[:new_commitment_attributes]
 
     flash[:notice] = "Commitments have been updated"
-    redirect_to project_sprint_commitments_path(@project, :sprint => Sprint.find_by_sprint_id(sprint_id))
+    redirect_to project_sprint_commitments_path(@project, :sprint => Sprint.find_by_id(params[:sprint_id]))
   end
 end
