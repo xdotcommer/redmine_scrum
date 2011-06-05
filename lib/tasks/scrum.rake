@@ -1,5 +1,3 @@
-require 'YAML' rescue nil
-
 namespace :redmine do
   namespace :scrum do
     task :csp => :environment do
