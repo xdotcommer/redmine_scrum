@@ -32,6 +32,8 @@ class Sprint < ActiveRecord::Base
 
   def self.update_burndown_for(date)
     if current_sprint = Sprint.find(:first, :conditions => ["start_date <= ? AND end_date >= ?", date, date])
+      date -= 2.days if date.wday == 0
+      date -= 1.day  if date.wday == 6
       Burndown::Story.snapshot_users_for current_sprint, date
     end
   end
@@ -97,12 +99,12 @@ class Sprint < ActiveRecord::Base
   end
   
   def sprint_day(date)
-    return 0 unless start_date && end_date
+    return -1 unless start_date && end_date
     return -1 if date < start_date
     return 10 if date > end_date
 
     counter_date = start_date
-    day          = 1
+    day          = 0
     
     while (counter_date < date)
       if counter_date.wday == 0 || counter_date.wday == 6

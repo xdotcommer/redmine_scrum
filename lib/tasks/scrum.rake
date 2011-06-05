@@ -1,4 +1,8 @@
-require 'YAML'
+begin
+  require 'YAML'
+rescue
+  require 'yaml'
+end
 
 namespace :redmine do
   namespace :scrum do
