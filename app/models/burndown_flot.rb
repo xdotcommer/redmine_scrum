@@ -8,7 +8,7 @@ class BurndownFlot < Flot
   
   def self.area(canvas = nil, &block)
     flot = self.new(canvas, &block)
-    flot.options[:series] = {:stack => 0, :lines => {:show => true, :fill => true, :steps => true}}
+    flot.options[:series] = {:stack => 0, :lines => {:show => true, :fill => true, :points => true}}
     flot
   end
   
