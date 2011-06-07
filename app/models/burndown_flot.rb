@@ -21,7 +21,7 @@ class BurndownFlot < Flot
   def initialize(canvas = nil,  &block)
     @options ||= {}
     xaxis :min => 0, :ticks => Burndown.day_labels, :max => 9
-    yaxis :min => 0, :tickSize => 1, :tickDecimals => 0, :autoscaleMargin => nil
+    yaxis :min => 0, :tickDecimals => 0
     grid :hoverable => true
     super(canvas, {}, &block)
   end
