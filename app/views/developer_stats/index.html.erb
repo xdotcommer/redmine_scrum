@@ -1,0 +1,52 @@
+<% html_title "Developer Stats" -%>
+
+<% content_for :header_tags do %>
+  <style>
+    table.list tr td { text-align:center;}
+    table.list tr.highlight { background-color: #ccc;}
+  </style>
+<% end %>
+
+<h2>Developer Stats</h2>
+
+<table class="list">
+  <tr>
+    <th>Sprint</th>
+    <% @developers.each do |name| %>
+      <th><%= name %></th>
+    <% end %>
+    <th>Total</th>
+  </tr>
+  
+  <% @stats.group_by {|s| s.sprint_name}.each do |sprint, stat| %>
+    <tr>
+      <td><%= sprint %></td>
+      <% stat.each do |stat| %>
+        <td><%= stat.completed_points %> / <%= stat.committed_points %></td>
+      <% end %>
+      <td>
+        <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.completed_points} %>
+        /
+        <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.committed_points} %>
+      </td>
+    </tr>
+  <% end %>
+  
+  <tr>
+    <th></th>
+    <% @developers.each do |name| %>
+      <% completed = @stats.select {|stat| stat.user_name == name}.map(&:completed_points) %>
+      <% committed = @stats.select {|stat| stat.user_name == name}.map(&:committed_points) %>
+      <th>
+        <%= completed.sum / completed.size %>
+        /
+        <%= committed.sum / committed.size %>
+      </th>
+    <% end %>
+    <th>
+      <%= @stats.sum {|s| s.completed_points} / @sprints.size %>
+      /
+      <%= @stats.sum {|s| s.committed_points} / @sprints.size %>
+    </th>
+  </tr>
+</table>
