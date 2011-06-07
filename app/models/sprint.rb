@@ -1,7 +1,7 @@
 class Sprint < ActiveRecord::Base
   unloadable
 
-  STORY_TRACKERS  = ["Story", "Systems", "TechDebt"].map {|type| Tracker.find_by_name(type).id}
+  STORY_TRACKERS  = ["Story", "Research", "Systems", "TechDebt"].map {|type| Tracker.find_by_name(type).id}
   BUG_TRACKERS    = ["Bug"].map {|type| Tracker.find_by_name(type).id}
 
   QA_STATUSES     = ["Needed", "Not Needed", "Succeeded", "Failed"]

@@ -25,7 +25,7 @@ class DeveloperStat < ActiveRecord::Base
   
 private
   def set_developer_stats
-    issues = Issue.for_sprint_and_developer(sprint_id, user_id)
+    issues = Issue.stories.for_sprint_and_developer(sprint_id, user_id)
     
     self.committed_stories = Commitment.count :conditions => {:sprint_id => sprint_id, :user_id => user_id}
     self.committed_points  = Commitment.sum(:story_points, :conditions => {:sprint_id => sprint_id, :user_id => user_id})
