@@ -26,7 +26,7 @@
         <td style="border-left: 1px solid #999; background: #eef"><%= stat.completed_points %></td>
         <td style="border-left: 1px dashed #999; background: #eef"><%= stat.committed_points %></td>
       <% end %>
-      <td>
+      <td style="border-left: 1px solid #999;">
         <%= @current_stats.sum {|s| s.completed_points} %>
       </td>
       <td style="border-left: 1px dashed #999;">
@@ -36,16 +36,16 @@
   <% end %>
 
   <% @stats.group_by {|s| s.sprint_name}.each do |sprint, stat| %>
-    <tr>
+  <tr style="border-bottom: 1px solid #999">
       <td><%= sprint %></td>
       <% stat.each do |stat| %>
-        <td style="width: 80px; border-left: 1px solid #999; background: #eef"><%= stat.completed_points %></td>
-        <td style="width: 80px; border-left: 1px dashed #999; background: #eef"><%= stat.committed_points %></td>
+        <td style="width: 75px; border-left: 1px solid #999; background: #eef"><%= stat.completed_points %></td>
+        <td style="width: 75px; border-left: 1px dashed #999; background: #eef"><%= stat.committed_points %></td>
       <% end %>
-        <td style="width: 80px; border-left: 1px solid #999">
+        <td style="width: 75px; border-left: 1px solid #999">
           <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.completed_points} %>
         </td>
-        <td style="width: 80px; border-left: 1px dashed #999;">
+        <td style="width: 75px; border-left: 1px dashed #999;">
           <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.committed_points} %>
         </td>
         
