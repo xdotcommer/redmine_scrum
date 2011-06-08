@@ -21,7 +21,7 @@
 
   <% unless @current_stats.empty? %>
     <tr>
-      <td><%= @current_stats.first.sprint %></td>
+      <td><%= @current_stats.first.sprint.name %></td>
       <% @current_stats.each do |stat| %>
         <td><%= stat.completed_points %> / <%= stat.committed_points %></td>
       <% end %>
