@@ -6,6 +6,6 @@ class DeveloperStatsController < RedmineScrumController
     @developers.sort!
     @sprints    = DeveloperStat.find_by_sql("select distinct(sprint_name) from developer_stats").map &:sprint_name
     @sprints.sort!
-    @stats      = DeveloperStat.all(:order => 'sprint_name DESC, user_name ASC')
+    @stats      = DeveloperStat.all(:include => [:sprint], :conditions => ["sprints.end_date < ?", Date.today], :order => 'sprint_name DESC, user_name ASC')
   end
 end
