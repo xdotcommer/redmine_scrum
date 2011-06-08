@@ -18,6 +18,21 @@
     <th>Total</th>
   </tr>
   
+
+  <% unless @current_stats.empty? %>
+    <tr>
+      <td><%= @current_stats.first.sprint %></td>
+      <% @current_stats.each do |stat| %>
+        <td><%= stat.completed_points %> / <%= stat.committed_points %></td>
+      <% end %>
+      <td>
+        <%= @current_stats.sum {|s| s.completed_points} %>
+        /
+        <%= @current_stats.sum {|s| s.committed_points} %>
+      </td>
+    </tr>
+  <% end %>
+
   <% @stats.group_by {|s| s.sprint_name}.each do |sprint, stat| %>
     <tr>
       <td><%= sprint %></td>
