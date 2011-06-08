@@ -25,7 +25,8 @@ class Commitment < ActiveRecord::Base
         commitments << Commitment.new(:sprint => story.sprint, :user => story.assigned_to, :issue => story, :estimation => story.estimation, :story_points => story.estimation.value)
       end
     end
-    commitments
+    
+    commitments.sort(&:user_id)
   end
 
   def self.bulk_update(commitment_attributes)
