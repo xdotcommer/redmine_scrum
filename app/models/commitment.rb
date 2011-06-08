@@ -19,7 +19,7 @@ class Commitment < ActiveRecord::Base
   def self.from_stories(stories)
     commitments = []
     stories.each do |story|
-      if story.commitment && Commitment.exists?(:sprint_id => story.sprint_id, :user_id => story.user_id, :issue_id => story.id)
+      if story.commitment && Commitment.exists?(:sprint_id => story.sprint_id, :user_id => story.assigned_to_id, :issue_id => story.id)
         commitments << story.commitment
       else
         commitments << Commitment.new(:sprint => story.sprint, :user => story.assigned_to, :issue => story, :estimation => story.estimation, :story_points => story.estimation.value)
