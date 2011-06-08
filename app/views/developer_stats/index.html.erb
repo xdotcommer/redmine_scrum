@@ -9,25 +9,27 @@
 
 <h2>Developer Stats</h2>
 
-<table class="list">
-  <tr>
+<table class="list" style="border: 1px solid #999">
+  <tr style="border-bottom: 1px solid #999">
     <th>Sprint</th>
     <% @developers.each do |name| %>
-      <th><%= name %></th>
+      <th colspan="2" style="border-left: 1px solid #999"><%= name %></th>
     <% end %>
-    <th>Total</th>
+    <th colspan="2" style="border-left: 1px solid #999">Total</th>
   </tr>
   
 
   <% unless @current_stats.empty? %>
-    <tr>
+    <tr style="border-bottom: 1px solid #999">
       <td><%= @current_stats.first.sprint.name %></td>
       <% @current_stats.each do |stat| %>
-        <td><%= stat.completed_points %> / <%= stat.committed_points %></td>
+        <td style="border-left: 1px solid #999; background: #eef"><%= stat.completed_points %></td>
+        <td style="border-left: 1px dashed #999; background: #eef"><%= stat.committed_points %></td>
       <% end %>
       <td>
         <%= @current_stats.sum {|s| s.completed_points} %>
-        /
+      </td>
+      <td style="border-left: 1px dashed #999;">
         <%= @current_stats.sum {|s| s.committed_points} %>
       </td>
     </tr>
@@ -37,30 +39,37 @@
     <tr>
       <td><%= sprint %></td>
       <% stat.each do |stat| %>
-        <td><%= stat.completed_points %> / <%= stat.committed_points %></td>
+        <td style="width: 80px; border-left: 1px solid #999; background: #eef"><%= stat.completed_points %></td>
+        <td style="width: 80px; border-left: 1px dashed #999; background: #eef"><%= stat.committed_points %></td>
       <% end %>
-      <td>
-        <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.completed_points} %>
-        /
-        <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.committed_points} %>
+        <td style="width: 80px; border-left: 1px solid #999">
+          <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.completed_points} %>
+        </td>
+        <td style="width: 80px; border-left: 1px dashed #999;">
+          <%= @stats.select {|stat| stat.sprint_name == sprint}.sum {|s| s.committed_points} %>
+        </td>
+        
       </td>
     </tr>
   <% end %>
   
-  <tr>
+  <tr style="border-top: 1px solid #999">
     <th></th>
     <% @developers.each do |name| %>
       <% completed = @stats.select {|stat| stat.user_name == name}.map(&:completed_points) %>
       <% committed = @stats.select {|stat| stat.user_name == name}.map(&:committed_points) %>
-      <th>
+
+      <th style="border-left: 1px solid #999">
         <%= completed.sum / completed.size %>
-        /
+      </th>
+      <th style="border-left: 1px dashed #999;">
         <%= committed.sum / committed.size %>
       </th>
     <% end %>
-    <th>
+    <th style="border-left: 1px solid #999">
       <%= @stats.sum {|s| s.completed_points} / @sprints.size %>
-      /
+    </th>
+    <th style="border-left: 1px dashed #999;">
       <%= @stats.sum {|s| s.committed_points} / @sprints.size %>
     </th>
   </tr>
