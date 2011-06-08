@@ -26,7 +26,7 @@ class Commitment < ActiveRecord::Base
       end
     end
     
-    commitments.sort(&:user_id)
+    commitments
   end
 
   def self.bulk_update(commitment_attributes)
