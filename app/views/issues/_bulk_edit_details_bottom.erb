@@ -1,0 +1,20 @@
+  <p>
+    <label>Sprint Name</label>
+    <%= select_tag('issue[sprint_id]', content_tag('option', l(:label_no_change_option), :value => '') + options_from_collection_for_select(sprints, :id, :name)) %>
+  </p>
+
+  <p>
+    <label>QA</label>
+    <%= select_tag('issue[qa]', content_tag('option', l(:label_no_change_option), :value => '') + options_for_select(Sprint::QA_STATUSES)) %>
+  </p>
+  
+  <p>
+    <label>Story Points</label>
+    <%= select_tag('issue[estimation_id]', content_tag('option', l(:label_no_change_option), :value => '') + options_from_collection_for_select(estimations, :id, :name)) %>
+  </p>
+  
+  <p>
+    <label>Backlog Rank</label>
+    <%= text_field_tag('issue[backlog_rank]') %>
+  </p>
+  
