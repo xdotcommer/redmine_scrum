@@ -23,5 +23,12 @@ module RedmineScrum
       context[:controller].send(:render_to_string, {:partial => "issues/bulk_edit_details_bottom", 
                                 :locals => context.merge(:sprints => sprints, :estimations => estimations)})
     end
+    
+    def view_issues_context_menu_start(context = {})
+      sprints     = Sprint.all(:order => 'is_backlog DESC, name DESC')
+      estimations = Estimation.all(:order => 'value ASC')
+      context[:controller].send(:render_to_string, {:partial => "issues/context_menu_start", 
+                                :locals => context.merge(:sprints => sprints, :estimations => estimations)})
+    end
   end
 end

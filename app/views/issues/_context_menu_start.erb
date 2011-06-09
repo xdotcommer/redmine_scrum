@@ -1,0 +1,30 @@
+<li class="folder">			
+	<a href="#" class="submenu" onclick="return false;">Sprint</a>
+	<ul>
+	<% sprints.each do |s| -%>
+	    <li><%= context_menu_link s.name, {:controller => 'issues', :action => 'bulk_edit', :ids => @issues.collect(&:id), :issue => {:sprint_id => s}, :back_url => @back}, :method => :post,
+	                              :selected => (@issue && s == @issue.sprint), :disabled => ! @can[:update] %></li>
+	<% end -%>
+	</ul>
+</li>
+
+<li class="folder">			
+	<a href="#" class="submenu" onclick="return false;">Story Points</a>
+	<ul>
+	<% estimations.each do |e| -%>
+	    <li><%= context_menu_link e.name, {:controller => 'issues', :action => 'bulk_edit', :ids => @issues.collect(&:id), :issue => {:estimation_id => e}, :back_url => @back}, :method => :post,
+	                              :selected => (@issue && e == @issue.estimation), :disabled => ! @can[:update] %></li>
+	<% end -%>
+	</ul>
+</li>
+
+
+<li class="folder">			
+	<a href="#" class="submenu" onclick="return false;">QA</a>
+	<ul>
+	<% Sprint::QA_STATUSES.each do |s| -%>
+	    <li><%= context_menu_link s, {:controller => 'issues', :action => 'bulk_edit', :ids => @issues.collect(&:id), :issue => {:qa => s}, :back_url => @back}, :method => :post,
+	                              :selected => (@issue && s == @issue.qa), :disabled => ! @can[:update] %></li>
+	<% end -%>
+	</ul>
+</li>
