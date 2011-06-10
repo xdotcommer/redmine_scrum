@@ -11,6 +11,7 @@
     	<% @commitments.map(&:story).each do |story| %>
     	  $j("#link_<%= dom_id(story) %>").click(function() {
     	    $j("#<%= dom_id(story) %>").toggle();
+    	    return false;
     	  });
     	<% end %>
   	});

@@ -66,6 +66,10 @@ class Burndown < ActiveRecord::Base
   # Graph of bugs over time (daily) by priority (stacked graph)
   # Graph of bugs over time (daily) by resolution (include open)
   
+  def tooltip
+    "asdf"
+  end
+  
 private
   def update_sprint_day
     self.sprint_day = sprint.sprint_day(date)
