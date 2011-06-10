@@ -4,11 +4,8 @@ class SprintHistoriesController < RedmineScrumController
   def index
     @sprint      = Sprint.find(params[:sprint_id])
 
-    debugger
     @open_points = BurndownFlot.area('open_points') do |f|
-      debugger
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        debugger
         f.series_for(user, days, :x => :sprint_day, :y => :open_point_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_point_count} open stoies" })
       end
     end
