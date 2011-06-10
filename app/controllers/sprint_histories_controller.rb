@@ -6,25 +6,25 @@ class SprintHistoriesController < RedmineScrumController
 
     @open_points = BurndownFlot.area('open_points') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :open_point_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_point_count} open stoies" })
+        f.series_for(user, days, :x => :sprint_day, :y => :open_point_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_point_count} points open" })
       end
     end
     
     @pending_story_points = BurndownFlot.area('pending_story_points') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => lambda {|r| r.open_point_count + r.pending_point_count }, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_point_count + r.pending_point_count} open and pending stoies" })
+        f.series_for(user, days, :x => :sprint_day, :y => lambda {|r| r.open_point_count + r.pending_point_count }, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_point_count + r.pending_point_count} points open or pending" })
       end
     end
 
     @pending_stories = BurndownFlot.stacked_bar('pending_stories') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :pending_count)
+        f.series_for(user, days, :x => :sprint_day, :y => :pending_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_point_count + r.pending_point_count} stories in pending state" })
       end
     end
     
     @reopened_stories = BurndownFlot.stacked_bar('reopened_stories') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :reopened_count)
+        f.series_for(user, days, :x => :sprint_day, :y => :reopened_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_point_count + r.pending_point_count} stories in reopenned state" })
       end
     end
   end
