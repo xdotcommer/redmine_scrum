@@ -18,13 +18,13 @@ class SprintHistoriesController < RedmineScrumController
 
     @pending_stories = BurndownFlot.stacked_bar('pending_stories') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :pending_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.pending_point_count} stories in pending state" })
+        f.series_for(user, days, :x => :sprint_day, :y => :pending_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.pending_count} stories in pending state" })
       end
     end
     
     @reopened_stories = BurndownFlot.stacked_bar('reopened_stories') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :reopened_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.pending_point_count} stories in reopenned state" })
+        f.series_for(user, days, :x => :sprint_day, :y => :reopened_count, :tooltip => lambda {|r| "#{r.user_name} has #{r.reopened_count} stories in reopenned state" })
       end
     end
   end
