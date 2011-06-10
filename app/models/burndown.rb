@@ -66,6 +66,14 @@ class Burndown < ActiveRecord::Base
   # Graph of bugs over time (daily) by priority (stacked graph)
   # Graph of bugs over time (daily) by resolution (include open)
   
+  def open_line
+    committed_point_count - complete_point_count
+  end
+  
+  def pending_line
+    committed_point_count - complete_point_count - pending_point_count
+  end
+  
 private
   def update_sprint_day
     self.sprint_day = sprint.sprint_day(date)
