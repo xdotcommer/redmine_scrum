@@ -4,11 +4,12 @@ class Burndown < ActiveRecord::Base
   HACK_FIRST_SPRINT_DAY = -100
 
   DAY_MAPPINGS = {
-    "Mon" => [3,8],
-    "Tue" => [4,9],
-    "Wed" => [0,5],
-    "Thu" => [1,6],
-    "Fri" => [2,7]
+    "COM" => [0]
+    "Mon" => [4,9],
+    "Tue" => [5,10],
+    "Wed" => [1,6],
+    "Thu" => [2,7],
+    "Fri" => [3,8]
   }
 
   FIELD_PREFIXES  = %w(open pending invalid complete verified duplicate wont reopened)
