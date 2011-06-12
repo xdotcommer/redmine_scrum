@@ -17,22 +17,22 @@ namespace :redmine do
       
     end
     
-    task :add_one_to_sprint_days => :environment do
-      # Burndown.all.each do |burndown|
-      #   burndown.update_attribute(:sprint_day, burndown.sprint_day + 1)
-      # end
-      DeveloperStat.all.each do |stat|
-        stat.update_attribute(:days_until_first_story_pending, stat.days_until_first_story_pending + 1) unless stat.days_until_first_story_pending == 0
-        stat.update_attribute(:days_until_first_story_complete, stat.days_until_first_story_complete + 1) unless stat.days_until_first_story_complete == 0
-      end
-    end
-    
-    task :generate_first_day_from_commitments => :environment do
-      Sprint.all.each do |sprint|
-        Burndown::Story.snapshot_first_day(sprint)
-      end
-    end
-    
+    # task :add_one_to_sprint_days => :environment do
+    #   Burndown.all.each do |burndown|
+    #     burndown.update_attribute(:sprint_day, burndown.sprint_day + 1)
+    #   end
+    #   DeveloperStat.all.each do |stat|
+    #     stat.update_attribute(:days_until_first_story_pending, stat.days_until_first_story_pending + 1) unless stat.days_until_first_story_pending == 0
+    #     stat.update_attribute(:days_until_first_story_complete, stat.days_until_first_story_complete + 1) unless stat.days_until_first_story_complete == 0
+    #   end
+    # end
+    # 
+    # task :generate_first_day_from_commitments => :environment do
+    #   Sprint.all.each do |sprint|
+    #     Burndown::Story.snapshot_first_day(sprint)
+    #   end
+    # end
+    # 
     desc "Update Burndown for Yesterday"
     task :update_burndown => :environment do
       if ENV['DAYS_AGO']

@@ -1,7 +1,7 @@
 <%= flot_includes %>
 <%= javascript_include_tag "flotomatic/jquery.flot.stack.js", :cache => false %>
 
-  <h2>Open for <%= @sprint.name%></h2>
+  <h2>Points Open for <%= @sprint.name%></h2>
 
   <div class='flot_dataset_picker'>
         <%#= flot_selections %>
@@ -24,7 +24,7 @@
   
   <br>
 
-  <h2>Unclosed Stories for <%= @sprint.name %></h2>
+  <h2>Points Open/Pending for <%= @sprint.name %></h2>
 
   <div class='flot_dataset_picker'>
         <%#= flot_selections %>
