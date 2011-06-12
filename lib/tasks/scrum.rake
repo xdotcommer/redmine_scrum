@@ -18,12 +18,12 @@ namespace :redmine do
     end
     
     task :add_one_to_sprint_days => :environment do
-      Burndown.all.each do |burndown|
-        burndown.update_attribute(:sprint_day, burndown.sprint_day + 1)
-      end
+      # Burndown.all.each do |burndown|
+      #   burndown.update_attribute(:sprint_day, burndown.sprint_day + 1)
+      # end
       DeveloperStat.all.each do |stat|
-        stat.update_attribute(:days_until_first_story_pending, days_until_first_story_pending + 1) unless days_until_first_story_pending == 0
-        stat.update_attribute(:days_until_first_story_closed, days_until_first_story_closed + 1) unless days_until_first_story_closed == 0
+        stat.update_attribute(:days_until_first_story_pending, stat.days_until_first_story_pending + 1) unless stat.days_until_first_story_pending == 0
+        stat.update_attribute(:days_until_first_story_closed, stat.days_until_first_story_closed + 1) unless stat.days_until_first_story_closed == 0
       end
     end
     
