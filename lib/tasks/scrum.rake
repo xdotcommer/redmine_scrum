@@ -23,7 +23,7 @@ namespace :redmine do
       # end
       DeveloperStat.all.each do |stat|
         stat.update_attribute(:days_until_first_story_pending, stat.days_until_first_story_pending + 1) unless stat.days_until_first_story_pending == 0
-        stat.update_attribute(:days_until_first_story_closed, stat.days_until_first_story_closed + 1) unless stat.days_until_first_story_closed == 0
+        stat.update_attribute(:days_until_first_story_complete, stat.days_until_first_story_complete + 1) unless stat.days_until_first_story_complete == 0
       end
     end
     
