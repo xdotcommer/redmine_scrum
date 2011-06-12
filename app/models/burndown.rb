@@ -1,5 +1,7 @@
 class Burndown < ActiveRecord::Base
   unloadable
+  
+  HACK_FIRST_SPRINT_DAY = -100
 
   DAY_MAPPINGS = {
     "Mon" => [3,8],
@@ -76,6 +78,10 @@ class Burndown < ActiveRecord::Base
   
 private
   def update_sprint_day
-    self.sprint_day = sprint.sprint_day(date)
+    if sprint_day == HACK_FIRST_SPRINT_DAY
+      self.sprint_day = 0
+    else
+      self.sprint_day = sprint.sprint_day(date)
+    end
   end
 end

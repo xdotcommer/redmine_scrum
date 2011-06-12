@@ -37,6 +37,10 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def is_story?
+        Sprint::STORY_TRACKERS.include? tracker_id
+      end
+      
       def update_developer_stats
         return true unless assigned_to && sprint.commitable?
         developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)

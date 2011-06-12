@@ -11,14 +11,15 @@ class DeveloperStat < ActiveRecord::Base
   before_save     :set_developer_stats
   
   def update_details_for(issue)
+    return true if issue.is_story?
     return true unless issue.status_id_changed?
     
     self.story_reopens             += 1 if issue.status.is_reopened?
     self.pending_story_submissions += 1 if issue.status.is_pending?
     
-    if issue.status.is_pending?
+    if issue.status.is_pending? && days_until_first_story_pending <= 0
       self.days_until_first_story_pending = sprint.sprint_day(Date.today)
-    elsif issue.status.is_closed?
+    elsif issue.status.is_closed? && days_until_first_story_complete <= 0
       self.days_until_first_story_complete = sprint.sprint_day(Date.today) 
     end
   end

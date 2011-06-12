@@ -101,10 +101,10 @@ class Sprint < ActiveRecord::Base
   def sprint_day(date)
     return -1 unless start_date && end_date
     return -1 if date < start_date
-    return 10 if date > end_date
+    return 11 if date > end_date
 
     counter_date = start_date
-    day          = 0
+    day          = 1
     
     while (counter_date < date)
       if counter_date.wday == 0 || counter_date.wday == 6

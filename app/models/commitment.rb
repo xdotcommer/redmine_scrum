@@ -48,12 +48,18 @@ class Commitment < ActiveRecord::Base
       end
     end
   end
+
+  def self.update_burndown_first_day(sprint_id)
+    sprint = Sprint.find(sprint_id)
+    Burndown::Story.snapshot_first_day(sprint)
+  end
   
   def should_be_cleared?
     estimation.spiked? || ! user # || ! sprint.try(:commitable?)
   end
   
 private
+
   def denormalize_data
     self.story_points = estimation.try(:value)
   end
