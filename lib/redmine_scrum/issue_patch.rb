@@ -66,6 +66,7 @@ module RedmineScrum
       end
       
       def reset_qa
+        debugger
         return true unless status_id_changed?# || new_record?
 
         if status.is_pending?
