@@ -12,8 +12,12 @@ class Sprint < ActiveRecord::Base
   has_many  :assigned_tos, :through => :issues
   has_many  :commitments
   has_many  :burndowns, :order => 'sprint_day ASC'
+  has_many  :developer_stats
   
   named_scope :recent, lambda { {:conditions => ["end_date >= ? OR name='Backlog' OR name='Icebox'", 14.days.ago], :order => 'name ASC' } }
+  named_scope :commitable, :conditions => 'name != "Backlog" AND name != "Icebox"'
+  named_scope :past, :conditions => ['end_date <= ?', Date.today]
+  named_scope :with_developer_stats, :include => [:developer_stats], :conditions => 'developer_stats.id > 0'
   
   validates_each :start_date, :end_date, :on => :create do |record, attr, value|
     record.errors.add attr, 'already exists' if Sprint.send("find_by_#{attr}".to_sym, value)
@@ -29,7 +33,7 @@ class Sprint < ActiveRecord::Base
   def self.backlog
     @@backlog ||= find_by_name("Backlog")
   end
-
+  
   def self.update_burndown_for(date)
     if current_sprint = Sprint.find(:first, :conditions => ["start_date <= ? AND end_date >= ?", date, date])
       date -= 2.days if date.wday == 0

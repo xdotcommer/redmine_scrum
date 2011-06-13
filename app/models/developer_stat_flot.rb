@@ -1,9 +1,9 @@
-class BurndownFlot < Flot
+class DeveloperStatFlot < Flot
   extend ScrumFlot
 
   def initialize(canvas = nil,  &block)
     @options ||= {}
-    xaxis :min => 0, :ticks => Burndown.day_labels, :max => 10
+    xaxis :ticks => DeveloperStat.sprint_labels
     yaxis :min => 0, :tickDecimals => 0
     grid :hoverable => true
     super(canvas, {}, &block)

@@ -6,9 +6,12 @@ class DeveloperStat < ActiveRecord::Base
   belongs_to  :sprint
   belongs_to  :user
   
-  
   before_create   :denormalize_data
   before_save     :set_developer_stats
+  
+  def self.sprint_labels
+    Sprint.with_developer_stats.commitable.past.map {|s| [s.id, s.name]}
+  end
   
   def update_details_for(issue)
     return true if issue.is_story?
