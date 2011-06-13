@@ -20,5 +20,11 @@ class DeveloperStatsController < RedmineScrumController
         f.series_for(user, sprint, :x => :sprint_id, :y => :days_until_first_story_pending, :tooltip => lambda {|r| "#{r.user_name} took #{r.days_until_first_story_pending} days to submit first story" })
       end
     end  
+
+    @completed_points = DeveloperStatFlot.stacked_bar('completed_points') do |f|
+      @stats.group_by {|b| b.user_name }.each do |user, sprint|
+        f.series_for(user, sprint, :x => :sprint_id, :y => :completed_points, :tooltip => lambda {|r| "#{r.user_name} completed #{r.completed_points} points" })
+      end
+    end  
   end
 end
