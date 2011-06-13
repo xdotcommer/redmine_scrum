@@ -11,7 +11,7 @@ class DeveloperStatsController < RedmineScrumController
     
     @carryover = DeveloperStatFlot.stacked_bar('carryover') do |f|
       @stats.group_by {|b| b.user_name }.each do |user, sprint|
-        f.series_for(user, sprint, :x => :sprint_id, :y => :carryover_points, :tooltip => lambda {|r| "#{r.user_name} has #{r.carryover_points} points carrying over" })
+        f.series_for(user, sprint, :x => :sprint_id, :y => :carryover_points, :tooltip => lambda {|r| "#{r.user_name} had #{r.carryover_points} points carrying over" })
       end
     end
 

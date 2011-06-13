@@ -21,9 +21,9 @@ class DeveloperStat < ActiveRecord::Base
     self.pending_story_submissions += 1 if issue.status.is_pending?
     
     if issue.status.is_pending? && days_until_first_story_pending <= 0
-      self.days_until_first_story_pending = sprint.sprint_day(Date.today)
+      self.days_until_first_story_pending = sprint.sprint_day(Date.today) - 1
     elsif issue.status.is_closed? && days_until_first_story_complete <= 0
-      self.days_until_first_story_complete = sprint.sprint_day(Date.today) 
+      self.days_until_first_story_complete = sprint.sprint_day(Date.today) - 1
     end
   end
   
