@@ -66,10 +66,9 @@ module RedmineScrum
       end
       
       def reset_qa
-        debugger
         return true unless status_id_changed?# || new_record?
 
-        if status.is_pending?
+        if status.is_pending? || status.is_reopened?
           if qa_used_to_be == "Needed" || qa_used_to_be == "Not Needed"
             self.qa = qa_used_to_be
           else # just to make sure
