@@ -1,6 +1,5 @@
 <% content_for :header_tags do %>
   <script type="text/javascript" charset="utf-8">
-
   	$(function() {
       jQuery.noConflict();
       var $j = jQuery;
@@ -22,15 +21,6 @@
       });
   	});
   </script>
-  
-  <style>
-    ol#defects {display:inline; list-style-type:none;}
-    ol#defects {margin-left:0px;}
-    ol#defects li {text-align:left;}
-    ol#defects li textarea {width: 400px; height: 80px;}
-    textarea.biggy {width: 400px; height: 80px; margin-bottom: 10px;}
-  </style>
-  
 <% end %>
 
 <% @statuses = IssueStatus.all.map {|s| [s.name, s.id]} %>

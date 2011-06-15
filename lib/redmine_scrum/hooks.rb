@@ -37,5 +37,9 @@ module RedmineScrum
         context[:issue].defects << Defect.new(defect) unless defect[:description].blank?
       end
     end
+    
+    def view_layouts_base_html_head(context = {})
+      context[:controller].send(:render_to_string, {:partial => "layout/head", :locals => {}})
+    end
   end
 end
