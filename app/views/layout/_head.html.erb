@@ -8,4 +8,6 @@
   textarea.biggy {width: 400px; height: 80px; margin-bottom: 10px;}
 </style>
 
-<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+<% if params[:controller] == "issues" && params[:action] == "show" %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+<% end %>

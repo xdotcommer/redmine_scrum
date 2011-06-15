@@ -1,0 +1,65 @@
+</div>
+
+<style>
+#folding_subnav_queries ul {
+ list-style-type: none;
+ margin: 3px 0px;
+ padding: 0px;
+}
+#folding_subnav_queries ul ul {
+ margin-left: 15px;
+}
+#folding_subnav_queries ul.hidden_menuitem {
+  display: none;
+}
+
+</style>
+
+
+<script language="JavaScript">
+ function showHideSubnav(atag_object) {
+   $(atag_object).siblings('ul').each(function(node) {
+      if (node.hasClassName('hidden_menuitem')) {
+				node.removeClassName("hidden_menuitem");
+      } else {
+				node.addClassName("hidden_menuitem");
+			}
+   });
+   return false;
+ }
+</script>
+
+
+<% unless sidebar_queries.empty? -%>
+
+<div id="folding_subnav_queries">
+<h3>Saved Queries</h3>
+<ul>
+  <% last_pre_part = nil -%>
+  <% sidebar_queries.each do |query| -%>
+		<%
+        colon_loc = query.name.index(":")
+        if !colon_loc.nil? && colon_loc > 0
+					pre_part = query.name.slice(0, colon_loc)
+					post_part = query.name.slice(colon_loc+1, query.name.length - colon_loc - 1)
+		    	if last_pre_part != pre_part  -%>
+    <%      if !last_pre_part.nil?  -%>
+             </ul></li>
+    <%      end -%> 
+             <li class="mainitem collapsible"><%= link_to_function(h("> #{pre_part} ..."), "showHideSubnav(this);") %>
+             <ul class="hidden_menuitem">
+    <%      last_pre_part = pre_part -%>
+    <%    end -%>
+                 <li class="subitem"><%= link_to(h(post_part), :controller => 'issues', :action => 'index', :project_id => @project, :query_id => query) %></li>
+	   <% else -%>
+     <%   if !last_pre_part.nil? -%>
+            </ul></li>
+     <%   end -%>
+             <li class="mainitem"><%= link_to(h(query.name), :controller => 'issues', :action => 'index', :project_id => @project, :query_id => query) %></li>
+     <%   last_pre_part = nil -%>
+     <% end -%>
+  <% end -%>
+</ul>
+</div> <!-- #folding_subnav_queries -->
+<% end -%>
+
