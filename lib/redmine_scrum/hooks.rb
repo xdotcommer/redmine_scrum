@@ -5,9 +5,6 @@ module RedmineScrum
     #   :f      => the form object to create additional fields
     # render_on :view_issues_form_details_top, :partial => 'issues/form_details_bottom'
 
-    render_on :view_issues_sidebar_planning_bottom, :inline => '<div id="sidebar_queries" style="display: none;">'
-    render_on :view_issues_sidebar_queries_bottom, :partial => 'layout/foldable_queries'
-
     def view_issues_form_details_bottom(context={})
       sprints     = Sprint.all(:order => 'is_backlog DESC, name DESC')
       estimations = Estimation.all(:order => 'value ASC')
