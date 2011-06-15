@@ -1,6 +1,4 @@
 <% content_for :header_tags do %>
-  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
-  
   <script type="text/javascript" charset="utf-8">
 
   	$(function() {
@@ -9,19 +7,19 @@
 
       defect_count = 1;
 
-      $j(".defect_link").click(function() {
-        $(this).next().next().next().toggle();
-        return false;
-      });
-
-      $j(".edit_defect_link").click(function() {
-        $(this).next().next().next().toggle();
-        return false;
-      });
-      
-      $j("#issue_add_defect").click(function() {
-        $j("#defects_submit").show();
-      });
+      // $j(".defect_link").click(function() {
+      //   $(this).next().next().next().toggle();
+      //   return false;
+      // });
+      // 
+      // $j(".edit_defect_link").click(function() {
+      //   $(this).next().next().next().toggle();
+      //   return false;
+      // });
+      // 
+      // $j("#issue_add_defect").click(function() {
+      //   $j("#defects_submit").show();
+      // });
   	});
   </script>
   
