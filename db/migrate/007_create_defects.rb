@@ -5,6 +5,7 @@ class CreateDefects < ActiveRecord::Migration
       t.column :status_id, :integer
       t.column :description, :text
       t.column :position, :integer
+      t.column :category, :string
     end
   end
 

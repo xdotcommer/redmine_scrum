@@ -3,10 +3,11 @@
     p#defects_form label {}
     ol#defects {display:inline; list-style-type:none;}
     ol#defects li {margin-left:180px;}
+    ol#defects.no_margin li {margin-left:0px;}
     ol#defects li textarea {width: 400px; height: 80px;}
   </style>
 
-  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+  <%= javascript_include_tag "flotomatic/jquery.min.js", :cache => true %>
   
   <script type="text/javascript" charset="utf-8">
 
@@ -15,9 +16,15 @@
       var $j = jQuery;
 
       defect_count = 1;
+      category_options_html = '<%= options_for_select(Defect::CATEGORIES).gsub("\n", "") %>';
+      status_options_html = '<%= options_for_select(IssueStatus.all.map {|s| [s.name == "Won\'t Fix" ? "Wont Fix" : s.name, s.id]}).gsub("\n", "") %>';
 
       $j("#issue_add_defect").click(function() {
-        $j("ol#defects").append('<li><textarea name="defects[' + defect_count + ']"></textarea></li>')
+        $j("ol#defects").append('<li>'
+          + '<select name="defects[' + defect_count + '][category]">' + category_options_html + '</select>'
+          + '<select name="defects[' + defect_count + '][status_id]">' + status_options_html + '</select>'
+          + '<br>'
+          +  '<textarea name="defects[' + defect_count + '][description]"></textarea></li>')
         defect_count += 1;
         return false;
       });

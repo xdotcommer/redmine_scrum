@@ -32,8 +32,8 @@ module RedmineScrum
     end
     
     def controller_issues_edit_after_save(context = {})
-      context[:params][:defects].each do |k, defect_description|
-        context[:issue].defects << Defect.new(:description => defect_description) unless defect_description.blank?
+      context[:params][:defects].each do |k, defect|
+        context[:issue].defects << Defect.new(defect) unless defect[:description].blank?
       end
     end
   end

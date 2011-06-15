@@ -1,11 +1,13 @@
 <% content_for :header_tags do %>
-  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+  <%= javascript_include_tag "flotomatic/jquery.min.js", :cache => true %>
   
   <script type="text/javascript" charset="utf-8">
 
   	$(function() {
       jQuery.noConflict();
       var $j = jQuery;
+
+      defect_count = 1;
 
       $j(".defect_link").click(function() {
         $(this).next().next().next().toggle();
@@ -16,15 +18,24 @@
         $(this).next().next().next().toggle();
         return false;
       });
+      
+      $j("#issue_add_defect").click(function() {
+        $j("#defects_submit").show();
+      });
   	});
   </script>
   
   <style>
+    ol#defects {display:inline; list-style-type:none;}
+    ol#defects {margin-left:0px;}
+    ol#defects li {text-align:left;}
+    ol#defects li textarea {width: 400px; height: 80px;}
     textarea.biggy {width: 400px; height: 80px; margin-bottom: 10px;}
   </style>
   
 <% end %>
 
+<% @statuses = IssueStatus.all.map {|s| [s.name, s.id]} %>
 
   <tr>
     <th><%= l :field_sprint %>:</th>
@@ -56,8 +67,11 @@
         <div style="display:none" id="defect_<%= defect.id %>"><%= textilizable defect, :description %></div>
         <div style="display:none">
           <% form_for defect, :url => project_defect_path(@project, defect) do |f| %>
+            <br>
             <%= f.hidden_field :id %>
-            <%= f.text_area :description, :class => 'biggy' %>
+            <%= f.select :category, Defect::CATEGORIES %>
+            <%= f.select :status_id, @statuses, :selected => defect.status_id %>
+            <%= f.text_area :description, :class => 'biggy' %><br>
             <%= f.submit "Update Defect" %>
           <% end %>
           
@@ -65,3 +79,18 @@
       </th>
     </tr>
   <% end %>
+  
+  <tr>
+    <th>
+      <%= link_to "Add Defect", "#", :id => "issue_add_defect" %>
+    </th>
+
+    <td colspan="3" style="text-align:left">
+      <% form_for issue do |f| %>
+        <ol id="defects" class="no_margin">
+        </ol>
+        <%= f.submit "Add Defects", :id => 'defects_submit', :style => "display:none" %>
+      <% end %>
+    </td>
+  <th>
+  
