@@ -30,5 +30,11 @@ module RedmineScrum
       context[:controller].send(:render_to_string, {:partial => "issues/context_menu_start", 
                                 :locals => context.merge(:sprints => sprints, :estimations => estimations)})
     end
+    
+    def controller_issues_edit_after_save(context = {})
+      context[:params][:defects].each do |k, defect_description|
+        context[:issue].defects << Defect.new(:description => defect_description) unless defect_description.blank?
+      end
+    end
   end
 end

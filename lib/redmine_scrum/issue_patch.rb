@@ -12,6 +12,7 @@ module RedmineScrum
         belongs_to    :sprint
         belongs_to    :estimation
         has_one       :commitment
+        has_many      :defects
         
         after_create  :update_burndown
         before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa

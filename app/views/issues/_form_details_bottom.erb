@@ -1,4 +1,30 @@
-<%# if ["Story", "Tech Debt", "Systems", "Epic"].include? issue.tracker.name  %>
+<% content_for :header_tags do %>
+  <style>
+    p#defects_form label {}
+    ol#defects {display:inline; list-style-type:none;}
+    ol#defects li {margin-left:180px;}
+    ol#defects li textarea {width: 400px; height: 80px;}
+  </style>
+
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+  
+  <script type="text/javascript" charset="utf-8">
+
+  	$(function() {
+      jQuery.noConflict();
+      var $j = jQuery;
+
+      defect_count = 1;
+
+      $j("#issue_add_defect").click(function() {
+        $j("ol#defects").append('<li><textarea name="defects[' + defect_count + ']"></textarea></li>')
+        defect_count += 1;
+        return false;
+      });
+  	});
+  </script>
+<% end %>
+
   <p>
     <%= form.select :sprint_id, sprints.map {|s| [s.name, s.id]}, {:default => Sprint.backlog.id, :required => true} %>
   </p>
@@ -15,4 +41,12 @@
     <%= form.text_field :backlog_rank %>
   </p>
   
-<%# end %>
+  <p id="defects_form">
+    <label><%= l(:field_add_defect) %></label>
+    <label class="floating">
+      <%= link_to "Add Defect", "#", :id => "issue_add_defect" %>
+    </label>
+  </p>
+
+  <ol id="defects">
+  </ol>

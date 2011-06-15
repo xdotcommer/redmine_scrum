@@ -1,4 +1,30 @@
-<%# if ["Story", "Tech Debt", "Systems", "Epic"].include? issue.tracker.name  %>
+<% content_for :header_tags do %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+  
+  <script type="text/javascript" charset="utf-8">
+
+  	$(function() {
+      jQuery.noConflict();
+      var $j = jQuery;
+
+      $j(".defect_link").click(function() {
+        $(this).next('div').toggle();
+        return false;
+      });
+
+      $j(".edit_defect_link").click(function() {
+        $(this).next('div').next().toggle();
+        return false;
+      });
+  	});
+  </script>
+  
+  <style>
+    textarea.biggy {width: 400px; height: 80px; margin-bottom: 10px;}
+  </style>
+  
+<% end %>
+
 
   <tr>
     <th><%= l :field_sprint %>:</th>
@@ -19,5 +45,22 @@
     <th><%= l :field_backlog_rank %>:</th>
     <td><%= issue.backlog_rank %></td>
   </tr>
-
-<%# end %>
+  
+  <% issue.defects.each do |defect| %>
+    <tr>
+      <th>Defect <%= defect.position %></th>
+      <td>
+        <%= link_to truncate(defect.description, :length => 40), '#', :class => "defect_link" -%>
+        <%= link_to '', '#', :class => 'edit_defect_link icon icon-edit' %>
+        <div style="display:none" id="defect_<%= defect.id %>"><%= textilizable defect, :description %></div>
+        <div style="display:none">
+          <% form_for defect, :url => project_defect_path(@project, defect) do |f| %>
+            <%= f.hidden_field :id %>
+            <%= f.text_area :description, :class => 'biggy' %>
+            <%= f.submit "Update Defect" %>
+          <% end %>
+          
+        </div>
+      </th>
+    </tr>
+  <% end %>
