@@ -8,12 +8,12 @@
       var $j = jQuery;
 
       $j(".defect_link").click(function() {
-        $(this).next('div').toggle();
+        $(this).next().next().next().toggle();
         return false;
       });
 
       $j(".edit_defect_link").click(function() {
-        $(this).next('div').next().toggle();
+        $(this).next().next().next().toggle();
         return false;
       });
   	});
@@ -52,6 +52,7 @@
       <td>
         <%= link_to truncate(defect.description, :length => 40), '#', :class => "defect_link" -%>
         <%= link_to '', '#', :class => 'edit_defect_link icon icon-edit' %>
+        <%= link_to '', project_defect_path(@project, defect), :method => :delete, :class => 'delete_defect_link icon icon-del', :confirm => 'Are you sure?' %>
         <div style="display:none" id="defect_<%= defect.id %>"><%= textilizable defect, :description %></div>
         <div style="display:none">
           <% form_for defect, :url => project_defect_path(@project, defect) do |f| %>
