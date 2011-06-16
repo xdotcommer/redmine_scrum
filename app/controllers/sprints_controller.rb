@@ -5,12 +5,7 @@ class SprintsController < RedmineScrumController
   before_filter :find_sprint, :only => [:edit, :update, :destroy]
 
   def index
-    # if params[:all]
-      @sprints = Sprint.all(:order => 'end_date desc')
-    # else
-    #   @sprints = Sprint.recent(:order => 'end_date desc')
-    # end
-    
+    @sprints        = Sprint.all(:order => 'end_date desc')
     @bug_trackers   = Sprint::BUG_TRACKERS
     @story_trackers = Sprint::STORY_TRACKERS
   end

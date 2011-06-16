@@ -19,6 +19,8 @@
     <th>Commitments</th>
     <th>Open<br>Stories</th>
     <th>Total<br>Stories</th>
+    <th>Open<br>Points</th>
+    <th>Total<br>Points</th>
     <th>Open<br>Bugs</th>
     <th>Total<br>Bugs</th>
   </tr>
@@ -67,6 +69,19 @@
       <% end %>
 
     </td>
+    
+    <td>
+      <% unless sprint.developer_stats.empty? %>
+        sprint.developer_stats.sum {|s| s.completed_points}
+      <% end %>
+    </td>
+
+    <td>
+      <% unless sprint.developer_stats.empty? %>
+        sprint.developer_stats.sum {|s| s.committed_points}
+      <% end %>
+    </td>
+    
     <td>
       
       <% if sprint.bug_count > 0 %>
