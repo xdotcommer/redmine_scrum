@@ -72,13 +72,13 @@
     
     <td>
       <% unless sprint.developer_stats.empty? %>
-        sprint.developer_stats.sum {|s| s.completed_points}
+        <%= sprint.developer_stats.sum {|s| s.completed_points} %>
       <% end %>
     </td>
 
     <td>
       <% unless sprint.developer_stats.empty? %>
-        sprint.developer_stats.sum {|s| s.committed_points}
+        <%= sprint.developer_stats.sum {|s| s.committed_points} %>
       <% end %>
     </td>
     
