@@ -63,10 +63,10 @@
       <% committed = @stats.select {|stat| stat.user_name == name}.map(&:committed_points) %>
 
       <th style="border-left: 1px solid #999">
-        <%= completed.sum / completed.size %>
+        <%= (completed.size > 0) ? completed.sum / completed.size : "N/A" %>
       </th>
       <th style="border-left: 1px dashed #999;">
-        <%= committed.sum / committed.size %>
+        <%= (committed.size > 0) ? committed.sum / committed.size : "N/A" %>
       </th>
     <% end %>
     <th style="border-left: 1px solid #999">
