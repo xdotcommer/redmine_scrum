@@ -6,13 +6,13 @@ class SprintHistoriesController < RedmineScrumController
 
     @pending_story_points = BurndownFlot.area('open_points') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :open_line, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_line} points open" })
+        f.series_for(user, days, :x => :sprint_day, :y => :open_line, :tooltip => lambda {|r| "#{r.user_name} has #{r.open_line} points open or pending" })
       end
     end
     
     @open_points = BurndownFlot.area('pending_story_points') do |f|
       @sprint.burndowns.group_by {|b| b.user_name }.each do |user, days|
-        f.series_for(user, days, :x => :sprint_day, :y => :pending_line, :tooltip => lambda {|r| "#{r.user_name} has #{r.pending_line} points open or pending" })
+        f.series_for(user, days, :x => :sprint_day, :y => :pending_line, :tooltip => lambda {|r| "#{r.user_name} has #{r.pending_line} points open" })
       end
     end
 
