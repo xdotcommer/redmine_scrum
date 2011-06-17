@@ -10,10 +10,10 @@
     <%= f.select :sprint_id, Sprint.all.map {|u| [u.name, u.id] }, :selected => commitment.story.sprint_id %>
   </td>
   <td>
-    <%= f.select :estimation_id, Estimation.all.map {|u| [u.name, u.id] }, :selected => commitment.story.estimation_id %>
+    <%= f.select :estimation_id, Estimation.all.map {|u| [u.name, u.id] }, {:selected => commitment.story.estimation_id}, :class => 'estimation' %>
   </td>
   <td>
-    <%= f.select :user_id, @developers.map {|u| [u.name, u.id] }, :selected => commitment.story.assigned_to_id, :include_blank => true %>
+    <%= f.select :user_id, @developers.map {|u| [u.name, u.id] }, {:selected => commitment.story.assigned_to_id, :include_blank => true}, :class => 'developer' %>
   </td>
   <td>
     <%= commitment.story.category %>

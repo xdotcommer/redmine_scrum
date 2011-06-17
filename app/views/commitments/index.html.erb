@@ -7,6 +7,18 @@
     $(function() {
       jQuery.noConflict();
     	var $j = jQuery;
+    	point_counts = new Hash();
+    	estimations = new Hash();
+    	var old_estimate = 0;
+    	var old_developer = 0;
+    	
+    	<% @developers.each do |developer| %>
+    	  point_counts['<%= developer.id %>'] = 0;
+    	<% end %>
+    	
+    	<% Estimation.all.each do |estimation| %>
+    	  estimations['<%= estimation.id %>'] = <%= estimation.value %>;
+    	<% end %>
     	
     	<% @commitments.map(&:story).each do |story| %>
     	  $j("#link_<%= dom_id(story) %>").click(function() {
@@ -14,6 +26,46 @@
     	    return false;
     	  });
     	<% end %>
+    	
+      $j(".developer").focus(function () {
+        old_developer = this.value;
+      }).change(function() {
+        estimation = estimations[ $j(this).parent('td').prev('td').children('select').val() ];
+        developer_id = this.value;
+        
+        point_counts[developer_id] += estimation;
+        point_counts[old_developer] -= estimation;
+
+        node = $j('#points_' + developer_id);
+        node.empty();
+        node.html(point_counts[developer_id]);
+
+        node = $j('#points_' + old_developer);
+        node.empty();
+        node.html(point_counts[old_developer]);
+    	});
+
+      $j(".estimation").focus(function () {
+        old_estimate = estimations[this.value];
+      }).change(function() {
+        developer_id = $j(this).parent('td').next('td').children('select').val();
+        estimation = estimations[this.value];
+        node = $j('#points_' + developer_id);
+
+        point_counts[developer_id] += (estimation - old_estimate);
+
+        node.empty();
+        node.html(point_counts[developer_id]);
+    	});
+    	
+    	$j(".estimation").each(function() {
+        developer_id = $j(this).parent('td').next('td').children('select').val();
+        estimation = estimations[this.value];
+        point_counts[developer_id] += estimation;
+        node = $j('#points_' + developer_id);
+        node.empty();
+        node.html(point_counts[developer_id]);
+    	});
   	});
   </script>
   
@@ -25,6 +77,23 @@
 <% end %>
 
 <h2>Commitments for the <%= @sprint.name %> sprint</h2>
+
+<table class="list">
+  <tr>
+    <th></th>
+    <% @developers.each do |developer| %>
+      <th><%= developer.name %></th>
+    <% end %>
+    <th></th>
+  </tr>
+  <tr id="point_count">
+    <th>Points</th>
+    <% @developers.each do |developer| %>
+      <td id="points_<%= developer.id %>"></td>
+    <% end %>
+    <th></th>
+  </tr>
+</table>
 
 <% form_for @sprint, :url => bulk_update_project_sprint_commitments_path(@project, @sprint) do |f| %>
   <table class="list">
