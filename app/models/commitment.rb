@@ -17,6 +17,7 @@ class Commitment < ActiveRecord::Base
   after_destroy :update_story
   
   delegate      :description, :to => :story
+  delegate      :priority, :to => :story
 
   def self.from_stories(stories)
     commitments = []
@@ -70,6 +71,10 @@ class Commitment < ActiveRecord::Base
   
   def requires_clarification=(value)
     story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).update_attribute :value, value
+  end
+  
+  def priority=(value)
+    story.priority_id = value
   end
   
 private

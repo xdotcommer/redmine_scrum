@@ -1,7 +1,10 @@
 <tr class="<%= 'red' if commitment.new_record? %>">
   <%= f.hidden_field :issue_id, :value => commitment.story.id %>
   <td>
-    <%= link_to commitment.story.id, issue_path(:project_id => @project, :id => commitment.story.id) %>
+    <%= link_to commitment.story.id, issue_path(:project_id => @project, :id => commitment.story.id), :popup => true %>
+  </td>
+  <td>
+    <%= f.select :priority, @priorities.map {|pr| [pr.name, pr.id] }, :selected => (commitment.story.priority_id || @unprioritized.id) %>
   </td>
   <td class="left">
     <%= link_to commitment.story.subject, "#", :id => "link_#{dom_id(commitment.story)}" %>
@@ -20,13 +23,14 @@
   </td>
   <td>
     <%= f.check_box :requires_clarification %>
-    <%#= "Y" if commitment.story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification").id).try(:value) == "1" %>
   </td>
 </tr>
 
 <tr style="display:none" id="<%= dom_id(commitment.story) %>">
-  <td><%= link_to "edit", edit_issue_path(:project_id => @project, :id => commitment.story.id), :popup => true %></td>
-  <td class="left">
+  <td>
+    <%= link_to "edit", edit_issue_path(:project_id => @project, :id => commitment.story.id), :popup => true %>
+  </td>
+  <td class="left" colspan="2">
     <%= f.text_area :description, :class => 'biggy', :style => 'height: 200px' %>
   </td>
   <td></td>
