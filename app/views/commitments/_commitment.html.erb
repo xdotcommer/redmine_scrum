@@ -24,9 +24,9 @@
 </tr>
 
 <tr style="display:none" id="<%= dom_id(commitment.story) %>">
-  <td><%= link_to "edit", edit_issue_path(:project_id => @project, :id => commitment.story.id) %></td>
+  <td><%= link_to "edit", edit_issue_path(:project_id => @project, :id => commitment.story.id), :popup => true %></td>
   <td class="left">
-      <%= simple_format commitment.story.description %>
+    <%= f.text_area :description, :class => 'biggy', :style => 'height: 200px' %>
   </td>
   <td></td>
   <td></td>

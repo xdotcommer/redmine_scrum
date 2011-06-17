@@ -15,6 +15,8 @@ class Commitment < ActiveRecord::Base
   before_save   :denormalize_data
   after_save    :update_story
   after_destroy :update_story
+  
+  delegate      :description, :to => :story
 
   def self.from_stories(stories)
     commitments = []
@@ -56,6 +58,10 @@ class Commitment < ActiveRecord::Base
   
   def should_be_cleared?
     estimation.spiked? || ! user # || ! sprint.try(:commitable?)
+  end
+  
+  def description=(text)
+    story.description = text
   end
   
 private

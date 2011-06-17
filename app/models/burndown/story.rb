@@ -3,6 +3,7 @@ class Burndown::Story < Burndown
   
   def self.snapshot_first_day(sprint)
     sprint.issues.stories.group_by {|i| i.assigned_to_id}.each do |user_id, issues|
+      next unless user_id
       unless snapshot = find_by_sprint_day_and_sprint_id_and_user_id(0, sprint.id, user_id)
         snapshot = new(:date => sprint.start_date, :sprint_day => HACK_FIRST_SPRINT_DAY, :sprint_id => sprint.id, :sprint_name => sprint.name, :user_id => user_id, :user_name => User.find(user_id).login)
       end
