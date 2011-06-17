@@ -7,6 +7,27 @@
         <%#= flot_selections %>
   </div>
 
+  <%= flot_canvas("pending_story_points") %>
+
+  <!-- do the actual plotting... -->
+  <% flot_graph("pending_story_points", @pending_story_points) do %>
+        <%= flot_plot("pending_story_points") %>
+        <%= flot_tooltip("pending_story_points") %>
+
+        pending_story_points_flotomatic.labelFormatter = function(label, series) {
+            // series is the series object for the label
+            return '<a href="#' + label + '">' + label + '</a>';
+        };
+  <% end %>
+
+  <br>
+
+  <h2>Points Open for <%= @sprint.name %></h2>
+
+  <div class='flot_dataset_picker'>
+        <%#= flot_selections %>
+  </div>
+
   <%= flot_canvas("open_points") %>
 
   <!-- do the actual plotting... -->
@@ -22,27 +43,6 @@
 
   <% end %>
   
-  <br>
-
-  <h2>Points Open for <%= @sprint.name %></h2>
-
-  <div class='flot_dataset_picker'>
-        <%#= flot_selections %>
-  </div>
-
-  <%= flot_canvas("pending_story_points") %>
-
-  <!-- do the actual plotting... -->
-  <% flot_graph("pending_story_points", @pending_story_points) do %>
-        <%= flot_plot("pending_story_points") %>
-        <%= flot_tooltip("pending_story_points") %>
-
-        pending_story_points_flotomatic.labelFormatter = function(label, series) {
-            // series is the series object for the label
-            return '<a href="#' + label + '">' + label + '</a>';
-        };
-  <% end %>
-
   <br>
 
   <h2>Pending Stories for <%= @sprint.name %></h2>
