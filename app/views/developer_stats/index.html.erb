@@ -59,14 +59,11 @@
   <tr style="border-top: 1px solid #999">
     <th></th>
     <% @developers.each do |name| %>
-      <% completed = @stats.select {|stat| stat.user_name == name}.map(&:completed_points) %>
-      <% committed = @stats.select {|stat| stat.user_name == name}.map(&:committed_points) %>
-
       <th style="border-left: 1px solid #999">
-        <%= (completed.size > 0) ? completed.sum / completed.size : "N/A" %>
+        <%= @developer_averages[name][:completed_points] %>
       </th>
       <th style="border-left: 1px dashed #999;">
-        <%= (committed.size > 0) ? committed.sum / committed.size : "N/A" %>
+        <%= @developer_averages[name][:committed_points] %>
       </th>
     <% end %>
     <th style="border-left: 1px solid #999">

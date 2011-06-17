@@ -11,6 +11,14 @@ class DeveloperStatsController < RedmineScrumController
     
     @average_completed =  DeveloperStat.sum(:completed_points, :include => [:sprint], :conditions => ["sprints.start_date < ?", Date.today]) / @sprints.size
     @average_committed = DeveloperStat.sum(:committed_points, :include => [:sprint], :conditions => ["sprints.start_date < ?", Date.today]) / @sprints.size
+    @developer_averages = {}
+    
+    @developers.each do |name|
+      @developer_averages[name] = {
+        :completed_points => (DeveloperStat.sum(:completed_points, :include => [:sprint], :conditions => ["sprints.start_date < ? AND user_name=?", Date.today, name]) / @sprints.size),
+        :committed_points => (DeveloperStat.sum(:committed_points, :include => [:sprint], :conditions => ["sprints.start_date < ? AND user_name=?", Date.today, name]) / @sprints.size)
+      } 
+    end
     
     @carryover = DeveloperStatFlot.stacked_bar('carryover') do |f|
       @stats.group_by {|b| b.user_name }.each do |user, sprint|
