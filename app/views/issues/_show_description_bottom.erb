@@ -1,0 +1,84 @@
+<% content_for :header_tags do %>
+  <script type="text/javascript" charset="utf-8">
+  	$(function() {
+      jQuery.noConflict();
+      var $j = jQuery;
+
+      defect_count = 1;
+      
+      next_defect = <%= issue.defects.count %> + 1;
+
+      $j(".defect_link").click(function() {
+        $(this).next().next().next().toggle();
+        return false;
+      });
+      
+      $j(".edit_defect_link").click(function() {
+        $(this).next().next().next().toggle();
+        return false;
+      });
+      
+      $j("#add_defect").click(function() {
+        $j("table#defects").append('<tr><td><strong>' + next_defect + '.</strong></td><td>'
+          + '<select name="defects[' + defect_count + '][status_id]">' + status_options_html + '</select></td><td>'
+          + '<select name="defects[' + defect_count + '][category]">' + category_options_html + '</select></td><td width="100%">'
+          +  '<textarea name="defects[' + defect_count + '][description]" class="biggy"></textarea></td></tr>')
+        defect_count += 1;
+        next_defect += 1;
+        $j("#defects_submit").show();
+        return false;
+      });
+  	});
+  </script>
+<% end %>
+
+<% @statuses = IssueStatus.all.map {|s| [s.name, s.id]} %>
+
+<hr>
+
+<div id="defect_list">
+  <div class="contextual">
+    <%= link_to l(:button_add), '#', :id => 'add_defect' %>
+  </div>
+
+  <p><strong>Defects</strong></p>
+
+  <% form_for issue do |f| %>
+    <table style="width:100%" id="defects">
+      <% issue.defects.each do |defect| %>
+        <tr>
+          <td><strong><%= defect.position %>.</strong></td>
+          <td>
+            <%= defect.status.name %>
+          </td>
+          <td>
+            <%= defect.category %>
+          </td>
+          <td>
+            <%= link_to truncate(defect.description, :length => 100), '#', :class => "defect_link" -%>
+            <%= link_to '', '#', :class => 'edit_defect_link icon icon-edit' %>
+            <%= link_to '', project_defect_path(@project, defect), :method => :delete, :class => 'delete_defect_link icon icon-del', :confirm => 'Are you sure?' %>
+            <div style="display:none" id="defect_<%= defect.id %>"><%= textilizable defect, :description %></div>
+            <div style="display:none">
+              <% form_for defect, :url => project_defect_path(@project, defect) do |f| %>
+                <br>
+                <%= f.hidden_field :id %>
+                <%= f.select :category, Defect::CATEGORIES %>
+                <%= f.select :status_id, @statuses, :selected => defect.status_id %>
+                <%= f.text_area :description, :class => 'biggy' %><br>
+                <%= f.submit "Update Defect" %>
+              <% end %>
+        
+            </div>
+          </th>
+        </tr>
+      <% end %>
+    </table>
+    <div class="contextual">    
+      <%= f.submit "Add Defects", :id => 'defects_submit', :style => "display:none; margin-bottom: 30px" %>
+    </div>
+  <% end %>
+  
+
+</div>
+

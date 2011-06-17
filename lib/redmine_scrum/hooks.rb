@@ -17,6 +17,11 @@ module RedmineScrum
                                 :locals => context})
     end
     
+    def view_issues_show_description_bottom(context={})
+      context[:controller].send(:render_to_string, {:partial => "issues/show_description_bottom", 
+                                :locals => context})
+    end
+    
     def view_issues_bulk_edit_details_bottom(context = {})
       sprints     = Sprint.all(:order => 'is_backlog DESC, name DESC')
       estimations = Estimation.all(:order => 'value ASC')
