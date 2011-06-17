@@ -27,12 +27,12 @@ namespace :redmine do
     #   end
     # end
     # 
-    # task :generate_first_day_from_commitments => :environment do
-    #   Sprint.all.each do |sprint|
-    #     Burndown::Story.snapshot_first_day(sprint)
-    #   end
-    # end
-    # 
+    task :generate_first_day_from_commitments => :environment do
+      Sprint.all.each do |sprint|
+        Burndown::Story.snapshot_first_day(sprint)
+      end
+    end
+    
     desc "Update Burndown for Yesterday"
     task :update_burndown => :environment do
       if ENV['DAYS_AGO']
