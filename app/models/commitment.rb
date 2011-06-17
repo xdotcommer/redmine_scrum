@@ -64,6 +64,14 @@ class Commitment < ActiveRecord::Base
     story.description = text
   end
   
+  def requires_clarification
+    story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).value
+  end
+  
+  def requires_clarification=(value)
+    story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).update_attribute :value, value
+  end
+  
 private
 
   def denormalize_data
