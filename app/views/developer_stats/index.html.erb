@@ -70,6 +70,7 @@
       </th>
     <% end %>
     <th style="border-left: 1px solid #999">
+      <% RAILS_DEFAULT_LOGGER.error("\n\n>>>>>>>>SPRINT SIZE=#{@sprints.size} COMPLETED = #{@stats.sum {|s| s.completed_points}}\n\n") %>
       <%= @stats.sum {|s| s.completed_points} / @sprints.size %>
     </th>
     <th style="border-left: 1px dashed #999;">

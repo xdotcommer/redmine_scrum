@@ -4,11 +4,11 @@ class CommitmentsController < RedmineScrumController
   def index
     @sprint      = Sprint.find(params[:sprint_id])
     @commitments = Commitment.from_stories(@sprint.issues.stories)
-    if params[:sort] == "developer"
+    # if params[:sort] == "developer"
       @commitments = @commitments.sort_by {|c| c.user_id || 0 }
-    else
-      @commitments = @commitments.sort_by {|c| c.issue_id }
-    end
+    # else
+    #   @commitments = @commitments.sort_by {|c| c.issue_id }
+    # end
     @developers  = Role.find_by_name("Developer").members.map(&:user).select {|d| d.active? }
   end
   

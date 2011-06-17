@@ -70,6 +70,7 @@
   </script>
   
   <style>
+    table.list {border: 1px solid #666;}
     table.list tr td { text-align:center;}
     table.list tr.red td { color:#903; font-weight:bold;}
     table.list tr td.left { text-align:left;}
@@ -84,14 +85,12 @@
     <% @developers.each do |developer| %>
       <th><%= developer.name %></th>
     <% end %>
-    <th></th>
   </tr>
   <tr id="point_count">
     <th>Points</th>
     <% @developers.each do |developer| %>
       <td id="points_<%= developer.id %>"></td>
     <% end %>
-    <th></th>
   </tr>
 </table>
 
