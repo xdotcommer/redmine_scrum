@@ -4,9 +4,9 @@ class DeveloperStatsController < RedmineScrumController
   def index
     @developers = DeveloperStat.find_by_sql("select distinct(user_name) from developer_stats").map &:user_name
     @developers.sort!
-    @sprints    = DeveloperStat.find_by_sql("select distinct(sprint_name) from developer_stats").map &:sprint_name
+    @sprints    = DeveloperStat.find_by_sql("select distinct(sprint_name) from developer_stats JOIN sprints ON  sprint_id=sprints.id WHERE sprints.start_date < DATE(NOW())").map &:sprint_name
     @sprints.sort!
-    @stats      = DeveloperStat.all(:include => [:sprint], :conditions => ["sprints.end_date < ? AND sprints.start_date < ?", Date.today, Date.today], :order => 'sprint_name DESC, user_name ASC')
+    @stats      = DeveloperStat.all(:include => [:sprint], :conditions => ["sprints.end_date < ?", Date.today], :order => 'sprint_name DESC, user_name ASC')
     @current_stats = DeveloperStat.all(:include => [:sprint], :conditions => ["sprints.start_date <= ? AND sprints.end_date >= ?", Date.today, Date.today], :order => 'user_name ASC')
     
     @carryover = DeveloperStatFlot.stacked_bar('carryover') do |f|
