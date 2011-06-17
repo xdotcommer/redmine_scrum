@@ -70,10 +70,10 @@
       </th>
     <% end %>
     <th style="border-left: 1px solid #999">
-      <%= @stats.sum {|s| s.completed_points} / @sprints.size %>
+      <%= @average_completed %>
     </th>
     <th style="border-left: 1px dashed #999;">
-      <%= @stats.sum {|s| s.committed_points} / @sprints.size %>
+      <%= @average_committed %>
     </th>
   </tr>
 </table>
