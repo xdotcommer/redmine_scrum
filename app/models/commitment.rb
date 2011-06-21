@@ -37,6 +37,9 @@ class Commitment < ActiveRecord::Base
       commitment = find(id)
       if commitment.should_be_cleared?
         commitment.destroy
+      elsif commitment.sprint_id != attributes[:sprint_id] && commitment.sprint.start_date < Date.yesterday
+        # moving sprints - create a new commitment, only if the sprint has already started (and it's not the sprint planning day)
+        Commitment.create(commitment.attributes.merge(attributes))
       else
         commitment.update_attributes attributes
       end
