@@ -2,8 +2,9 @@ class DefectsController < RedmineScrumController
   unloadable
   
   def update
+    raise "HERE"
     @defect = Defect.find(params[:defect][:id])
-    @defect.update_attribute(:description, params[:defect][:description])
+    @defect.update_attributes(params[:defect])
     redirect_to @defect.issue
   end
   

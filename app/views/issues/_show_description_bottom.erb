@@ -15,14 +15,15 @@
       
       $j(".edit_defect_link").click(function() {
         $(this).next().next().next().toggle();
+        $j("#defects_submit").show();
         return false;
       });
       
       $j("#add_defect").click(function() {
-        $j("table#defects").append('<tr><td><strong>' + next_defect + '.</strong></td><td>'
-          + '<select name="defects[' + defect_count + '][status_id]">' + status_options_html + '</select></td><td>'
-          + '<select name="defects[' + defect_count + '][category]">' + category_options_html + '</select></td><td width="100%">'
-          +  '<textarea name="defects[' + defect_count + '][description]" class="biggy"></textarea></td></tr>')
+        $j("tr#defects_submit").before('<tr><td><strong>' + next_defect + '.</strong></td><td>'
+          + '<select name="new_defects[' + defect_count + '][status_id]">' + status_options_html + '</select></td><td>'
+          + '<select name="new_defects[' + defect_count + '][category]">' + category_options_html + '</select></td><td width="100%">'
+          +  '<textarea name="new_defects[' + defect_count + '][description]" class="biggy"></textarea></td></tr>')
         defect_count += 1;
         next_defect += 1;
         $j("#defects_submit").show();
@@ -60,22 +61,25 @@
             <%= link_to '', project_defect_path(@project, defect), :method => :delete, :class => 'delete_defect_link icon icon-del', :confirm => 'Are you sure?' %>
             <div style="display:none" id="defect_<%= defect.id %>"><%= textilizable defect, :description %></div>
             <div style="display:none">
-              <% form_for defect, :url => project_defect_path(@project, defect) do |f| %>
                 <br>
-                <%= f.hidden_field :id %>
+            <% fields_for "defect_#{defect.id}", defect do |f| %>
                 <%= f.select :category, Defect::CATEGORIES %>
                 <%= f.select :status_id, @statuses, :selected => defect.status_id %>
                 <%= f.text_area :description, :class => 'biggy' %><br>
-                <%= f.submit "Update Defect" %>
-              <% end %>
-        
+            <% end %>
             </div>
           </th>
         </tr>
       <% end %>
+      <tr id="defects_submit" style="display:none">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td align="right"><%= f.submit "Update Defects" %></td>
+      </tr>
     </table>
     <div class="contextual">    
-      <%= f.submit "Add Defects", :id => 'defects_submit', :style => "display:none; margin-bottom: 30px" %>
+      <%#= f.submit "Add Defects", :id => 'defects_submit', :style => "display:none; margin-bottom: 30px" %>
     </div>
   <% end %>
   
