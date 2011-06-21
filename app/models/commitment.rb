@@ -66,10 +66,12 @@ class Commitment < ActiveRecord::Base
   end
   
   def requires_clarification
+    return nil unless story
     story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).value
   end
   
   def requires_clarification=(value)
+    return nil unless story
     story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).update_attribute :value, value
   end
   
