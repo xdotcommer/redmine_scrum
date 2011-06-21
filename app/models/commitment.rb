@@ -46,7 +46,7 @@ class Commitment < ActiveRecord::Base
   def self.bulk_create(commitment_attributes)
     commitment_attributes.each do |attributes|
       commitment = new(attributes)
-      unless commitment.should_be_cleared?
+      unless commitment.try(:should_be_cleared?)
         commitment.save
       end
     end

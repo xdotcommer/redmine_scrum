@@ -10,7 +10,6 @@ class CommitmentsController < RedmineScrumController
   end
   
   def update #don't know why bulk_update won't work - must be an engines thing
-    raise params[:new_commitment_attributes].inspect
     Commitment.bulk_update(params[:commitment_attributes]) if params[:commitment_attributes]
     Commitment.bulk_create(params[:new_commitment_attributes]) if params[:new_commitment_attributes]
     Commitment.update_burndown_first_day(params[:sprint_id])
