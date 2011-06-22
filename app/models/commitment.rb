@@ -38,6 +38,7 @@ class Commitment < ActiveRecord::Base
       if commitment.should_be_cleared?
         commitment.destroy
       else
+        raise attributes.inspect if commitment.try(:issue_id) == 3127
         commitment.update_attributes attributes
       end
     end
