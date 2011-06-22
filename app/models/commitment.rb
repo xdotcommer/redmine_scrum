@@ -39,6 +39,7 @@ class Commitment < ActiveRecord::Base
         commitment.destroy
       else
         commitment.update_attributes attributes
+        commitment.story.save
       end
     end
   end
@@ -88,7 +89,6 @@ private
   end
   
   def update_story
-    story.save
     story.update_attributes(:assigned_to_id => user_id, :estimation_id => estimation_id, :sprint_id => sprint_id)
   end
 end
