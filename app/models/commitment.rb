@@ -37,10 +37,6 @@ class Commitment < ActiveRecord::Base
       commitment = find(id)
       if commitment.should_be_cleared?
         commitment.destroy
-      # this condition may not be necessary since bulk_create should handle it...
-      elsif commitment.sprint_id != attributes[:sprint_id] && commitment.sprint.start_date < Date.yesterday
-        # moving sprints - create a new commitment, only if the sprint has already started (and it's not the sprint planning day)
-        Commitment.create(commitment.attributes.merge(attributes))
       else
         commitment.update_attributes attributes
       end
@@ -69,7 +65,7 @@ class Commitment < ActiveRecord::Base
     return nil unless story
     story.description = text
   end
-  
+
   def requires_clarification
     return nil unless story
     story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).value
@@ -81,6 +77,7 @@ class Commitment < ActiveRecord::Base
   end
   
   def priority=(value)
+    return nil unless story
     story.priority_id = value
   end
   
