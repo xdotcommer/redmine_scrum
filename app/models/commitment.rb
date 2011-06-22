@@ -38,7 +38,6 @@ class Commitment < ActiveRecord::Base
       if commitment.should_be_cleared?
         commitment.destroy
       else
-        raise attributes.inspect if commitment.try(:issue_id) == 3127
         commitment.update_attributes attributes
       end
     end
@@ -79,6 +78,7 @@ class Commitment < ActiveRecord::Base
   
   def priority=(value)
     return nil unless story
+    raise "old priority_id = #{story.priority_id} new value = #{value}" if story.id == 3127
     story.priority_id = value
   end
   
