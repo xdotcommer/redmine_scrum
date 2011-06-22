@@ -78,7 +78,6 @@ class Commitment < ActiveRecord::Base
   
   def priority=(value)
     return nil unless story
-    raise "old priority_id = #{story.priority_id} new value = #{value}" if story.id == 3127
     story.priority_id = value
   end
   
@@ -89,6 +88,7 @@ private
   end
   
   def update_story
+    story.save
     story.update_attributes(:assigned_to_id => user_id, :estimation_id => estimation_id, :sprint_id => sprint_id)
   end
 end
