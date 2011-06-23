@@ -1,5 +1,7 @@
 class Burndown < ActiveRecord::Base
   unloadable
+  
+  HACK_FIRST_SPRINT_DAY = -100
 
   DAY_MAPPINGS = {
     "COM" => [0],
@@ -73,5 +75,14 @@ class Burndown < ActiveRecord::Base
   
   def pending_line
     committed_point_count - complete_point_count - pending_point_count
+  end
+  
+private
+  def update_sprint_day
+    if sprint_day == HACK_FIRST_SPRINT_DAY
+      self.sprint_day = 0
+    else
+      self.sprint_day = sprint.sprint_day(date)
+    end
   end
 end
