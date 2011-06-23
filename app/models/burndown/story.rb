@@ -5,13 +5,17 @@ class Burndown::Story < Burndown
     sprint.issues.stories.group_by {|i| i.assigned_to_id}.each do |user_id, issues|
       next unless user_id
       unless snapshot = find_by_sprint_day_and_sprint_id_and_user_id(0, sprint.id, user_id)
-        snapshot = new(:date => sprint.start_date, :sprint_day => HACK_FIRST_SPRINT_DAY, :sprint_id => sprint.id, :sprint_name => sprint.name, :user_id => user_id, :user_name => User.find(user_id).login)
+        snapshot = new(:date => sprint.start_date, :sprint_day => 0, :sprint_id => sprint.id, :sprint_name => sprint.name, :user_id => user_id, :user_name => User.find(user_id).login)
       end
 
       snapshot.committed_count       = Commitment.count(:conditions => ["user_id=? AND sprint_id=?", user_id, sprint.id])
       snapshot.committed_point_count = Commitment.sum(:story_points, :conditions => ["user_id=? AND sprint_id=?", user_id, sprint.id])
+      
+      before = snapshot.inspect
 
       snapshot.save!
+      
+      raise "before=#{before}  after=#{snapshot.inspect}"
     end
   end
   

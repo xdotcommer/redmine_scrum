@@ -14,7 +14,6 @@ module RedmineScrum
         has_one       :commitment
         has_many      :defects
         
-        after_create  :update_burndown
         before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa
         after_save    :update_developer_stats
         
@@ -58,12 +57,6 @@ module RedmineScrum
         if backlog_rank.blank? && max = Issue.maximum(:backlog_rank)
           self.backlog_rank = max + 1
         end
-      end
-      
-      def update_burndown
-        reload
-        # Burndown.update_from_issue self
-        return true
       end
       
       def reset_qa
