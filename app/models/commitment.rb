@@ -59,7 +59,7 @@ class Commitment < ActiveRecord::Base
   end
   
   def should_be_cleared?
-    estimation.spiked? || ! user # || ! sprint.try(:commitable?)
+    estimation.try(:spiked?) || ! user # || ! sprint.try(:commitable?)
   end
   
   def description=(text)
