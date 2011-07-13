@@ -94,7 +94,7 @@
   </tr>
 </table>
 
-<% form_for @sprint, :url => bulk_update_project_sprint_commitments_path(@project, @sprint) do |f| %>
+<% form_for @sprint, :url => bulk_update_project_sprint_commitments_path(@project, @sprint) do |form| %>
   <table class="list">
     <tr>
       <th>#</th>
@@ -108,13 +108,13 @@
     </tr>
   
     <% @commitments.select {|c| c.new_record?}.each do |commitment| %>
-      <% fields_for "new_commitment_attributes[]", commitment do |f| %>
+      <% form.fields_for "new_commitment_attributes[]", commitment do |f| %>
         <%= render :partial => 'commitment', :locals => {:commitment => commitment, :f => f} %>
       <% end %>
     <% end %>
 
     <% @commitments.reject {|c| c.new_record?}.each do |commitment| %>
-      <% fields_for "commitment_attributes[]", commitment do |f| %>
+      <% form.fields_for "commitment_attributes[]", commitment do |f| %>
         <%= render :partial => 'commitment', :locals => {:commitment => commitment, :f => f} %>
       <% end %>
     <% end %>
@@ -122,5 +122,5 @@
   </table>
 
   <br>
-  <center><%= f.submit "Update Commitments" %></center>
+  <center><%= form.submit "Update Commitments" %></center>
 <% end %>

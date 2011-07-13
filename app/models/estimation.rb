@@ -4,6 +4,10 @@ class Estimation < ActiveRecord::Base
   has_many  :issues
   has_many  :commitments
 
+  def self.spike
+    find_by_value(0)
+  end
+
   def self.create_defaults
     if count == 0
       [1, 2, 3, 5, 8, 13].each do |number|

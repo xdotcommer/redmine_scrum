@@ -1,6 +1,6 @@
 <tr class="<%= 'red' if commitment.new_record? %>">
-  <%= f.hidden_field :issue_id, :value => commitment.story.id %>
   <td>
+    <%= f.hidden_field :issue_id, :value => commitment.story.id %>
     <%= link_to commitment.story.id, issue_path(:project_id => @project, :id => commitment.story.id), :popup => true %>
   </td>
   <td>
@@ -22,7 +22,7 @@
     <%= commitment.story.category %>
   </td>
   <td>
-    <%= f.check_box :requires_clarification %>
+    <%#= f.check_box :requires_clarification %>
   </td>
 </tr>
 

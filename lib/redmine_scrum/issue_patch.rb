@@ -37,6 +37,16 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def update_from_attributes(attributes)
+        custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).update_attribute :value, attributes[:requires_clarification]
+        self.estimation_id  = attributes[:estimation_id]
+        self.priority_id    = attributes[:priority]
+        self.sprint_id      = attributes[:sprint_id]
+        self.description    = attributes[:description]
+        self.assigned_to_id = attributes[:user_id]
+        save!
+      end
+      
       def is_story?
         Sprint::STORY_TRACKERS.include? tracker_id
       end

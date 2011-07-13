@@ -31,26 +31,34 @@ class Commitment < ActiveRecord::Base
     
     commitments
   end
-
-  def self.bulk_update(commitment_attributes)
-    commitment_attributes.each do |id, attributes|
+  
+  def self.rebuild(new_commitments, old_commitments)
+    new_commitments.each do |attributes|
+      if has_valid_attributes?(attributes)
+        Commitment.create(attributes)
+      end
+      
+      Issue.find(attributes[:issue_id]).update_from_attributes(attributes)
+    end unless new_commitments.blank?
+    
+    old_commitments.each do |id, attributes|
       commitment = find(id)
-      if commitment.should_be_cleared?
-        commitment.destroy
-      else
-        commitment.update_attributes attributes
-        commitment.story.save
-      end
-    end
-  end
+      
+      commitment.story.update_from_attributes(attributes)
 
-  def self.bulk_create(commitment_attributes)
-    commitment_attributes.each do |attributes|
-      commitment = new(attributes)
-      unless commitment.try(:should_be_cleared?)
-        commitment.save
+      if has_valid_attributes?(attributes)
+        commitment.attributes = attributes
+        commitment.save!
+      else
+        commitment.delete
       end
-    end
+    end unless old_commitments.blank?
+  end
+  
+  def self.has_valid_attributes?(attributes)
+    return false if Estimation.spike.id == attributes[:estimation_id].to_i
+    return false unless attributes[:user_id]
+    true
   end
 
   def self.update_burndown_first_day(sprint_id)
@@ -63,22 +71,21 @@ class Commitment < ActiveRecord::Base
   end
   
   def description=(text)
-    return nil unless story
+    return unless story
     story.description = text
   end
 
   def requires_clarification
-    return nil unless story
     story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).value
   end
   
   def requires_clarification=(value)
-    return nil unless story
+    return unless story
     story.custom_values.find_by_custom_field_id(CustomField.find_by_name("Requires Clarification")).update_attribute :value, value
   end
   
   def priority=(value)
-    return nil unless story
+    return unless story
     story.priority_id = value
   end
   
