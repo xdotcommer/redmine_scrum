@@ -9,7 +9,7 @@ module RedmineScrum
       base.class_eval do
         unloadable # Send unloadable so it will not be unloaded in development
         
-        acts_as_list  :column => 'backlog_rank'
+        acts_as_list  :column => 'backlog_rank', :scope => :sprint
         
         belongs_to    :sprint
         belongs_to    :estimation

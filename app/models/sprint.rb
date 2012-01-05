@@ -8,7 +8,7 @@ class Sprint < ActiveRecord::Base
   
   mattr_accessor  :backlog
   
-  has_many  :issues#, :order => 'backlog_rank'
+  has_many  :issues, :order => 'backlog_rank'
   has_many  :assigned_tos, :through => :issues
   has_many  :commitments
   has_many  :burndowns, :order => 'sprint_day ASC'

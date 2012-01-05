@@ -1,5 +1,5 @@
 <% content_tag_for :li, story do %>
-  <span class="handle">[<%= story.id %>]</span>
+  <span class="handle">[<%= story.backlog_rank %>]</span>
   <%= link_to h(story.subject), story %>
 <% end %>
 
