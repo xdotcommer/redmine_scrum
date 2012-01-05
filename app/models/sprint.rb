@@ -40,6 +40,19 @@ class Sprint < ActiveRecord::Base
     project.save!
   end
   
+  def self.with_open_stories
+    sql =<<-EOSQL
+      select distinct(sprint_name)
+      from issues
+      left join issue_statuses on issues.status_id = issue_statuses.id
+      left join trackers on issues.tracker_id = trackers.id
+      where issue_statuses.is_closed=0 AND trackers.name in ("Story", "Research", "Lab", "TechDebt")
+    EOSQL
+    
+    Issue.find_by_sql(sql).map {|i| Sprint.find_by_name(i.sprint_name)}.sort_by(&:name)
+  end
+  
+  
   def self.backlog
     @@backlog ||= find_by_name("Backlog")
   end
