@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :projects do |project|
+    project.resources :backlog, :collection => { :sort => :post }
     project.resources :defects
     project.resources :developer_stats
     project.resources :sprints do |sprint|

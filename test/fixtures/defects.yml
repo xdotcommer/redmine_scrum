@@ -3,11 +3,11 @@ one:
   id: 1
   issue_id: 1
   status_id: 1
-  description: MyText
+  description: Broke on IE
   position: 1
 two:
   id: 2
   issue_id: 1
   status_id: 1
-  description: MyText
+  description: Don\'t work
   position: 1

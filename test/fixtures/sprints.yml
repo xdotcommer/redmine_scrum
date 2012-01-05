@@ -1,15 +1,17 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1
-  name: MyString
-  version_id: 1
-  release: MyString
+  name: First Sprint
   start_date: 2011-05-13
-  end_date: 
+  end_date: 2011-05-21
 two:
   id: 2
-  name: MyString
-  version_id: 1
-  release: MyString
-  start_date: 2011-05-13
-  end_date: 
+  name: Second Sprint
+  start_date: 2011-06-13
+  end_date: 2011-06-21
+backlog:
+  id: 3
+  name: Backlog
+  start_date: 
+  end_date:
+  is_backlog: true

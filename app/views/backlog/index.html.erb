@@ -1,0 +1,45 @@
+<style type="text/css" media="screen">
+  ul {
+    list-style-type: none;
+  }
+
+  ul.zebra li { background: #efefef; }
+  ul.zebra li:nth-child(odd) { background: #fff; }
+  
+  ul.zebra li .handle {
+    font-size: 12px;
+    cursor: move;
+    color: #777;
+  }
+  
+  ul.zebra li {
+    padding-bottom: 5px;
+  }
+  
+</style>
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    alert("hello");
+  });
+</script>
+
+<h1><%= @sprint.name %><hr></h1>
+
+<div style="align: right;">
+
+Change sprint:
+
+<% form_tag do %>
+  <%= hidden_field_tag "project_id", params[:project_id] %>
+  <%= select_tag "sprint_id", options_for_select(@sprints.map {|s| [s.name, s.id]}, @sprint.id) %>
+  <%= select_tag "limit", options_for_select([10, 25, 50, 100, 250, 500, 1000], @limit) %>
+  <%= submit_tag "Update List" %>
+<% end %>
+
+</div>
+
+<ul id="stories" class="zebra" style="clear: both;">  
+  <%= render :partial => "story", :collection => @stories %>
+</ul>
+

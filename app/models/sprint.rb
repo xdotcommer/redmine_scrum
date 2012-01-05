@@ -1,14 +1,14 @@
 class Sprint < ActiveRecord::Base
   unloadable
 
-  STORY_TRACKERS  = ["Story", "Research", "Lab", "TechDebt"].map {|type| Tracker.find_by_name(type).id}
-  BUG_TRACKERS    = ["Bug"].map {|type| Tracker.find_by_name(type).id}
+  STORY_TRACKERS  = ["Story", "Research", "Lab", "TechDebt"].map {|type| Tracker.find_or_create_by_name(type) }
+  BUG_TRACKERS    = ["Bug"].map {|type| Tracker.find_or_create_by_name(type) }
 
   QA_STATUSES     = ["Needed", "Not Needed", "Succeeded", "Failed"]
   
   mattr_accessor  :backlog
   
-  has_many  :issues
+  has_many  :issues#, :order => 'backlog_rank'
   has_many  :assigned_tos, :through => :issues
   has_many  :commitments
   has_many  :burndowns, :order => 'sprint_day ASC'
@@ -29,7 +29,17 @@ class Sprint < ActiveRecord::Base
   before_save :set_name
   
   belongs_to  :version
-
+  
+  # hack for testing
+  def self.set_trackers_to_main_project
+    project = Project.first
+    (STORY_TRACKERS + BUG_TRACKERS).each do |id|
+      tracker = Tracker.find(id)
+      project.trackers << tracker unless project.trackers.include? tracker
+    end
+    project.save!
+  end
+  
   def self.backlog
     @@backlog ||= find_by_name("Backlog")
   end

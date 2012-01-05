@@ -1,0 +1,25 @@
+story:
+  name: Story
+  id: 1999
+  is_in_chlog: true
+  position: 1999
+research:
+  name: Research
+  id: 2000
+  is_in_chlog: true
+  position: 2000
+lab:
+  name: Lab
+  id: 2001
+  is_in_chlog: true
+  position: 2001
+tech_debt:
+  name: TechDebt
+  id: 2002
+  is_in_chlog: true
+  position: 2002
+bug:
+  name: Bug
+  is_in_chlog: true
+  id: 2003
+  position: 2003

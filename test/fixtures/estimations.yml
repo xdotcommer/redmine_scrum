@@ -1,9 +1,13 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1
-  display: MyString
+  name: 1
   value: 1
 two:
   id: 2
-  display: MyString
-  value: 1
+  name: 2
+  value: 2
+three:
+  id: 3
+  name: 3
+  value: 3

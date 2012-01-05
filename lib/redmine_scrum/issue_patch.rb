@@ -9,6 +9,8 @@ module RedmineScrum
       base.class_eval do
         unloadable # Send unloadable so it will not be unloaded in development
         
+        acts_as_list  :column => 'backlog_rank'
+        
         belongs_to    :sprint
         belongs_to    :estimation
         has_one       :commitment
@@ -23,6 +25,8 @@ module RedmineScrum
         named_scope   :open, :conditions => ["issue_statuses.is_closed = ?", false], :include => :status
         named_scope   :pending, :conditions => {:status_id => IssueStatus.pending.try(:id)}
         named_scope   :closed, :conditions => ["issue_statuses.is_closed = ?", true], :include => :status
+        named_scope   :ordered_by_rank, :order => 'backlog_rank asc'
+        named_scope   :limit_to, lambda { |n| {:limit => n} }
 
         # Add visible to Redmine 0.8.x
         unless respond_to?(:visible)

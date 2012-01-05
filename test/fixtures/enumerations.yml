@@ -1,0 +1,12 @@
+high:
+  name: high
+  type: IssuePriority
+  active: 1
+medium:
+  name: medium
+  type: IssuePriority
+  active: 1
+low:
+  name: low
+  type: IssuePriority
+  active: 1
