@@ -1,6 +1,15 @@
 <% content_tag_for :li, story do %>
   <span class="handle">[<%= story.backlog_rank %>]</span>
-  <%= link_to h(story.subject), story %>
+  <%= story.category %>: 
+  <a href="<%= issue_path(story) %>">
+    <%= h story.subject %>
+    <span>
+      <strong>#<%= story.id %> <%= story.subject %></strong>
+      <hr>
+      <%= simple_format story.description %>
+    </span>
+  </a>
+  [<%= story.story_points %> pts]
 <% end %>
 
 <%= sortable_element("stories", :url => sort_project_backlog_path(params[:project_id]), :handle => "handle") %>
