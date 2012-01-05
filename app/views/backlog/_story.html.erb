@@ -6,7 +6,7 @@
     <span>
       <strong>#<%= story.id %> <%= story.subject %></strong>
       <hr>
-      <%= simple_format story.description %>
+      <%= simple_format h(story.description) %>
     </span>
   </a>
   [<%= story.story_points %> pts]
