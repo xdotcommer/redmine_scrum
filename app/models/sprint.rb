@@ -16,8 +16,9 @@ class Sprint < ActiveRecord::Base
   
   named_scope :recent, lambda { {:conditions => ["end_date >= ? OR name='Backlog' OR name='Icebox'", 14.days.ago], :order => 'name ASC' } }
   named_scope :commitable, :conditions => 'name != "Backlog" AND name != "Icebox"'
-  named_scope :past, :conditions => ['end_date <= ?', Date.today]
+  named_scope :past, lambda { {:conditions => ['end_date <= ?', Date.today]} }
   named_scope :with_developer_stats, :include => [:developer_stats], :conditions => 'developer_stats.id > 0'
+  named_scope :upcoming, lambda { {:conditions => ['end_date >= ? AND end_date <= ?', Date.today, 6.weeks.from_now], :order => 'start_date ASC'} }
   
   validates_each :start_date, :end_date, :on => :create do |record, attr, value|
     record.errors.add attr, 'already exists' if Sprint.send("find_by_#{attr}".to_sym, value)

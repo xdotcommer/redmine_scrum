@@ -1,0 +1,18 @@
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "redmine_scrum", :plugin => "redmine_scrum" %>
+<% end %>
+
+
+<h1>Upcoming Sprints<hr></h1>
+
+<br>
+
+<% @sprints_to_stories.keys.sort.each do |sprint_name| %>
+
+  <h2><%= sprint_name %></h2>
+
+  <ul id="stories_<%= sprint_name %>" class="zebra" style="clear: both;"> 
+    <%= render :partial => "story", :collection => @sprints_to_stories[sprint_name], :locals => {:sortable => "stories_#{sprint_name}"} %>
+  </ul>
+
+<% end %>

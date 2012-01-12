@@ -1,0 +1,27 @@
+ul {
+  list-style-type: none;
+}
+
+ul.zebra li { background: #efefef; }
+ul.zebra li:nth-child(odd) { background: #fff; }
+
+ul.zebra li .handle {
+  font-size: 12px;
+  cursor: move;
+  color: #777;
+}
+
+ul.zebra li {
+	margin-left: 0px;
+	padding-left: 0px;
+  padding-bottom: 5px;
+}
+
+ul.zebra li a span {display: none;}
+ul.zebra li a:hover {text-decoration: none;}
+ul.zebra li a:hover span {display: block;
+   position: absolute; top: -50px; right: 0; width: 550px;
+   padding: 5px; margin: 25px; z-index: 100;
+   color: #666; background: #ffc;
+   font: 11px Verdana, sans-serif;}
+

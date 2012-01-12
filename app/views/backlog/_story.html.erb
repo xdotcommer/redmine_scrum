@@ -12,4 +12,4 @@
   [<%= story.story_points %> pts]
 <% end %>
 
-<%= sortable_element("stories", :url => sort_project_backlog_path(params[:project_id]), :handle => "handle") %>
+<%= sortable_element(sortable, :url => sort_project_backlog_path(params[:project_id]), :handle => "handle") %>

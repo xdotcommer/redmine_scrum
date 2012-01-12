@@ -1,40 +1,10 @@
-<style type="text/css" media="screen">
-  ul {
-    list-style-type: none;
-  }
-
-  ul.zebra li { background: #efefef; }
-  ul.zebra li:nth-child(odd) { background: #fff; }
-  
-  ul.zebra li .handle {
-    font-size: 12px;
-    cursor: move;
-    color: #777;
-  }
-  
-  ul.zebra li {
-    padding-bottom: 5px;
-  }
-  
-  ul.zebra li a span {display: none;}
-  ul.zebra li a:hover {text-decoration: none;}
-  ul.zebra li a:hover span {display: block;
-     position: absolute; top: -50px; right: 0; width: 550px;
-     padding: 5px; margin: 25px; z-index: 100;
-     color: #666; background: #ffc;
-     font: 11px Verdana, sans-serif;}
-  
-</style>
-
-<script type="text/javascript" charset="utf-8">
-  $(function() {
-    alert("hello");
-  });
-</script>
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "redmine_scrum", :plugin => "redmine_scrum" %>
+<% end %>
 
 <h1><%= @sprint.name %> (<%= @count %> stories)<hr></h1>
 
-<div style="align: right;">
+<div style="float: left;">
 
 Change sprint:
 
@@ -47,7 +17,14 @@ Change sprint:
 
 </div>
 
-<ul id="stories" class="zebra" style="clear: both;">  
-  <%= render :partial => "story", :collection => @stories %>
+<div style="float: right;">
+  <%= link_to "Show upcoming sprints...", upcoming_project_backlog_path %>
+</div>
+
+
+<br style="clear: both">
+
+<ul id="stories" class="zebra">  
+  <%= render :partial => "story", :collection => @stories, :locals => {:sortable => "stories"} %>
 </ul>
 
