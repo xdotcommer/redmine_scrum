@@ -8,8 +8,10 @@
 <br>
 
 <% @sprints_to_stories.keys.sort.each do |sprint_name| %>
+  
+  <%= total = @sprints_to_stories[sprint_name].inject(0) {|sum, sprint| sum += sprint.story_points unless sprint.story_points.nil? } %>
 
-  <h2><%= sprint_name %></h2>
+  <h2><%= sprint_name %> (<%= total %>)</h2>
 
   <ul id="stories_<%= sprint_name %>" class="zebra" style="clear: both;"> 
     <%= render :partial => "story", :collection => @sprints_to_stories[sprint_name], :locals => {:sortable => "stories_#{sprint_name}"} %>
