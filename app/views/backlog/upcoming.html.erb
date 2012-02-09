@@ -9,7 +9,7 @@
 
 <% @sprints_to_stories.keys.sort.each do |sprint_name| %>
   
-  <%= total = @sprints_to_stories[sprint_name].inject(0) {|sum, sprint| sum += sprint.story_points unless sprint.story_points.nil? } %>
+  <% total = @sprints_to_stories[sprint_name].inject(0) {|sum, sprint| sum += sprint.story_points unless sprint.story_points.nil? } %>
 
   <h2><%= sprint_name %> (<%= total %>)</h2>
 
