@@ -1,4 +1,4 @@
-class CreateSprints < ActiveRecord::Migration
+class AddGoalToSprints < ActiveRecord::Migration
   def self.up
     add_column :sprints, :goal, :text
   end
