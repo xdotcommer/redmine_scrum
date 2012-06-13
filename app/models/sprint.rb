@@ -58,6 +58,10 @@ class Sprint < ActiveRecord::Base
     @@backlog ||= find_by_name("Backlog")
   end
   
+  def self.current
+    Sprint.find(:first, :conditions => ["start_date <= ? AND end_date >= ?", Date.today, Date.today])
+  end
+  
   def self.update_burndown_for(date)
     if current_sprint = Sprint.find(:first, :conditions => ["start_date <= ? AND end_date >= ?", date, date])
       date -= 2.days if date.wday == 0

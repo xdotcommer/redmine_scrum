@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+  <style>
+    table#dashboard {
+      width: 100%;
+      font-family: Courier, monospace;
+    }
+    table#dashboard th {
+      background: #336;
+      color: white;
+      padding: 4px;
+    }
+    table#dashboard th:first-child {
+      background: white;
+    }
+    table#dashboard tr td {
+      border-bottom: 1px thin #ccc;
+      padding: 4px;
+    }
+    table#dashboard tr td.name {
+      border: none;
+      background: #336;
+      color: white;
+    }
+    
+    #dashboard .card {
+      float:left;
+      border: 1px solid #999;
+      background: #ffc;
+      width: 200px;
+      font-size: 12px;
+      color: #111;
+      margin: 2px;
+      padding: 3px;
+    }
+
+  </style>
+</head>
+<body>
+  
+  <table id="dashboard">
+    <tr>
+      <th></th>
+      <% Scrumboard::STATUSES.each do |status| %>
+        <th><%= status %></th>
+      <% end %>
+    </tr>
+    <% @scrumboard.developer_boards.each do |developer| %>
+      <tr>
+        <td class="name"><%= developer.name %></td>
+        
+        <% developer.status_boards.each do |board| %>
+        <td>
+          <% board.issues.each do |story| %>
+            <div class="card"><%= link_to "#{story.tracker.name} ##{story.id}", story %>: <%= story.subject %> [<%= story.story_points %>pts]</div>
+          <% end %>
+        </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+
+</body>
