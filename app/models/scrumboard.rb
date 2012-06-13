@@ -12,7 +12,7 @@ class Scrumboard
     
     DEVELOPERS.each do |login|
       if user = User.find_by_login(login)
-        developer_boards << DeveloperBoard.new(login, @sprint.issues.select { |s| Sprint::STORY_TRACKERS.include?(s.tracker) && !s.assigned_to.nil? })
+        developer_boards << DeveloperBoard.new(login, @sprint.issues.select { |s| !s.assigned_to.nil? })
       end
     end
   end

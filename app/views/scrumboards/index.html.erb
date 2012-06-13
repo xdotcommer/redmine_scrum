@@ -6,21 +6,19 @@
       font-family: Courier, monospace;
     }
     table#dashboard th {
-      background: #336;
-      color: white;
+      font-size: 15px;
       padding: 4px;
     }
     table#dashboard th:first-child {
       background: white;
     }
     table#dashboard tr td {
-      border-bottom: 1px thin #ccc;
+      border-right: 1px dashed #999;
       padding: 4px;
     }
     table#dashboard tr td.name {
       border: none;
-      background: #336;
-      color: white;
+      width: 80px;
     }
     
     #dashboard .card {
@@ -33,6 +31,19 @@
       margin: 2px;
       padding: 3px;
     }
+    
+    #dashboard .bug {
+      background: #900;
+      color: white;
+      width: 50px;
+    }
+
+    #dashboard .bug a:active,
+    #dashboard .bug a:link,
+    #dashboard .bug a:visited,
+    #dashboard .bug a:hover {
+      color: white;
+    }
 
   </style>
 </head>
@@ -44,15 +55,26 @@
       <% Scrumboard::STATUSES.each do |status| %>
         <th><%= status %></th>
       <% end %>
+      <th>
+        Bugs
+      </th>
     </tr>
     <% @scrumboard.developer_boards.each do |developer| %>
       <tr>
-        <td class="name"><%= developer.name %></td>
+        <td class="name"><%= image_or_name_for developer %></td>
         
         <% developer.status_boards.each do |board| %>
         <td>
-          <% board.issues.each do |story| %>
-            <div class="card"><%= link_to "#{story.tracker.name} ##{story.id}", story %>: <%= story.subject %> [<%= story.story_points %>pts]</div>
+          <% board.stories.each do |story| %>
+            <div class="card story"><%= link_to "#{story.tracker.name} ##{story.id}", story %>: <%= story.subject %> [<%= story.story_points %>pts]</div>
+          <% end %>
+          
+          <br>
+          
+          <div style="clear:both"/>
+          
+          <% board.bugs.each do |story| %>
+            <div class="card bug"><%= link_to "#{story.tracker.name} ##{story.id}", story %></div>
           <% end %>
         </td>
         <% end %>
