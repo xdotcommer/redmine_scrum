@@ -96,15 +96,18 @@ class Sprint < ActiveRecord::Base
     i = 0
     
     burndowns.group_by {|b| b.sprint_day }.each do |day, devs|
-      if (i == 0)
-        overall[i].sprint_day = 0
-
-        devs.each do |dev|
-          overall[i].open += dev.committed_point_count
-        end
-        
-        i += 1
-      end
+      # if (i == 0)
+      #   overall[i].sprint_day = 0
+      # 
+      #   devs.each do |dev|
+      #     overall[i].open += dev.committed_point_count
+      #   end
+      #   
+      #   i += 1
+      # end
+      # 
+      
+      debugger
       
       overall[i].sprint_day = day
       devs.each do |dev|
