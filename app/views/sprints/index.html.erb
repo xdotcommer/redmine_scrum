@@ -26,7 +26,7 @@
   </tr>
 <% @sprints.each do |sprint| %>
   <tr class="<%= 'highlight' if this_sprint(sprint) %>">
-    <td><%= link_to "Charts", project_sprint_histories_path(@project, sprint, :tab => 'Sprints') %></td>
+    <td><%= link_to "Charts", project_sprint_burndowns_path(@project, sprint, :tab => 'Burndown') %></td>
     <td><%= link_to sprint.name, edit_project_sprint_path(@project, sprint) %></td>
     <td><%= sprint.start_date %></td>
     <td><%= sprint.end_date %></td>
