@@ -34,8 +34,10 @@ Redmine::Plugin.register :redmine_scrum do
   permission :commitments, {:commitments => [:index, :bulk_update]}, :public => true
   permission :backlog, {:backlog => [:index, :update]}, :public => true
   permission :scrumboards, {:scrumboards => [:index]}, :public => true
+  permission :burndowns, {:burndowns => [:index]}, :public => true
   menu :project_menu, :backlog, { :controller => 'backlog', :action => 'index' }, :caption => 'Backlog', :before => :issues, :param => :project_id
   menu :project_menu, :sprints, { :controller => 'sprints', :action => 'index' }, :caption => 'Sprints', :before => :issues, :param => :project_id
   menu :project_menu, :developer_stats, { :controller => 'developer_stats', :action => 'index' }, :caption => 'Dev Stats', :before => :issues, :param => :project_id
   menu :project_menu, :scrumboards, { :controller => 'scrumboards', :action => 'index' }, :caption => "Boards", :before => :issues, :param => :project_id
+  menu :project_menu, :burndowns, { :controller => 'burndowns', :action => 'index' }, :caption => "Burndown", :before => :issues, :param => :project_id
 end
