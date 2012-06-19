@@ -22,9 +22,10 @@ class Commitment < ActiveRecord::Base
   def self.from_stories(stories)
     commitments = []
     stories.each do |story|
-      if story.commitment && Commitment.exists?(:sprint_id => story.sprint_id, :user_id => story.assigned_to_id, :issue_id => story.id)
+      if story.commitment # already have a commitment for this story in this sprint
         commitments << story.commitment
       else
+        # new commitment for this sprint
         commitments << Commitment.new(:sprint => story.sprint, :user => story.assigned_to, :issue => story, :estimation => story.estimation, :story_points => story.estimation.value)
       end
     end
@@ -33,31 +34,35 @@ class Commitment < ActiveRecord::Base
   end
   
   def self.rebuild(new_commitments, old_commitments)
-    new_commitments.each do |attributes|
-      if has_valid_attributes?(attributes)
-        Commitment.create(attributes)
-      end
+    unless new_commitments.blank?
+      new_commitments.each do |attributes|
+        if has_valid_attributes?(attributes)
+          Commitment.create(attributes)
+        end
       
-      Issue.find(attributes[:issue_id]).update_from_attributes(attributes)
-    end unless new_commitments.blank?
+        Issue.find(attributes[:issue_id]).update_from_attributes(attributes)
+      end 
+    end
     
-    old_commitments.each do |id, attributes|
-      commitment = find(id)
+    unless old_commitments.blank?
+      old_commitments.each do |id, attributes|
+        commitment = find(id)
       
-      commitment.story.update_from_attributes(attributes)
-
-      if has_valid_attributes?(attributes)
-        commitment.attributes = attributes
-        commitment.save!
-      else
-        commitment.delete
+        commitment.story.update_from_attributes(attributes)
+        
+        if has_valid_attributes?(attributes)
+          commitment.attributes = attributes
+          commitment.save!
+        else
+          commitment.delete
+        end
       end
-    end unless old_commitments.blank?
+    end
   end
   
   def self.has_valid_attributes?(attributes)
     return false if Estimation.spike.id == attributes[:estimation_id].to_i
-    return false unless attributes[:user_id]
+    return false if attributes[:user_id].blank?
     true
   end
 

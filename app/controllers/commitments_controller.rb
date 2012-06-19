@@ -4,8 +4,6 @@ class CommitmentsController < RedmineScrumController
   def index
     @sprint        = Sprint.find(params[:sprint_id])
     @commitments   = Commitment.from_stories(@sprint.issues.stories).sort_by {|c| c.user_id || 0 }
-    @priorities    = IssuePriority.all(:order => 'position DESC')
-    @unprioritized = @priorities.detect {|pr| pr.name == "Unprioritized"}
     @developers    = Role.find_by_name("Developer").members.map(&:user).select {|d| d.active? }
   end
   
