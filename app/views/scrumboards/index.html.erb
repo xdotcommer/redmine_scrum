@@ -45,8 +45,12 @@
     }
     
     #dashboard .hover {
-      background: #ccc;
-      border: dashed;
+      background: #eee;
+      border: 1px thin black;
+      display: none;
+      z-index: 1000;
+      margin-left: -50px;
+      width: 192px;
     }
 
     #dashboard .bug a:active,
@@ -85,12 +89,12 @@
           
           <% board.bugs.each do |story| %>
             <div class="card bug" id="card_<%= dom_id(story) %>"><%= link_to "#{story.tracker.name} ##{story.id}", story %></div>
-            <span class="card hover" style="display:none" id="hover_<%= dom_id(story) %>"><%= simple_format story.subject %></span>
+            <span class="card hover" id="hover_<%= dom_id(story) %>"><%= simple_format story.subject %></span>
           <% end %>
 
           <% board.distractions.each do |story| %>
             <div class="card bug distraction" id="<%= dom_id(story) %>"><%= link_to "#{story.tracker.name} ##{story.id}", story %></div>
-            <span class="card hover" style="display:none" id="hover_<%= dom_id(story) %>"><%= simple_format story.subject %></span>
+            <span class="card hover" id="hover_<%= dom_id(story) %>"><%= simple_format story.subject %></span>
           <% end %>
         </td>
         <% end %>
