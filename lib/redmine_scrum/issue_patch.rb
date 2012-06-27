@@ -16,7 +16,7 @@ module RedmineScrum
         has_many      :commitments
         has_many      :defects
         
-        before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa
+        before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa, :update_aging
         after_save    :update_developer_stats
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
@@ -52,6 +52,14 @@ module RedmineScrum
         Sprint::STORY_TRACKERS.include? tracker_id
       end
       
+      def age
+        if opened_on
+          (Date.today - opened_on.to_date).to_i
+        else
+          nil
+        end
+      end
+      
       def commitment
         commitments.find_by_sprint_id(sprint.id)
       end
@@ -61,6 +69,33 @@ module RedmineScrum
         developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
         developer_stat.update_details_for(self)
         developer_stat.save
+      end
+      
+      def update_aging
+        debugger
+        if assigned_to_id_changed? 
+          if assigned?
+            if Date.today < sprint.start_date
+              self.opened_on = sprint.start_date
+            elsif Date.today > sprint.end_date
+              self.opened_on = nil
+            else
+              self.opened_on = Time.now
+            end
+          elsif unassigned?
+            self.opened_on = nil
+          end
+        end
+      end
+      
+      def assigned?
+        dev_team = User.find_by_login("dev_team")
+
+        assigned_to && assigned_to != dev_team
+      end
+      
+      def unassigned?
+        ! assigned?
       end
       
       def denormalize_data

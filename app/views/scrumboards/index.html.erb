@@ -58,6 +58,28 @@
     #dashboard .bug a:hover {
       color: white;
     }
+    
+    .counter {
+      min-width: 14px;
+      color: white;
+      font-weight: bold;
+      background-color: #933;
+      -webkit-border-radius: 20px;
+      -moz-border-radius: 20px;
+      border-radius: 20px;
+      padding: 1px;
+      border: 2px solid white;
+      box-shadow: 1px 1px 3px #777;
+      -webkit-box-shadow: 1px 1px 3px #777;
+      -moz-box-shadow: 1px 1px 3px #777;
+      display: block;
+      text-align: center;
+      float: right;
+      font-size: 11px;
+      position: relative;
+      bottom: -10px;
+      right: -10px;
+    }
 
   </style>
   
@@ -79,7 +101,12 @@
         <% developer.status_boards.each do |board| %>
         <td>
           <% board.stories.each do |story| %>
-            <div class="card story"><%= link_to "#{story.tracker.name} ##{story.id}", story %>: <%= story.subject %> [<%= story.story_points %>pts]</div>
+            <div class="card story" id="story_<%= story.id %>">
+              <%= link_to "#{story.tracker.name} ##{story.id}", story %>: <%= story.subject %> [<%= story.story_points %>pts]
+              <% if story.age && story.age != 0 %>
+                <span class="counter"><%= story.age %></span>
+              <% end %>
+            </div>
           <% end %>
           
           <br>
@@ -87,7 +114,9 @@
           <div style="clear:both"/>
           
           <% board.bugs.each do |story| %>
-            <div class="card bug" id="card_<%= dom_id(story) %>"><%= link_to "#{story.tracker.name} ##{story.id}", story %></div>
+            <div class="card bug" id="card_<%= dom_id(story) %>">
+              <%= link_to "#{story.tracker.name} ##{story.id}", story %>
+            </div>
             <span class="card hover" id="hover_<%= dom_id(story) %>"><%= simple_format story.subject %></span>
           <% end %>
 
