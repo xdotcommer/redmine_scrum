@@ -72,7 +72,6 @@ module RedmineScrum
       end
       
       def update_aging
-        debugger
         if assigned_to_id_changed? 
           if assigned?
             if Date.today < sprint.start_date

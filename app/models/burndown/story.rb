@@ -18,7 +18,8 @@ class Burndown::Story < Burndown
   
   def self.snapshot_users_for(sprint, snapshot_date)
     sprint.issues.stories.group_by {|i| i.assigned_to_id}.each do |user_id, issues|
-
+      
+      debugger
       unless snapshot = find_by_date_and_sprint_id_and_user_id(snapshot_date, sprint.id, user_id)
         snapshot = new(:date => snapshot_date, :sprint_id => sprint.id, :sprint_name => sprint.name, :user_id => user_id, :user_name => User.find(user_id).login)
       end
