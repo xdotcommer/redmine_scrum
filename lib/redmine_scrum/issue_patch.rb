@@ -17,6 +17,7 @@ module RedmineScrum
         has_many      :defects
         
         before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa, :update_aging
+        before_save   :assign_to_devteam
         after_save    :update_developer_stats
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
@@ -88,13 +89,21 @@ module RedmineScrum
       end
       
       def assigned?
-        dev_team = User.find_by_login("dev_team")
-
         assigned_to && assigned_to != dev_team
       end
       
       def unassigned?
         ! assigned?
+      end
+      
+      def assign_to_devteam
+        if unassigned? && Date.today >= sprint.start_date && Date.today <= sprint.end_date
+          self.assigned_to = dev_team
+        end
+      end
+      
+      def dev_team
+        User.find_by_login("dev_team")
       end
       
       def denormalize_data
