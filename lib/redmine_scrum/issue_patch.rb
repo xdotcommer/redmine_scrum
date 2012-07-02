@@ -97,7 +97,7 @@ module RedmineScrum
       end
       
       def assign_to_devteam
-        if unassigned? && Date.today >= sprint.start_date && Date.today <= sprint.end_date
+        if sprint.nil? || unassigned? && Date.today >= sprint.start_date && Date.today <= sprint.end_date
           self.assigned_to = dev_team
         end
       end
