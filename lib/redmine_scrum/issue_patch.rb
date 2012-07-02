@@ -17,7 +17,7 @@ module RedmineScrum
         has_many      :defects
         
         before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa, :update_aging
-        before_save   :assign_to_devteam
+#        before_save   :assign_to_devteam
         after_save    :update_developer_stats
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
