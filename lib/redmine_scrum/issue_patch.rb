@@ -96,7 +96,7 @@ module RedmineScrum
         ! assigned?
       end
       
-      def empty_sprint
+      def empty_sprint?
         sprint.nil? || sprint.end_date.nil? || sprint.start_date.nil?
       end
       
