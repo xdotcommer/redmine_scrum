@@ -86,7 +86,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 </head>
 <body>
-  <% form_tag project_sprint_scrumboards_path, :method => :get do %>
+  <% form_tag project_sprint_scrumboards_path(params[:project_id], params[:sprint_id]), :method => :get do %>
     <%= hidden_field_tag "project_id", params[:project_id] %>
     <%= select_tag "sprint_id", options_for_select(@sprints.map {|s| [s.name, s.id]}, @sprint.id) %>
     <%= submit_tag "Change Sprint" %>
