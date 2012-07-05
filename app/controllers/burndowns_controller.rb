@@ -2,6 +2,7 @@ class BurndownsController < RedmineScrumController
   unloadable
 
   def index
+    @sprints = Sprint.commitable
     @sprint = params[:sprint_id] ? Sprint.find(params[:sprint_id]) : Sprint.current
     
     @burndown = BurndownFlot.area('Burndown') do |f|
