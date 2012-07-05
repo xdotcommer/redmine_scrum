@@ -3,6 +3,13 @@
 
   <h2>Burndown for <%= @sprint.name %></h2>
 
+  <% form_tag project_sprint_burndowns_path, :method => :get do %>
+    <%= hidden_field_tag "project_id", params[:project_id] %>
+    <%= select_tag "sprint_id", options_for_select(@sprints.map {|s| [s.name, s.id]}, @sprint.id) %>
+    <%= submit_tag "Change Sprint" %>
+  <% end %>
+  
+
   <div class='flot_dataset_picker'>
         <%#= flot_selections %>
   </div>
