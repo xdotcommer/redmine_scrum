@@ -73,6 +73,8 @@ module RedmineScrum
       end
       
       def update_aging
+        return true unless sprint.start_date && sprint.end_date && sprint.commitable?
+        
         if assigned_to_id_changed? 
           if assigned?
             if Date.today < sprint.start_date
