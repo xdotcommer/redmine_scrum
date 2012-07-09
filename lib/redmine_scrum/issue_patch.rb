@@ -61,6 +61,10 @@ module RedmineScrum
         end
       end
       
+      def high_or_critical?
+        %w(High Critical).include? priority.try(:name)
+      end
+      
       def commitment
         commitments.find_by_sprint_id(sprint.id)
       end
