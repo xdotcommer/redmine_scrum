@@ -51,7 +51,7 @@ class Sprint < ActiveRecord::Base
       where issue_statuses.is_closed=0 AND trackers.name in ("Story", "Research", "Lab", "TechDebt")
     EOSQL
     
-    Issue.find_by_sql(sql).map {|i| Sprint.find_by_name(i.sprint_name)}.sort_by(&:name)
+    Issue.find_by_sql(sql).map {|i| Sprint.find_by_name(i.sprint_name)}.compact.sort_by(&:name)
   end
   
   
