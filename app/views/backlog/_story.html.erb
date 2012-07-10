@@ -1,7 +1,7 @@
 <% content_tag_for :li, story do %>
   <span class="handle">[<%= story.backlog_rank %>]</span>
   <%= story.category %>: 
-  <a href="<%= issue_path(story) %>">
+  <a href="<%= issue_path(story) %>" style="<%= 'font-color: #990' unless story.ready_for_review? %>">
     <%= h story.subject %>
     <span>
       <strong>#<%= story.id %> <%= story.subject %></strong>
