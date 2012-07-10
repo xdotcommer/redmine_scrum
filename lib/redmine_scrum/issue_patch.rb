@@ -56,6 +56,10 @@ module RedmineScrum
         Sprint::STORY_TRACKERS.include? tracker_id
       end
       
+      def ready_for_review?
+        ! custom_values.find(:first, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}).empty?
+      end
+      
       def age
         if closed_on && opened_on
           (closed_on - opened_on).to_i
