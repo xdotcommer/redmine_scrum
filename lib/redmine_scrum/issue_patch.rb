@@ -54,7 +54,9 @@ module RedmineScrum
       end
       
       def age
-        if opened_on
+        if closed_on && opened_on
+          (closed_on - opened_on).to_i
+        elsif opened_on
           (Date.today - opened_on.to_date).to_i
         else
           nil
@@ -77,6 +79,18 @@ module RedmineScrum
       end
       
       def update_aging
+        set_opened_on
+        set_closed_on
+      end
+      
+      def set_closed_on
+        return true unless sprint.commitable? && status_id_changed?
+        
+        self.closed_on = Date.today if status.try(:is_closed?)
+        debugger
+      end
+      
+      def set_opened_on
         return true unless sprint.start_date && sprint.end_date && sprint.commitable?
         
         if assigned_to_id_changed? 
