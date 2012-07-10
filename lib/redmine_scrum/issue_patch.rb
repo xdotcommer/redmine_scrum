@@ -28,8 +28,8 @@ module RedmineScrum
         named_scope   :closed, :conditions => ["issue_statuses.is_closed = ?", true], :include => :status
         named_scope   :ordered_by_rank, :order => 'backlog_rank asc'
         named_scope   :limit_to, lambda { |n| {:limit => n} }
-        named_scope   :ready_for_review, :conditions => ['custom_values.value = "Ready for Review" AND custom_fields.name = ?', true, 'Story Readiness'], :include => {:custom_values =>  :custom_field}
-        named_scope   :work_in_progress, :conditions => ['custom_values.value = "Work in Progress" AND custom_fields.name = ?', true, 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :ready_for_review, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :work_in_progress, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Work in Progress", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
         
 
         # Add visible to Redmine 0.8.x
