@@ -57,7 +57,7 @@ module RedmineScrum
       end
       
       def ready_for_review?
-        ! custom_values.find(:first, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => :custom_field).empty?
+        ! custom_values.find(:first, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => :custom_field)
       end
       
       def age
