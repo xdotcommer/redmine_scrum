@@ -97,6 +97,7 @@ class Sprint < ActiveRecord::Base
     i = 0
     
     burndowns.group_by {|b| b.sprint_day }.each do |day, devs|
+      next unless overall[i]
       overall[i].sprint_day = day
       devs.each do |dev|
         overall[i].pending += dev.pending_point_count
