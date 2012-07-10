@@ -28,6 +28,9 @@ module RedmineScrum
         named_scope   :closed, :conditions => ["issue_statuses.is_closed = ?", true], :include => :status
         named_scope   :ordered_by_rank, :order => 'backlog_rank asc'
         named_scope   :limit_to, lambda { |n| {:limit => n} }
+        named_scope   :ready_for_review, :conditions => ['custom_values.value = "Ready for Review" AND custom_fields.name = ?', true, 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :work_in_progress, :conditions => ['custom_values.value = "Work in Progress" AND custom_fields.name = ?', true, 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        
 
         # Add visible to Redmine 0.8.x
         unless respond_to?(:visible)
@@ -87,7 +90,6 @@ module RedmineScrum
         return true unless sprint.commitable? && status_id_changed?
         
         self.closed_on = Date.today if status.try(:is_closed?)
-        debugger
       end
       
       def set_opened_on
