@@ -29,7 +29,7 @@ module RedmineScrum
         named_scope   :ordered_by_rank, :order => 'backlog_rank asc'
         named_scope   :limit_to, lambda { |n| {:limit => n} }
         named_scope   :ready_for_review, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
-        named_scope   :work_in_progress, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Work in Progress", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :work_in_progress, :conditions => ['custom_values.value = ? OR custom_values.value = ? AND custom_fields.name = ?', "Work in Progress", nil, 'Story Readiness'], :include => {:custom_values =>  :custom_field}
         
 
         # Add visible to Redmine 0.8.x
