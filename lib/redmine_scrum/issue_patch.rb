@@ -63,7 +63,7 @@ module RedmineScrum
       
       def age
         if closed_on && opened_on
-          (closed_on - opened_on).to_i
+          (closed_on.to_date - opened_on.to_date).to_i
         elsif opened_on
           (Date.today - opened_on.to_date).to_i
         else
