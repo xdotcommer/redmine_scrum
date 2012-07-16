@@ -18,7 +18,7 @@ class Burndown::Day
   end
   
   def display_reopens
-    if @reopens == 0
+    if @reopens == 0 || @reopens.nil? || @open.nil? || @pending.nil?
       nil
     else
       @reopens - @open - @pending
