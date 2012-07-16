@@ -98,10 +98,14 @@ class Sprint < ActiveRecord::Base
 
     0.upto(duration) do |i|
       overall[i] = Burndown::Day.new(self, i)
+      if i == 0 || i > days_in
+        overall[i].pending = nil
+        overall[i].open = nil
+      end
     end
 
     burndowns.group_by {|b| b.sprint_day }.each do |day, devs|
-      next unless overall[day]
+      next unless overall[day] || overall[day].pending.nil? || overall[day].open.nil?
       overall[day].pending += devs.inject {|sum, dev| dev.pending_point_count}
       overall[day].open += devs.inject {|sum, dev| dev.open_point_count}
     end
