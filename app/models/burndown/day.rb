@@ -5,12 +5,7 @@ class Burndown::Day
   
   def initialize(sprint, sprint_day)
     @pending = @open = nil
-    # if sprint_day == 0
-    #   @open = sprint.committed_points
-    # else
-    #   @open = 0
-    # end
-    
+
     self.sprint_day = sprint_day
   end
   
@@ -28,5 +23,9 @@ class Burndown::Day
     return nil unless sprint && sprint.starting_day
     
     Sprint::DAYS.index(day_of_week_index)
+  end
+  
+  def update_totals
+    
   end
 end
