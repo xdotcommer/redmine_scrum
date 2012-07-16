@@ -4,7 +4,7 @@ class Burndown::Day
   DAYS = %(Mon Tue Wed Thu Fri)
   
   def initialize(sprint, sprint_day)
-    @pending = @open = 0
+    @pending = @open = nil
     # if sprint_day == 0
     #   @open = sprint.committed_points
     # else
