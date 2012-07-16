@@ -2,11 +2,12 @@ class DeveloperStatsController < RedmineScrumController
   unloadable
 
   def index
-    @stats      = DeveloperStat.all(:include => [:sprint], :conditions => ["user_name != 'Development Team' AND sprints.end_date < ? AND sprints.start_date > ?", Date.today, 2.months.ago.to_date], :order => 'sprint_name DESC, user_name ASC')
+    @stats      = DeveloperStat.all(:include => [:sprint], :conditions => ["user_name != 'Development Team' AND sprints.end_date < ? AND sprints.start_date > ?", Date.today, 3.months.ago.to_date], :order => 'sprint_name DESC, user_name ASC')
 
     @completed_points = DeveloperStatFlot.stacked_bar('completed_points') do |f|
+      f.legend :position => "nw", :noColumns => 2
       @stats.group_by {|b| b.user_name }.each do |user, sprint|
-        f.series_for(user, sprint, :x => :sprint_id, :y => :completed_points, :tooltip => lambda {|r| "#{r.user_name} completed #{r.completed_points} points" })
+        f.series_for(user, sprint, :x => :sprint_id, :y => :completed_points, :tooltip => lambda {|r| "#{r.user_name} completed #{r.completed_points} points" }, :options => {:bars => {:stack => true}})
       end
     end
   end
