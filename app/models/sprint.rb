@@ -119,6 +119,8 @@ class Sprint < ActiveRecord::Base
     days.each do |day|
       day_map[day.day_of_week] << day.sprint_day
     end
+    
+    day_map
   end
   
   def burndown
