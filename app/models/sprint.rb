@@ -186,7 +186,7 @@ class Sprint < ActiveRecord::Base
   end
   
   def percent_complete
-    (days_in / duration).to_f
+    (days_in.to_f / duration.to_f * 100).round
   end
   
   def open_points
