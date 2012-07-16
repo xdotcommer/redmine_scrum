@@ -94,6 +94,7 @@ class Sprint < ActiveRecord::Base
   end
   
   def burndown
+    debugger
     overall = Array.new(duration + 1)
 
     last_day_calculated = Burndown.maximum(:sprint_day, :conditions => ["sprint_id = ?", id]) || 0
@@ -106,7 +107,7 @@ class Sprint < ActiveRecord::Base
     end
 
     burndowns.group_by {|b| b.sprint_day }.each do |day, devs|
-      next unless overall[day] && overall[day].pending && overall[day].open
+      next unless overall[day]# && overall[day].pending && overall[day].open
       
       overall[day].pending += devs.inject {|sum, dev| dev.pending_point_count}
       overall[day].open += devs.inject {|sum, dev| dev.open_point_count}
