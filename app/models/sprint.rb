@@ -96,8 +96,12 @@ class Sprint < ActiveRecord::Base
   def burndown
     overall = []
 
-    0.upto(duration) do |i|
+    0.upto(days_in) do |i|
       overall << Burndown::Day.new(self, i)
+    end
+    
+    (days_in + 1).upto(duration) do |i|
+      overall << nil
     end
     
     i = 0
