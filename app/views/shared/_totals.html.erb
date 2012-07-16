@@ -1,0 +1,17 @@
+<style>
+    
+    .totals {
+      color: #900;
+      font-size: 18px;
+      float: right;
+    }
+
+</style>
+
+<span class="totals">
+  <%= @sprint.committed_points %> points &raquo;
+  <%= @sprint.open_points %> open &raquo;
+  <%= @sprint.pending_points %> pending
+  
+  (<%= number_to_percentage(@sprint.percent_complete, :precision => 0) %> in)
+</span>

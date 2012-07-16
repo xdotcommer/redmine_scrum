@@ -6,9 +6,11 @@
   <% form_tag project_sprint_burndowns_path(params[:project_id], @sprint.id), :method => :get do %>
     <%= select_tag "new_sprint_id", options_for_select(@sprints.map {|s| [s.name, s.id]}, @sprint.id) %>
     <%= submit_tag "Change Sprint" %>
+    <%= render :partial => 'shared/totals', :locals => {:sprint => @sprint} %>
   <% end %>
   
-
+  <div style="clear:both;"></div>
+  
   <div class='flot_dataset_picker'>
         <%#= flot_selections %>
   </div>
