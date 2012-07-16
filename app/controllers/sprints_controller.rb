@@ -30,6 +30,7 @@ class SprintsController < RedmineScrumController
 
   def update
     if @sprint.update_attributes(params[:sprint])
+      @sprint.set_commitments
       flash[:notice] = 'Sprint was successfully updated.'
       redirect_to project_sprints_url(@project)
     else

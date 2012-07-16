@@ -29,6 +29,7 @@ class Sprint < ActiveRecord::Base
   validate :sprint_duration_of_one_or_two_weeks
   
   before_save :set_name
+  before_save :set_commitments, :if => :no_commitments?
   
   belongs_to  :version
   
@@ -170,6 +171,36 @@ class Sprint < ActiveRecord::Base
     end
     
     day
+  end
+  
+  def open_points
+    committed_points - pending_points - completed_points
+  end
+  
+  def open_stories
+    committed_stories - pending_stories - completed_stories
+  end
+  
+  def no_commitments?
+    committed_points == 0 || committed_stories == 0
+  end
+  
+  def set_commitments
+    self.committed_points = issues.stories.sum(:story_points)
+    self.committed_stories = issues.stories.count
+    save
+  end
+  
+  def calculate_totals
+    self.pending_points = issues.stories.pending.sum(:story_points)
+    self.pending_stories = issues.stories.pending.count
+    self.completed_points = issues.stories.closed.sum(:story_points)
+    self.completed_stories = issues.stories.closed.count
+  end
+  
+  def update_totals
+    calculate_totals
+    save
   end
 
 private

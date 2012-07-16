@@ -19,6 +19,7 @@ module RedmineScrum
         before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa, :update_aging
         before_save   :assign_to_devteam
         after_save    :update_developer_stats
+        after_save    :update_sprint_totals
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
@@ -45,6 +46,12 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def update_sprint_totals
+        return unless sprint && sprint.commitable?
+        sprint.set_commitments if sprint.committed_points == 0 && sprint.comitted_stories == 0
+        sprint.update_totals
+      end
+      
       def update_from_attributes(attributes)
         self.estimation_id  = attributes[:estimation_id]
         self.sprint_id      = attributes[:sprint_id]

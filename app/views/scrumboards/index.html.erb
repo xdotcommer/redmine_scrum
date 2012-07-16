@@ -80,6 +80,12 @@
       bottom: -10px;
       right: -10px;
     }
+    
+    .totals {
+      color: #900;
+      font-size: 18px;
+      float: right;
+    }
 
   </style>
   
@@ -90,7 +96,14 @@
   <% form_tag project_sprint_scrumboards_path(params[:project_id], @sprint.id), :method => :get do %>
     <%= select_tag "new_sprint_id", options_for_select(@sprints.map {|s| [s.name, s.id]}, @sprint.id) %>
     <%= submit_tag "Change Sprint" %>
+    <span class="totals">
+      <%= @sprint.committed_points %> points &raquo;
+      <%= @sprint.open_points %> open &raquo;
+      <%= @sprint.pending_points %> pending
+    </span>
   <% end %>
+  
+  <div style="clear:both;"></div>
   
   <table id="dashboard">
     <tr>
