@@ -26,7 +26,6 @@ class Sprint < ActiveRecord::Base
   end
   
   validate :start_date_before_end_date
-  validate :sprint_duration_of_one_or_two_weeks
   
   before_save :set_name
   before_save :set_commitments, :if => :no_commitments?
@@ -92,9 +91,11 @@ class Sprint < ActiveRecord::Base
     end
   end
   
+  # TODO: Fix me
+  
   def burndown
     overall = []
-    11.times { overall << Burndown::Day.new }
+    (duration + 1).times { overall << Burndown::Day.new }
     i = 0
     
     burndowns.group_by {|b| b.sprint_day }.each do |day, devs|
@@ -109,10 +110,6 @@ class Sprint < ActiveRecord::Base
     end
     
     overall
-  end
-  
-  def duration
-    (end_date - start_date).to_i + 1
   end
   
   def story_count
@@ -151,10 +148,12 @@ class Sprint < ActiveRecord::Base
     name == "Icebox"
   end
   
+  # TODO: Fix me
+  
   def sprint_day(date)
     return -1 unless start_date && end_date
     return -1 if date < start_date
-    return 11 if date > end_date
+    return (duration + 1) if date > end_date
 
     counter_date = start_date
     day          = 1
@@ -226,12 +225,6 @@ private
     end
   end
   
-  def sprint_duration_of_one_or_two_weeks
-    if duration != 14 and duration != 7
-      errors.add_to_base("Sprint duration must be one or two weeks")
-    end
-  end
-
   def set_name
     if end_date
       self.name = "#{end_date.strftime('%Y.%m.%d')}"

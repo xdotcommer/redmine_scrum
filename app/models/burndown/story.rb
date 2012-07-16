@@ -9,8 +9,8 @@ class Burndown::Story < Burndown
       end
       
       snapshot.sprint_day            = HACK_FIRST_SPRINT_DAY
-      snapshot.committed_count       = Commitment.count(:conditions => ["user_id=? AND sprint_id=?", user_id, sprint.id])
-      snapshot.committed_point_count = Commitment.sum(:story_points, :conditions => ["user_id=? AND sprint_id=?", user_id, sprint.id])
+      snapshot.committed_count       = sprint.committed_stories
+      snapshot.committed_point_count = sprint.committed_points
       
       snapshot.save!
     end
