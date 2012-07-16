@@ -112,7 +112,7 @@ class Sprint < ActiveRecord::Base
       "Fri" => []
     }
 
-    (1..duration).each do |d|
+    (0..duration).each do |d|
       days << Burndown::Day.new(self, d)
     end
     
