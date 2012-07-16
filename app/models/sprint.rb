@@ -94,9 +94,8 @@ class Sprint < ActiveRecord::Base
   end
   
   def burndown
-    debugger
     overall = Array.new(duration + 1)
-
+    
     last_day_calculated = Burndown.maximum(:sprint_day, :conditions => ["sprint_id = ?", id]) || 0
 
     0.upto(duration) do |i|
@@ -108,8 +107,6 @@ class Sprint < ActiveRecord::Base
       end
     end
 
-    debugger
-
     burndowns.group_by {|b| b.sprint_day }.each do |day, devs|
       next if day == 0
       
@@ -119,8 +116,6 @@ class Sprint < ActiveRecord::Base
       end
     end
 
-    debugger
-    
     overall
   end
   
