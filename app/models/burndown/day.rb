@@ -4,7 +4,7 @@ class Burndown::Day
   DAYS = %(Mon Tue Wed Thu Fri)
   
   def initialize(sprint, sprint_day)
-    @pending = @open = nil
+    self.pending = self.open = 0
 
     self.sprint_day = sprint_day
   end
@@ -26,6 +26,9 @@ class Burndown::Day
   end
   
   def update_totals
-    
+    devs.each do |dev|
+      overall[i].pending += dev.pending_point_count
+      overall[i].open += dev.open_point_count
+    end
   end
 end
