@@ -24,11 +24,4 @@ class Burndown::Day
     
     Sprint::DAYS.index(day_of_week_index)
   end
-  
-  def update_totals
-    devs.each do |dev|
-      overall[i].pending += dev.pending_point_count
-      overall[i].open += dev.open_point_count
-    end
-  end
 end

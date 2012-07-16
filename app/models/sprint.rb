@@ -98,7 +98,6 @@ class Sprint < ActiveRecord::Base
 
     1.upto(days_in) do |i|
       overall[i] = Burndown::Day.new(self, i)
-      overall[i].update_totals
     end
 
     burndowns.group_by {|b| b.sprint_day }.each do |day, stats|
