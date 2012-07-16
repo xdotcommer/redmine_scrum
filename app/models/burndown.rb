@@ -3,6 +3,8 @@ class Burndown < ActiveRecord::Base
   
   HACK_FIRST_SPRINT_DAY = -100
 
+  DAYS = %w(Mon Tue Wed Thu Fri)
+
   DAY_MAPPINGS = {
     "Mon" => [4,9],
     "Tue" => [5,10],
@@ -29,6 +31,8 @@ class Burndown < ActiveRecord::Base
 
   before_save     :update_sprint_day
 
+  # TODO: Fix me
+
   def self.day_labels
     labels = []
     DAY_MAPPINGS.each do |k,v|
@@ -37,6 +41,25 @@ class Burndown < ActiveRecord::Base
       end
     end
     labels
+  end
+  
+  def day_mappings
+    days = []
+    day_map = {
+      "Mon" => [],
+      "Tue" => [],
+      "Wed" => [],
+      "Thu" => [],
+      "Fri" => []
+    }
+
+    (1..sprint.duration).each do |d|
+      days << Burndown::Day.new(sprint, d)
+    end
+    
+    days.each do |day|
+      day_map[day.day_of_week] << day.sprint_day
+    end
   end
   
   def self.field_for_status_id(id)

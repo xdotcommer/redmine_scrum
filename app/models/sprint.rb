@@ -7,6 +7,8 @@ class Sprint < ActiveRecord::Base
 
   QA_STATUSES     = ["Needed", "Not Needed", "Succeeded", "Failed"]
   
+  DAYS = %w(Mon Tue Wed Thu Fri)
+  
   mattr_accessor  :backlog
   
   has_many  :issues, :order => 'backlog_rank'
@@ -91,15 +93,18 @@ class Sprint < ActiveRecord::Base
     end
   end
   
-  # TODO: Fix me
-  
   def burndown
     overall = []
-    (duration + 1).times { overall << Burndown::Day.new }
+
+    0.upto(duration) do |i|
+      overall << Burndown::Day.new(self, i)
+    end
+    
     i = 0
     
     burndowns.group_by {|b| b.sprint_day }.each do |day, devs|
       next unless overall[i]
+
       overall[i].sprint_day = day
       devs.each do |dev|
         overall[i].pending += dev.pending_point_count
@@ -109,6 +114,9 @@ class Sprint < ActiveRecord::Base
       i += 1
     end
     
+    # overall[0] = Burndown::Day.new(self, i)
+    # overall[0].open = committed_points
+    # 
     overall
   end
   
@@ -148,8 +156,7 @@ class Sprint < ActiveRecord::Base
     name == "Icebox"
   end
   
-  # TODO: Fix me
-  
+  # Only used for dev stats (which need rewriting anyway)
   def sprint_day(date)
     return -1 unless start_date && end_date
     return -1 if date < start_date
@@ -170,6 +177,16 @@ class Sprint < ActiveRecord::Base
     end
     
     day
+  end
+  
+  def starting_index
+    return nil unless start_date
+    DAYS.index(starting_day)
+  end
+  
+  def starting_day
+    return nil unless start_date
+    start_date.strftime("%a")
   end
   
   def duration
