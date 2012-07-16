@@ -14,7 +14,7 @@ module ScrumFlot
   
   def stacked_bar(canvas = nil, &block)
     flot = new(canvas, &block)
-    flot.options[:series] = {:stack => 0, :bars => {:show => true, :barWidth => 0.5, :align => "center"}}
+    flot.options[:series] = {:stack => true, :bars => {:show => true, :barWidth => 0.5, :align => "center"}}
     flot
   end
 end

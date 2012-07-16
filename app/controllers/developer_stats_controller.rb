@@ -6,9 +6,8 @@ class DeveloperStatsController < RedmineScrumController
 
     @completed_points = DeveloperStatFlot.stacked_bar('completed_points') do |f|
       f.legend :position => "nw", :noColumns => 2
-      f.bars :stack => true
       @stats.group_by {|b| b.user_name }.each do |user, sprint|
-        f.series_for(user, sprint, :x => :sprint_id, :y => :completed_points, :tooltip => lambda {|r| "#{r.user_name} completed #{r.completed_points} points" }, :options => {:bars => {:stack => true}})
+        f.series_for(user, sprint, :x => :sprint_id, :y => :completed_points, :tooltip => lambda {|r| "#{r.user_name} completed #{r.completed_points} points" })
       end
     end
   end
