@@ -4,8 +4,8 @@ class Burndown::Day
   DAYS = %(Mon Tue Wed Thu Fri)
   
   def initialize(sprint, sprint_day)
-    self.pending = self.open = 0
-
+    @pending = @open = 0
+    
     self.sprint_day = sprint_day
   end
   
