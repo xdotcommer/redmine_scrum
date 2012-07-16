@@ -5,14 +5,6 @@ class Burndown < ActiveRecord::Base
 
   DAYS = %w(Mon Tue Wed Thu Fri)
 
-  DAY_MAPPINGS = {
-    "Mon" => [4,9],
-    "Tue" => [5,10],
-    "Wed" => [1,6],
-    "Thu" => [2,7],
-    "Fri" => [3,8]
-  }
-
   FIELD_PREFIXES  = %w(open pending invalid complete verified duplicate wont reopened)
   STATUSES        = IssueStatus.all
   NAMES_TO_FIELDS = {
@@ -35,7 +27,7 @@ class Burndown < ActiveRecord::Base
 
   def self.day_labels
     labels = []
-    DAY_MAPPINGS.each do |k,v|
+    day_mappings.each do |k,v|
       v.each do |value|
         labels << [value, k]
       end
@@ -43,7 +35,7 @@ class Burndown < ActiveRecord::Base
     labels
   end
   
-  def day_mappings
+  def self.day_mappings
     days = []
     day_map = {
       "Mon" => [],
