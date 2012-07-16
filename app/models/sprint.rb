@@ -94,17 +94,13 @@ class Sprint < ActiveRecord::Base
   end
   
   def burndown
-    overall = []
+    overall = Array.new(duration + 1)
 
     1.upto(days_in) do |i|
-      overall << Burndown::Day.new(self, i)
+      overall[i] = Burndown::Day.new(self, i)
       overall[i].update_totals
     end
-    
-    (days_in + 1).upto(duration) do |i|
-      overall << nil
-    end
-    
+
     burndowns.group_by {|b| b.sprint_day }.each do |day, stats|
       next unless overall[day]
       overall[day].pending += stats.pending_point_count
