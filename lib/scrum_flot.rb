@@ -8,7 +8,7 @@ module ScrumFlot
   
   def area(canvas = nil, &block)
     flot = new(canvas, &block)
-    flot.options[:series] = {:stack => false, :lines => {:show => true, :fill => true, :points => true}}
+    flot.options[:series] = {:stack => 0, :lines => {:show => true, :fill => true, :points => true}}
     flot
   end
   
