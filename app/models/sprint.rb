@@ -107,7 +107,7 @@ class Sprint < ActiveRecord::Base
       if i == 0
         overall[i].open = committed_points
       elsif i > last_day_calculated
-        overall[i].open = overall[i].pending = nil
+        overall[i].clear_data
       end
     end
 
@@ -117,6 +117,7 @@ class Sprint < ActiveRecord::Base
       devs.each do |dev|
         overall[day].pending += dev.pending_point_count
         overall[day].open += dev.open_point_count
+        overall[day].reopens += dev.reopened_count
       end
     end
 

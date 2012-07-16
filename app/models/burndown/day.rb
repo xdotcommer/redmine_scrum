@@ -1,16 +1,28 @@
 class Burndown::Day
-  attr_accessor :sprint_day, :pending, :open, :sprint
+  attr_accessor :sprint_day, :pending, :open, :reopens, :sprint
   
   DAYS = %(Mon Tue Wed Thu Fri)
   
   def initialize(sprint, sprint_day)
-    @pending = @open = 0
+    @pending = @open = @reopens = 0
     
     self.sprint_day = sprint_day
   end
   
   def sprint_day=(day)
     @sprint_day = day
+  end
+  
+  def clear_data
+    @open = @pending = @reopens = nil
+  end
+  
+  def display_reopens
+    if @reopens == 0
+      nil
+    else
+      @reopens - @open - @pending
+    end
   end
   
   def day_of_week_index
