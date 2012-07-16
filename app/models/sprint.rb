@@ -96,9 +96,13 @@ class Sprint < ActiveRecord::Base
   def burndown
     overall = Array.new(duration + 1)
 
+    last_day_calculated = Burndown.maximum(:sprint_day, :conditions => ["sprint_id = ?", id]) || 0
+
     0.upto(duration) do |i|
       overall[i] = Burndown::Day.new(self, i)
-      if i == 0 || i > days_in
+      if i == 0
+        overall.open = committed_points
+      elsif i > last_day_calculated
         overall[i].pending = nil
         overall[i].open = nil
       end
