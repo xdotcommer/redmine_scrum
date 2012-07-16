@@ -94,6 +94,10 @@ class Sprint < ActiveRecord::Base
   end
   
   def burndown
+    if active?
+      self.class.update_burndown_for(Date.today)
+    end
+    
     overall = Array.new(duration + 1)
     
     last_day_calculated = Burndown.maximum(:sprint_day, :conditions => ["sprint_id = ?", id]) || 0
@@ -232,6 +236,10 @@ class Sprint < ActiveRecord::Base
   def update_totals
     calculate_totals
     save
+  end
+
+  def active?
+    Date.today <= end_date && Date.today >= start_date
   end
 
 private
