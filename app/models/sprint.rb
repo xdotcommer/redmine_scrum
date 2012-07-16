@@ -173,6 +173,22 @@ class Sprint < ActiveRecord::Base
     day
   end
   
+  def duration
+    ( (start_date..end_date) ).select {|d| (1..5).include? d.wday }.size
+  end
+  
+  def days_in
+    if Date.today >= end_date
+      duration
+    else
+      ( (start_date..Date.today) ).select {|d| (1..5).include? d.wday }.size
+    end
+  end
+  
+  def percent_complete
+    (days_in / duration).to_f
+  end
+  
   def open_points
     committed_points - pending_points - completed_points
   end
