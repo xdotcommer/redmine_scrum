@@ -146,7 +146,7 @@ class Sprint < ActiveRecord::Base
       
       devs.each do |dev|
         overall[day].pending += dev.pending_point_count
-        overall[day].open += dev.open_point_count
+        overall[day].open += (dev.open_point_count + dev.reopened_point_count)
         overall[day].reopens += dev.reopened_count
       end
     end
