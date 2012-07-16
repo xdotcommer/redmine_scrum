@@ -56,6 +56,34 @@ class Sprint < ActiveRecord::Base
     Issue.find_by_sql(sql).map {|i| Sprint.find_by_name(i.sprint_name)}.compact.sort_by(&:name)
   end
   
+  def self.day_labels
+    labels = []
+    day_mappings.each do |k,v|
+      v.each do |value|
+        labels << [value, k]
+      end
+    end
+    labels
+  end
+  
+  def self.day_mappings
+    days = []
+    day_map = {
+      "Mon" => [],
+      "Tue" => [],
+      "Wed" => [],
+      "Thu" => [],
+      "Fri" => []
+    }
+
+    (1..duration).each do |d|
+      days << Burndown::Day.new(self, d)
+    end
+    
+    days.each do |day|
+      day_map[day.day_of_week] << day.sprint_day
+    end
+  end
   
   def self.backlog
     @@backlog ||= find_by_name("Backlog")

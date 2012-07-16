@@ -3,8 +3,6 @@ class Burndown < ActiveRecord::Base
   
   HACK_FIRST_SPRINT_DAY = -100
 
-  DAYS = %w(Mon Tue Wed Thu Fri)
-
   FIELD_PREFIXES  = %w(open pending invalid complete verified duplicate wont reopened)
   STATUSES        = IssueStatus.all
   NAMES_TO_FIELDS = {
@@ -23,37 +21,6 @@ class Burndown < ActiveRecord::Base
 
   before_save     :update_sprint_day
 
-  # TODO: Fix me
-
-  def self.day_labels
-    labels = []
-    day_mappings.each do |k,v|
-      v.each do |value|
-        labels << [value, k]
-      end
-    end
-    labels
-  end
-  
-  def self.day_mappings
-    days = []
-    day_map = {
-      "Mon" => [],
-      "Tue" => [],
-      "Wed" => [],
-      "Thu" => [],
-      "Fri" => []
-    }
-
-    (1..sprint.duration).each do |d|
-      days << Burndown::Day.new(sprint, d)
-    end
-    
-    days.each do |day|
-      day_map[day.day_of_week] << day.sprint_day
-    end
-  end
-  
   def self.field_for_status_id(id)
     NAMES_TO_FIELDS[ name_for_status_id(id) ]
   end
