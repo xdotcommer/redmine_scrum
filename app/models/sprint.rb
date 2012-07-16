@@ -102,9 +102,6 @@ class Sprint < ActiveRecord::Base
       overall[i] = Burndown::Day.new(self, i)
       if i == 0
         overall[i].open = committed_points
-      elsif i > last_day_calculated
-        overall[i].pending = nil
-        overall[i].open = nil
       end
     end
 
