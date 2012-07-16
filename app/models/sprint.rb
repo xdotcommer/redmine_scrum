@@ -103,8 +103,8 @@ class Sprint < ActiveRecord::Base
 
     burndowns.group_by {|b| b.sprint_day }.each do |day, stats|
       next unless overall[day]
-      overall[day].pending += stats.pending_point_count
-      overall[day].open += stats.open_point_count
+      overall[day].pending += stats.inject {|sum, dev| dev.pending_point_count}
+      overall[day].open += stats.inject {|sum, dev| dev.open_point_count}
     end
     
     overall
