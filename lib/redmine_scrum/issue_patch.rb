@@ -46,6 +46,10 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def to_json
+        super(:methods => :age)
+      end
+      
       def update_sprint_totals
         return unless sprint && sprint.commitable?
         sprint.set_commitments if sprint.committed_points == 0 && sprint.comitted_stories == 0

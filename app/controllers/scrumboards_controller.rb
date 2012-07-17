@@ -9,7 +9,7 @@ class ScrumboardsController < RedmineScrumController
     respond_to do |format|
       format.html 
       format.json do 
-        render :json => {:sprint => @scrumboard.sprint.to_json(:methods => [:open_points, :percent_complete]), :developer_boards => @scrumboard.developer_boards}
+        render :json => @scrumboard
       end
     end
   end

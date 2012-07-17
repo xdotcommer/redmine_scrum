@@ -92,6 +92,10 @@ class Sprint < ActiveRecord::Base
     end
   end
   
+  def to_json
+    super(:methods => [:open_points, :percent_complete])
+  end
+  
   def day_labels
     labels = []
     day_mappings.each do |k,v|
