@@ -11,7 +11,7 @@ class Sprint < ActiveRecord::Base
   
   mattr_accessor  :backlog
   
-  attr_reader :open_points, :percent_complete
+  attr_reader :last_open_points, :last_percent_complete
   
   has_many  :issues, :order => 'backlog_rank'
   has_many  :assigned_tos, :through => :issues
@@ -238,11 +238,11 @@ class Sprint < ActiveRecord::Base
   end
   
   def percent_complete
-    @percent_complete = (days_in.to_f / duration.to_f * 100).round
+    (days_in.to_f / duration.to_f * 100).round
   end
   
   def open_points
-    @open_points = committed_points - pending_points - completed_points
+    committed_points - pending_points - completed_points
   end
   
   def open_stories
@@ -273,6 +273,11 @@ class Sprint < ActiveRecord::Base
 
   def active?
     Date.today <= end_date && Date.today >= start_date
+  end
+  
+  def prepare_json
+    @last_open_points     = open_points
+    @last_percent_comlete = percent_complete
   end
 
 private
