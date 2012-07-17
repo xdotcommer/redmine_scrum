@@ -11,6 +11,8 @@ module RedmineScrum
         
         acts_as_list  :column => 'backlog_rank', :scope => :sprint
         
+        attr_reader   :age
+        
         belongs_to    :sprint
         belongs_to    :estimation
         has_many      :commitments
@@ -69,7 +71,7 @@ module RedmineScrum
       end
       
       def age
-        if closed_on && opened_on
+        @age = if closed_on && opened_on
           ( (opened_on.to_date..closed_on.to_date) ).select {|d| (1..5).include? d.wday }.size
         elsif opened_on
           ( (opened_on.to_date..Date.today) ).select {|d| (1..5).include? d.wday }.size
