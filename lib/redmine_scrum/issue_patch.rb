@@ -11,8 +11,6 @@ module RedmineScrum
         
         acts_as_list  :column => 'backlog_rank', :scope => :sprint
         
-        attr_reader   :current_age
-        
         belongs_to    :sprint
         belongs_to    :estimation
         has_many      :commitments
@@ -48,10 +46,6 @@ module RedmineScrum
     end
     
     module InstanceMethods
-      def set_age
-        @current_age = age
-      end
-
       def update_sprint_totals
         return unless sprint && sprint.commitable?
         sprint.set_commitments if sprint.committed_points == 0 && sprint.comitted_stories == 0
