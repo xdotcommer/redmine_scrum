@@ -11,7 +11,7 @@ module RedmineScrum
         
         acts_as_list  :column => 'backlog_rank', :scope => :sprint
         
-        attr_reader   :age
+        attr_reader   :current_age
         
         belongs_to    :sprint
         belongs_to    :estimation
@@ -48,6 +48,10 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def after_initialize
+        @current_age = age
+      end
+
       def update_sprint_totals
         return unless sprint && sprint.commitable?
         sprint.set_commitments if sprint.committed_points == 0 && sprint.comitted_stories == 0
@@ -71,17 +75,12 @@ module RedmineScrum
       end
       
       def age
-        set_age unless @age
-        super
-      end
-      
-      def set_age
         if closed_on && opened_on
-          @age = ( (opened_on.to_date..closed_on.to_date) ).select {|d| (1..5).include? d.wday }.size
+          ( (opened_on.to_date..closed_on.to_date) ).select {|d| (1..5).include? d.wday }.size
         elsif opened_on
-          @age = ( (opened_on.to_date..Date.today) ).select {|d| (1..5).include? d.wday }.size
+          ( (opened_on.to_date..Date.today) ).select {|d| (1..5).include? d.wday }.size
         else
-          @age = nil
+          nil
         end
       end
       
