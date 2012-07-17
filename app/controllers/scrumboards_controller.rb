@@ -5,5 +5,10 @@ class ScrumboardsController < RedmineScrumController
 
   def index
     @scrumboard = Scrumboard.new(@sprint)
+    
+    respond_to do |format|
+      format.html 
+      format.json { render :json => @scrumboard }
+    end
   end
 end
