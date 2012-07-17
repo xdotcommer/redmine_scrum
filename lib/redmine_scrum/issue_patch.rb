@@ -46,8 +46,8 @@ module RedmineScrum
     end
     
     module InstanceMethods
-      def to_json
-        super(:methods => :age)
+      def to_json(opts = {})
+        super(opts.merge(:methods => :age))
       end
       
       def update_sprint_totals
