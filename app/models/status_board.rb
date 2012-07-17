@@ -6,6 +6,6 @@ class StatusBoard
     self.stories      = issues.select { |s| s.status.name == status && Sprint::STORY_TRACKERS.include?(s.tracker) }
     self.bugs         = issues.select { |s| s.status.name == status && Sprint::BUG_TRACKERS.include?(s.tracker) && s.high_or_critical? }
     self.distractions = issues.select { |s| s.status.name == status && Sprint::DISTRACTION_TRACKERS.include?(s.tracker) }
-    self.stories.map &:age
+    self.stories.map &:set_age
   end
 end

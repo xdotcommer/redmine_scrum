@@ -48,7 +48,7 @@ module RedmineScrum
     end
     
     module InstanceMethods
-      def after_initialize
+      def set_age
         @current_age = age
       end
 
