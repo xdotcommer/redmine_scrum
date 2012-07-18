@@ -9,7 +9,7 @@ class ScrumboardsController < RedmineScrumController
     respond_to do |format|
       format.html 
       format.json do 
-        render :json => @scrumboard.to_json
+        render :json => @scrumboard
       end
     end
   end
