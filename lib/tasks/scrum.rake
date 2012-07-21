@@ -1,5 +1,11 @@
 namespace :redmine do
   namespace :scrum do
+    task :sprint_totals => :environment do
+      Sprint.all.each do |sprint|
+        sprint.update_totals
+      end
+    end
+
     task :csp => :environment do
       Estimation.all.each do |e|
         Commitment.update_all({:story_points => e.value}, {:estimation_id => e.id})

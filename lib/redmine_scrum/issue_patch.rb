@@ -23,6 +23,7 @@ module RedmineScrum
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
+        named_scope   :distractions, :conditions => {:tracker_id => Sprint::DISTRACTION_TRACKERS}
         named_scope   :for_sprint_and_developer, lambda { |s,d| {:conditions => {:sprint_id => s, :assigned_to_id => d}} }
         named_scope   :open, :conditions => ["issue_statuses.is_closed = ?", false], :include => :status
         named_scope   :pending, :conditions => {:status_id => IssueStatus.pending.try(:id)}
@@ -31,7 +32,7 @@ module RedmineScrum
         named_scope   :limit_to, lambda { |n| {:limit => n} }
         named_scope   :ready_for_review, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
         named_scope   :work_in_progress, :conditions => ['(custom_values.value != ? AND custom_fields.name = ?) OR custom_values.value IS NULL', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
-        
+
 
         # Add visible to Redmine 0.8.x
         unless respond_to?(:visible)

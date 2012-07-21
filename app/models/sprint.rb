@@ -22,7 +22,11 @@ class Sprint < ActiveRecord::Base
   named_scope :past, lambda { {:conditions => ['end_date <= ?', Date.today]} }
   named_scope :with_developer_stats, :include => [:developer_stats], :conditions => 'developer_stats.id > 0'
   named_scope :upcoming, lambda { {:conditions => ['end_date >= ?', Date.today], :order => 'start_date ASC'} }
-  
+  named_scope :since, lambda { |date| {:conditions => ['start_date >= ?', date]} }
+  named_scope :up_to_current, lambda { {:conditions => ["start_date <= ?", Date.today]} }
+  named_scope :in_ascending_order, :order => 'start_date ASC'
+
+
   validates_each :start_date, :end_date, :on => :create do |record, attr, value|
     record.errors.add attr, 'already exists' if Sprint.send("find_by_#{attr}".to_sym, value)
   end
@@ -43,7 +47,11 @@ class Sprint < ActiveRecord::Base
     end
     project.save!
   end
-  
+
+  def self.up_to_current_since(date)
+    since(date).up_to_current.in_ascending_order
+  end
+
   def self.with_open_stories
     sql =<<-EOSQL
       select distinct(sprint_name)
@@ -181,7 +189,7 @@ class Sprint < ActiveRecord::Base
   def bug_count
     issues.bugs.count
   end
-  
+
   def commitable?
     ! backlog? && ! icebox?
   end
@@ -258,19 +266,24 @@ class Sprint < ActiveRecord::Base
   def set_commitments
     self.committed_points = issues.stories.sum(:story_points)
     self.committed_stories = issues.stories.count
-    save
   end
-  
+
   def calculate_totals
     self.pending_points = issues.stories.pending.sum(:story_points)
     self.pending_stories = issues.stories.pending.count
     self.completed_points = issues.stories.closed.sum(:story_points)
     self.completed_stories = issues.stories.closed.count
+    self.defects = Defect.total_for_sprint(id)
+    self.reopens = burndowns.sum(:reopened_point_count)
+    self.distractions = issues.distractions.count
+    self.bugs = issues.bugs.closed.count
   end
   
   def update_totals
-    calculate_totals
-    save
+    if issues.count > 0
+      calculate_totals
+      save
+    end
   end
 
   def active?
@@ -279,6 +292,8 @@ class Sprint < ActiveRecord::Base
 
 private
   def start_date_before_end_date
+    return true unless commitable?
+    raise self.inspect if end_date.nil?
     if end_date <= start_date
       errors.add(:start_date, 'must be before the end date')
     end

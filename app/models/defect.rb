@@ -10,4 +10,8 @@ class Defect < ActiveRecord::Base
   
   belongs_to  :issue
   belongs_to  :status, :class_name => 'IssueStatus', :foreign_key => 'status_id'
+
+  def self.total_for_sprint(sprint_id)
+    Defect.count :conditions => ["sprints.id = ?", sprint_id], :joins => {:issue => :sprint}
+  end
 end
