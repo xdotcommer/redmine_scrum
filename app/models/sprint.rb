@@ -240,6 +240,8 @@ class Sprint < ActiveRecord::Base
   end
   
   def days_in
+    return nil unless start_date && end_date
+
     if Date.today >= end_date
       duration
     else
