@@ -17,7 +17,7 @@ class SprintsController < RedmineScrumController
     respond_to do |wants|
       wants.html
       wants.json do
-        @sprints.to_json
+        render :json => @sprints
       end
     end
   end
