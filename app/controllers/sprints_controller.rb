@@ -5,9 +5,21 @@ class SprintsController < RedmineScrumController
   before_filter :find_sprint, :only => [:edit, :update, :destroy]
 
   def index
-    @sprints        = Sprint.all(:order => 'end_date desc')
+    if params[:since]
+      @sprints        = Sprint.all(:conditions => ["end_date < ?", params[:since], :order => 'end_date desc')
+    else
+      @sprints        = Sprint.all(:order => 'end_date desc')
+    end
+
     @bug_trackers   = Sprint::BUG_TRACKERS
     @story_trackers = Sprint::STORY_TRACKERS
+
+    respond_to do |wants|
+      wants.html
+      wants.json do
+        @sprints.to_json
+      end
+    end
   end
 
   def new
