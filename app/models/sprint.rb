@@ -236,13 +236,13 @@ class Sprint < ActiveRecord::Base
   end
   
   def duration
-    return 0 unless commitable?
+    return 0 unless commitable? && start_date && end_date
 
     ( (start_date..end_date) ).select {|d| (1..5).include? d.wday }.size
   end
   
   def days_in
-    return 0 unless commitable?
+    return 0 unless commitable? && start_date && end_date
 
     if Date.today >= end_date
       duration
