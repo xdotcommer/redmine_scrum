@@ -17,7 +17,13 @@ class SprintsController < RedmineScrumController
     respond_to do |wants|
       wants.html
       wants.json do
-        render :json => @sprints
+        @sprints_data = DeveloperStatFlot.area('sprints') do |f|
+          @sprints.each do |sprint|
+            f.series_for("Completed Points", sprint, :x => :sprint_id, :y => :completed_points)
+          end
+        end
+
+        render :json => @sprints_data
       end
     end
   end
