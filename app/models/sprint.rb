@@ -252,6 +252,7 @@ class Sprint < ActiveRecord::Base
   end
   
   def percent_complete
+    return 0 unless commitable? && duration > 0
     (days_in.to_f / duration.to_f * 100).round
   end
   
