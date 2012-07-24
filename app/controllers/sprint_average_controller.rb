@@ -5,7 +5,7 @@ class SprintAverageController < RedmineScrumController
     respond_to do |format|
       format.json do
         start_date = params[:since].blank? ? 3.months.ago.to_date : Date.parse(params[:since])
-        render :json => SprintAverage.new().to_json
+        render :json => SprintAverage.new(start_date).to_json
       end
     end
   end
