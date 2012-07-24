@@ -6,7 +6,7 @@ class SprintsController < RedmineScrumController
 
   def index
     if params[:since]
-      @sprints        = Sprint.all(:conditions => ["start_date >= ? AND end_date <= ?", params[:since], Date.today], :order => 'end_date desc')
+      @sprints        = Sprint.all(:conditions => ["start_date >= ? AND end_date <= ?", Date.parse(params[:since]), Date.today], :order => 'end_date desc')
     else
       @sprints        = Sprint.all(:order => 'end_date desc')
     end

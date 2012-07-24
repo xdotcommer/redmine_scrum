@@ -11,7 +11,6 @@ class SprintAverage < SprintStat
     hash = {}
 
     METHODS.each do |key|
-      debugger
       hash[key] = send(key)
     end
 
