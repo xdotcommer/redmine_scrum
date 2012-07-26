@@ -23,7 +23,7 @@ class SprintsController < RedmineScrumController
           end
         else
           @sprints_data = DeveloperStatFlot.bar('sprints') do |f|
-            f.xaxis({:tickSize => '.1', :tickDecimals => true})
+            f.yaxis({:ticks => [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]})
             f.series_for(params[:chart].humanize, @sprints, :x => :id, :y => params[:chart].to_sym)
           end
         end
