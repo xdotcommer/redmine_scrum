@@ -8,6 +8,8 @@ class Sprint < ActiveRecord::Base
   QA_STATUSES     = ["Needed", "Not Needed", "Succeeded", "Failed"]
   
   DAYS = %w(Mon Tue Wed Thu Fri)
+
+  DEFAULT_DEVELOPER_DAYS = 50
   
   mattr_accessor  :backlog
   
@@ -32,8 +34,11 @@ class Sprint < ActiveRecord::Base
   end
   
   validate :start_date_before_end_date
+  validates_numericality_of :developer_days
+  # TODO
+  #validate :not_overlapping_another_sprint
   
-  before_save :set_name
+  before_save :set_name, :set_developer_days
   before_save :set_commitments, :if => :no_commitments?
   
   belongs_to  :version
@@ -101,7 +106,7 @@ class Sprint < ActiveRecord::Base
   end
   
   def to_json(opts = {})
-    super(opts.merge(:methods => [:open_points, :percent_complete]))
+    super(opts.merge(:methods => [:open_points, :percent_complete, :story_points_per_developer_day]))
   end
   
   def day_labels
@@ -181,7 +186,15 @@ class Sprint < ActiveRecord::Base
   def open_bug_count
     issues.bugs.open.count - issues.bugs.pending.count
   end
-  
+
+  def story_points_per_developer_day
+    if developer_days == 0 || developer_days.blank?
+      nil
+    else
+      (completed_points.to_f / developer_days.to_f)
+    end
+  end
+
   def closed_bug_count
     issues.bugs.closed.count
   end
@@ -303,10 +316,16 @@ private
       errors.add(:start_date, 'must be before the end date')
     end
   end
-  
+
   def set_name
     if end_date
       self.name = "#{end_date.strftime('%Y.%m.%d')}"
     end
-  end  
+  end
+
+  def set_developer_days
+    if developer_days.blank?
+      self.developer_days = DEFAULT_DEVELOPER_DAYS
+    end
+  end
 end

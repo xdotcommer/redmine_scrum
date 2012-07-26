@@ -8,3 +8,5 @@ en:
   field_backlog_rank: Backlog Rank
   field_qa: QA
   field_add_defect: Defects
+  field_developer_days: Developer Days
+  field_goal: Sprint Goal
