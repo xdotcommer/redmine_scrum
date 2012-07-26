@@ -17,8 +17,14 @@ class SprintsController < RedmineScrumController
     respond_to do |wants|
       wants.html
       wants.json do
-        @sprints_data = DeveloperStatFlot.bar('sprints') do |f|
-          f.series_for("Completed Points", @sprints, :x => :id, :y => :completed_points)
+        if params[:chart].blank? || params[:chart] == "completed_points"
+          @sprints_data = DeveloperStatFlot.bar('sprints') do |f|
+            f.series_for("Completed Points", @sprints, :x => :id, :y => :completed_points)
+          end
+        elsif params[:chart] == "points_per_developer_day"
+          @sprints_data = DeveloperStatFlot.bar('sprints') do |f|
+            f.series_for("Points per Developer Day", @sprints, :x => :id, :y => :points_per_developer_day)
+          end
         end
 
         render :json => @sprints_data
