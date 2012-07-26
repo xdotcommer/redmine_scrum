@@ -2,12 +2,23 @@ class DeveloperStatsController < RedmineScrumController
   unloadable
 
   def index
-    @stats      = DeveloperStat.all(:include => [:sprint], :conditions => ["user_name != 'Development Team' AND user_name != 'Will Schneider' AND user_name != 'Dan Hensgen' AND user_name != 'Stephen McGarrigle' AND sprints.end_date < ? AND sprints.start_date > ?", 2.weeks.from_now.to_date, 3.months.ago.to_date], :order => 'sprint_name DESC, user_name ASC')
+    if params[:since]
+      @stats = DeveloperStat.all(:include => [:sprint], :conditions => ["user_name != 'Development Team' AND user_name != 'Will Schneider' AND user_name != 'Dan Hensgen' AND user_name != 'Stephen McGarrigle' AND sprints.end_date < ? AND sprints.start_date > ?", 2.weeks.from_now.to_date, Date.parse(params[:since])], :order => 'sprint_name DESC, user_name ASC')
+    else
+      @stats = DeveloperStat.all(:include => [:sprint], :conditions => ["user_name != 'Development Team' AND user_name != 'Will Schneider' AND user_name != 'Dan Hensgen' AND user_name != 'Stephen McGarrigle' AND sprints.end_date < ? AND sprints.start_date > ?", 2.weeks.from_now.to_date, 3.months.ago.to_date], :order => 'sprint_name DESC, user_name ASC')
+    end
 
     @completed_points = DeveloperStatFlot.area('completed_points') do |f|
       f.legend :position => "nw", :noColumns => 2
       @stats.group_by {|b| b.user_name }.each do |user, sprint|
         f.series_for(user, sprint, :x => :sprint_id, :y => :completed_points, :tooltip => lambda {|r| "#{r.user_name} completed #{r.completed_points} points" })
+      end
+    end
+
+    respond_to do |wants|
+      wants.html
+      wants.json do
+        render :json => @completed_points
       end
     end
   end
