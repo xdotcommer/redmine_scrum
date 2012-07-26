@@ -191,7 +191,7 @@ class Sprint < ActiveRecord::Base
     if developer_days == 0 || developer_days.blank?
       nil
     else
-      (completed_points.to_f / developer_days.to_f)
+      ('%.2f' % (completed_points.to_f / developer_days.to_f)).to_f
     end
   end
 
