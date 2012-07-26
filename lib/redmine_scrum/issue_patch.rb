@@ -75,9 +75,9 @@ module RedmineScrum
       
       def age
         if closed_on && opened_on
-          ( (opened_on.to_date..closed_on.to_date) ).select {|d| (1..5).include? d.wday }.size
+          ( (opened_on.to_date..closed_on.to_date) ).select {|d| (1..5).include? d.wday }.size - 1
         elsif opened_on
-          ( (opened_on.to_date..Date.today) ).select {|d| (1..5).include? d.wday }.size
+          ( (opened_on.to_date..Date.today) ).select {|d| (1..5).include? d.wday }.size - 1
         else
           nil
         end
