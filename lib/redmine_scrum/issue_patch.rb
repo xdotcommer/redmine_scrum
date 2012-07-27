@@ -53,7 +53,7 @@ module RedmineScrum
       
       def update_sprint_totals
         return unless sprint && sprint.commitable?
-        sprint.set_commitments if sprint.committed_points == 0 && sprint.comitted_stories == 0
+        sprint.set_commitments if sprint.committed_points == 0 && sprint.committed_stories == 0
         sprint.update_totals
       end
       
