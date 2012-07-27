@@ -50,7 +50,7 @@ module RedmineScrum
     
     module InstanceMethods
       def set_mailer_flag
-        @new_assignment = sprint.commitable? && assigned_to_changed? && assigned_to.try(:name) != "Development Team"
+        @new_assignment = sprint.commitable? && assigned_to_id_changed? && assigned_to.try(:name) != "Development Team"
       end
 
       def send_mail_to_dev
