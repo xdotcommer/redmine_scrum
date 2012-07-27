@@ -21,7 +21,7 @@ module RedmineScrum
         before_validation   :assign_to_devteam
         after_save    :update_developer_stats
         after_save    :update_sprint_totals
-        after_save    :send_mail_to_dev
+#        after_save    :send_mail_to_dev
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
