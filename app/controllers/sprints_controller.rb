@@ -21,6 +21,12 @@ class SprintsController < RedmineScrumController
           @sprints_data = DeveloperStatFlot.bar('sprints') do |f|
             f.series_for("Completed Points", @sprints, :x => :id, :y => :completed_points)
           end
+        elsif params[:chart] == 'stats'
+          @sprints_data = DeveloperStatFlot.line('sprints') do |f|
+            %w(committed_points completed_points bugs defects reopens distractions).each do |stat|
+              f.series_for(params[:chart].humanize, @sprints, :x => :id, :y => stat.to_sym)
+            end
+          end
         else
           @sprints_data = DeveloperStatFlot.bar('sprints') do |f|
             f.yaxis({:ticks => [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]})
