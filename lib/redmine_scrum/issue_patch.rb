@@ -10,16 +10,18 @@ module RedmineScrum
         unloadable # Send unloadable so it will not be unloaded in development
         
         acts_as_list  :column => 'backlog_rank', :scope => :sprint
-        
+
         belongs_to    :sprint
         belongs_to    :estimation
         has_many      :commitments
         has_many      :defects
         
         before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa, :update_aging
+        before_save   :set_mailer_flag
         before_validation   :assign_to_devteam
         after_save    :update_developer_stats
         after_save    :update_sprint_totals
+        after_save    :send_mail_to_dev
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
@@ -47,6 +49,14 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def set_mailer_flag
+        @new_assignment = sprint.commitable? && assigned_to_changed? && assigned_to.try(:name) != "Development Team"
+      end
+
+      def send_mail_to_dev
+        StoryAssignmentMailer.deliver_issue_summary(self) if @new_assignment
+      end
+
       def to_json(opts = {})
         super(opts.merge(:methods => :age))
       end
