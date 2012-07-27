@@ -24,7 +24,7 @@ class SprintsController < RedmineScrumController
         elsif params[:chart] == 'stats'
           @sprints_data = DeveloperStatFlot.line('sprints') do |f|
             %w(committed_points completed_points bugs defects reopens distractions).each do |stat|
-              f.series_for(params[:chart].humanize, @sprints, :x => :id, :y => stat.to_sym)
+              f.series_for(stat.humanize, @sprints, :x => :id, :y => stat.to_sym)
             end
           end
         else
