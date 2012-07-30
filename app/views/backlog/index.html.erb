@@ -13,13 +13,16 @@
 
       function drawSprints() {
         $j.each($j('#stories').children(), function(index, el) {
-          points += parseInt($j(el).attr('data-story-points'));
+          var lastPoints = parseInt($j(el).attr('data-story-points'));
+          
+          points += lastPoints;
 
           if (points > parseInt($j('#velocity').val())) {
+            var pts = points - lastPoints;
             sprint++;
 
             $j(el).prev().css("border-bottom", "2px dashed black");
-            $j(el).prev().after("<div style='float: right' class='sprint_ids'>Sprint #" + sprint + " (" + points + " pts) ending ~ " + sprintEndDates[sprint] + "</div><div class='sprint_ids' style='clear:both'></div>");
+            $j(el).prev().after("<div style='float: right' class='sprint_ids'>Sprint #" + sprint + " (" + pts + " pts) ending ~ " + sprintEndDates[sprint] + "</div><div class='sprint_ids' style='clear:both'></div>");
 
             points = 0;
           }
