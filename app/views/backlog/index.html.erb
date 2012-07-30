@@ -22,7 +22,7 @@
             sprint++;
 
             $j(el).prev().css("border-bottom", "2px dashed black");
-            $j(el).prev().after("<div style='float: right' class='sprint_ids'>Sprint #" + sprint + " (" + pts + " pts) ending ~ " + sprintEndDates[sprint] + "</div><div class='sprint_ids' style='clear:both'></div>");
+            $j(el).prev().after("<div style='float: right' class='sprint_ids'>Sprint #" + sprint + " (" + pts + " pts) releasing ~ " + sprintEndDates[sprint - 1] + "</div><div class='sprint_ids' style='clear:both'></div>");
 
             points = 0;
           }

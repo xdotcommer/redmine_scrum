@@ -10,7 +10,7 @@ class BacklogController < RedmineScrumController
     date = Sprint.current.end_date + 1.day
     @sprint_end_dates = []
     20.times do
-      date += 15.days
+      date += 3.weeks
       @sprint_end_dates << date
     end
   end
