@@ -156,7 +156,7 @@ module RedmineScrum
       
       def assign_to_devteam
         if empty_sprint? || unassigned? && Date.today >= sprint.start_date && Date.today <= sprint.end_date
-          if empty_sprint?
+          if empty_sprint? && assigned_to.try(:name) != "Development Team"
             errors.add(:assigned_to_id, "cannot be assigned outside of the current sprint") 
             return false
           else
