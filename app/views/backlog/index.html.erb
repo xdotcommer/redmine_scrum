@@ -9,6 +9,7 @@
       var sprint = 0;
       var points = 0;
       var velocity = <%= @velocity %>;
+      var sprintEndDates = <%= @sprint_end_dates.to_json %>;
 
       function drawSprints() {
         $j.each($j('#stories').children(), function(index, el) {
@@ -18,7 +19,7 @@
             sprint++;
 
             $j(el).prev().css("border-bottom", "2px dashed black");
-            $j(el).prev().after("<div style='float: right' class='sprint_ids'>Sprint #" + sprint + " (" + points + " pts)</div><div class='sprint_ids' style='clear:both'></div>");
+            $j(el).prev().after("<div style='float: right' class='sprint_ids'>Sprint #" + sprint + " (" + points + " pts) ending ~ " + sprintEndDates[sprint] + "</div><div class='sprint_ids' style='clear:both'></div>");
 
             points = 0;
           }

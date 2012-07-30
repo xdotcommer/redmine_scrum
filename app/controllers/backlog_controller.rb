@@ -6,6 +6,13 @@ class BacklogController < RedmineScrumController
   def index
     @stories = get_stories(@scope, @limit)
     @count   = @stories.size
+    
+    date = Sprint.current.end_date + 1.day
+    @sprint_end_dates = []
+    20.times do
+      date += 15.days
+      @sprint_end_dates << date
+    end
   end
   
   def sort
