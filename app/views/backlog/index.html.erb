@@ -27,6 +27,11 @@
       
       $j('#map_out_sprints').click(function() {
         
+        if ($j('#scope').val() != "Estimated") {
+          alert("You can only map out estimated stories");
+          return;
+        }
+        
         var state = $j(this).attr('data-state');
 
         if (state == "map") {
@@ -67,10 +72,10 @@ Change sprint:
 
   &nbsp;
 
-  &raquo;
-
-  Velocity: <%= text_field_tag "velocity", @velocity, :id => 'velocity', :style => 'width: 20px' %>
-  <%= link_to "Map Out Sprints", "#", :id => 'map_out_sprints', :"data-state" => 'map' %> 
+  <% if @scope == "Estimated" %>
+    Velocity: <%= text_field_tag "velocity", @velocity, :id => 'velocity', :style => 'width: 20px' %>
+    <%= link_to "Map Out Sprints", "#", :id => 'map_out_sprints', :"data-state" => 'map' %> 
+  <% end %>
 
 <% end %>
 
