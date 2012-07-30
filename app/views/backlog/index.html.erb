@@ -1,5 +1,53 @@
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag "redmine_scrum", :plugin => "redmine_scrum" %>
+    <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+
+    <script type="text/javascript" charset="utf-8">
+    var $j = $.noConflict(); 
+
+    $j(function() {
+      var sprint = 0;
+      var points = 0;
+      var velocity = <%= @velocity %>;
+
+      function drawSprints() {
+        $j.each($j('#stories').children(), function(index, el) {
+          points += parseInt($j(el).attr('data-story-points'));
+
+          if (points > parseInt($j('#velocity').val())) {
+            sprint++;
+
+            $j(el).prev().css("border-bottom", "2px dashed black");
+            $j(el).prev().after("<div style='float: right' class='sprint_ids'>Sprint #" + sprint + " (" + points + " pts)</div><div class='sprint_ids' style='clear:both'></div>");
+
+            points = 0;
+          }
+        });
+      }
+      
+      $j('#map_out_sprints').click(function() {
+        
+        var state = $j(this).attr('data-state');
+
+        if (state == "map") {
+          $j('#map_out_sprints').html("Clear Sprints");
+          $j('#map_out_sprints').attr("id", "clear_out_sprints");
+          drawSprints();
+          $j(this).attr('data-state', 'clear');
+        } else if (state == "clear") {
+          sprint = 0;
+          points = 0;
+          $j('#clear_out_sprints').html("Map Out Sprints");
+          $j('#clear_out_sprints').attr("id", "map_out_sprints");
+          $j('#stories').children().css("border-bottom", "");
+          $j('.sprint_ids').remove();
+          $j(this).attr('data-state', 'map');
+        }
+      });
+
+    });
+    </script>
+
 <% end %>
 
 <h1><%= @sprint.name %> (<%= @count %> stories)<hr></h1>
@@ -11,21 +59,57 @@ Change sprint:
 <% form_tag project_backlog_index_path, :method => :get do %>
   <%= hidden_field_tag "project_id", params[:project_id] %>
   <%= select_tag "sprint_id", options_for_select(@sprints.map {|s| [s.name, s.id]}, @sprint.id) %>
-  <%= select_tag "scope", options_for_select(["", "Work in Progress", "Ready for Review"], @scope) %>
+  <%= select_tag "scope", options_for_select(["", "Work in Progress", "Ready for Review", "Estimated"], @scope) %>
   <%= select_tag "limit", options_for_select([10, 25, 50, 100, 250, 500, 1000], @limit) %>
   <%= submit_tag "Update List" %>
+  
+  &nbsp;
+
+  &nbsp;
+
+  &raquo;
+
+  Velocity: <%= text_field_tag "velocity", @velocity, :id => 'velocity', :style => 'width: 20px' %>
+  <%= link_to "Map Out Sprints", "#", :id => 'map_out_sprints', :"data-state" => 'map' %> 
+
 <% end %>
 
 </div>
 
 <div style="float: right;">
-  <%= link_to "Show upcoming sprints...", upcoming_project_backlog_path %>
 </div>
 
 
 <br style="clear: both">
 
-<ul id="stories" class="zebra">  
+<ul id="stories" class="zebra">
   <%= render :partial => "story", :collection => @stories, :locals => {:sortable => "stories"} %>
 </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -34,6 +34,7 @@ module RedmineScrum
         named_scope   :limit_to, lambda { |n| {:limit => n} }
         named_scope   :ready_for_review, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
         named_scope   :work_in_progress, :conditions => ['(custom_values.value != ? AND custom_fields.name = ?) OR custom_values.value IS NULL', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :estimated, :conditions => 'estimation_id IS NOT NULL AND estimations.name != "Spike"', :include => :estimation
 
 
         # Add visible to Redmine 0.8.x

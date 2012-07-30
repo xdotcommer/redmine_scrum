@@ -1,4 +1,4 @@
-<% content_tag_for :li, story do %>
+<% content_tag_for :li, story, :"data-story-points" => story.story_points do %>
   <span class="handle">[<%= story.backlog_rank %>]</span>
   <%= story.category %>: 
   <a href="<%= issue_path(story) %>" style="<%= 'color: #900' unless story.ready_for_review? %>">
@@ -10,6 +10,6 @@
     </span>
   </a>
   [<%= story.story_points %> pts]
+  <%= sortable_element(sortable, :url => sort_project_backlog_path(params[:project_id]), :handle => "handle") %>
 <% end %>
 
-<%= sortable_element(sortable, :url => sort_project_backlog_path(params[:project_id]), :handle => "handle") %>
