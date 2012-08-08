@@ -52,7 +52,7 @@ module RedmineScrum
     end
     
     module InstanceMethods
-      def is_blocked?
+      def is_blocked
         ! blocker.blank?
       end
       
@@ -71,7 +71,7 @@ module RedmineScrum
       end
 
       def to_json(opts = {})
-        super(opts.merge(:methods => [:age, :blocker, :is_blocked?]))
+        super(opts.merge(:methods => [:age, :blocker, :is_blocked]))
       end
       
       def update_sprint_totals
