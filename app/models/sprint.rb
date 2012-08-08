@@ -292,7 +292,7 @@ class Sprint < ActiveRecord::Base
     self.completed_points = issues.stories.closed.sum(:story_points)
     self.completed_stories = issues.stories.closed.count
     self.defects = Defect.total_for_sprint(id)
-    self.reopens = burndowns.sum(:reopened_point_count)
+    self.reopens = burndowns.sum(:reopened_count)
     self.distractions = issues.distractions.count
     self.bugs = issues.bugs.closed.count
   end
