@@ -10,7 +10,7 @@ module RedmineScrum
         unloadable # Send unloadable so it will not be unloaded in development
         
         acts_as_list  :column => 'backlog_rank', :scope => :sprint
-
+        
         belongs_to    :sprint
         belongs_to    :estimation
         has_many      :commitments
@@ -52,6 +52,14 @@ module RedmineScrum
     end
     
     module InstanceMethods
+      def is_blocked?
+        ! blocker.blank?
+      end
+      
+      def blocker
+        custom_values.find_by_custom_field_id(CustomField.find_or_create_by_name("BLOCKED ON").id).try(:value)
+      end
+      
       def set_mailer_flag
         @new_assignment = sprint.commitable? && assigned_to_id_changed? && assigned_to.try(:name) != "Development Team"
         true
@@ -63,7 +71,7 @@ module RedmineScrum
       end
 
       def to_json(opts = {})
-        super(opts.merge(:methods => :age))
+        super(opts.merge(:methods => [:age, :blocker, :is_blocked?]))
       end
       
       def update_sprint_totals
