@@ -16,9 +16,11 @@ module RedmineScrum
         has_many      :commitments
         has_many      :defects
         
-        before_save   :denormalize_data, :set_next_backlog_rank, :reset_qa, :update_aging
-        before_save   :set_mailer_flag
         before_validation   :assign_to_devteam
+        before_validation_on_create :hold_backlog_rank
+        before_save   :denormalize_data, :reset_qa, :update_aging
+        before_save   :set_mailer_flag
+        after_create  :set_backlog_rank
         after_save    :update_developer_stats
         after_save    :update_sprint_totals
         after_save    :send_mail_to_dev
@@ -156,7 +158,7 @@ module RedmineScrum
       
       def assign_to_devteam
         if empty_sprint? || unassigned? && Date.today >= sprint.start_date && Date.today <= sprint.end_date
-          if empty_sprint? && assigned_to.try(:name) != "Development Team"
+          if empty_sprint? && assigned_to_id && assigned_to.name != "Development Team"
             errors.add(:assigned_to_id, "cannot be assigned outside of the current sprint") 
             return false
           else
@@ -174,9 +176,15 @@ module RedmineScrum
         self.story_points = estimation.try(:value)
       end
       
-      def set_next_backlog_rank
-        if backlog_rank.blank? && max = Issue.maximum(:backlog_rank)
-          self.backlog_rank = max + 1
+      def hold_backlog_rank
+        unless backlog_rank.blank?
+          @hold_rank_because_of_acts_as_list = backlog_rank
+        end
+      end
+      
+      def set_backlog_rank
+        if @hold_rank_because_of_acts_as_list
+          update_attribute(:backlog_rank, @hold_rank_because_of_acts_as_list) 
         end
       end
       
