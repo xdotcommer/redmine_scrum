@@ -7,7 +7,7 @@ class BacklogController < RedmineScrumController
     @stories = get_stories(@scope, @limit)
     @count   = @stories.size
     
-    date = Sprint.current.end_date + 1.day
+    date = (Sprint.current || Sprint.last).end_date + 1.day
     @sprint_end_dates = []
     20.times do
       date += 3.weeks
