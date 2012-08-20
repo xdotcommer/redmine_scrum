@@ -60,6 +60,10 @@ module RedmineScrum
         custom_values.find_by_custom_field_id(CustomField.find_or_create_by_name("BLOCKED ON").id).try(:value)
       end
       
+      def code_review
+        custom_values.find_by_custom_field_id(CustomField.find_or_create_by_name("Code Review").id).try(:value)
+      end
+      
       def set_mailer_flag
         @new_assignment = sprint.commitable? && assigned_to_id_changed? && assigned_to.try(:name) != "Development Team"
         true
@@ -71,7 +75,7 @@ module RedmineScrum
       end
 
       def to_json(opts = {})
-        super(opts.merge(:methods => [:age, :blocker, :is_blocked]))
+        super(opts.merge(:methods => [:age, :blocker, :is_blocked, :code_review]))
       end
       
       def update_sprint_totals
