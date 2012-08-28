@@ -20,7 +20,7 @@ module RedmineScrum
         before_validation_on_create :hold_backlog_rank
         before_save   :set_defaults_update_aging_and_stuff
         after_create  :set_backlog_rank
-        after_save    :update_dev_stats_sprint_totals_and_send_mail
+        # after_save    :update_dev_stats_sprint_totals_and_send_mail
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
