@@ -193,7 +193,6 @@ module RedmineScrum
       end
       
       def update_dev_stats_sprint_totals_and_send_mail
-        update_dev_stats_sprint_totals_and_send_mail
         update_developer_stats
         update_sprint_totals
         send_mail_to_dev
