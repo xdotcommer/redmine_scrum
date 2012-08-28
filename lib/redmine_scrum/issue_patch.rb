@@ -65,7 +65,6 @@ module RedmineScrum
       end
       
       def set_mailer_flag
-        denormalize_data
         @new_assignment = sprint.commitable? && assigned_to_id_changed? && assigned_to.try(:name) != "Development Team"
         true
       end
