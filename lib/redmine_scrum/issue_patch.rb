@@ -16,11 +16,14 @@ module RedmineScrum
         has_many      :commitments
         has_many      :defects
         
-        # before_validation   :assign_to_devteam
+        before_validation   :assign_to_devteam
         before_validation_on_create :hold_backlog_rank
-        # before_save   :set_defaults_update_aging_and_stuff
+        before_save   :denormalize_data, :reset_qa, :update_aging
+        before_save   :set_mailer_flag
         after_create  :set_backlog_rank
-        # after_save    :update_dev_stats_sprint_totals_and_send_mail
+        after_save    :update_developer_stats
+        after_save    :update_sprint_totals
+        after_save    :send_mail_to_dev
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
@@ -67,7 +70,6 @@ module RedmineScrum
       end
 
       def send_mail_to_dev
-        debugger
         StoryAssignmentMailer.deliver_issue_summary(self) if @new_assignment
         true
       end
@@ -77,11 +79,9 @@ module RedmineScrum
       end
       
       def update_sprint_totals
-        debugger
         return unless sprint && sprint.commitable?
         sprint.set_commitments if sprint.committed_points == 0 && sprint.committed_stories == 0
         sprint.update_totals
-        true
       end
       
       def update_from_attributes(attributes)
@@ -121,19 +121,15 @@ module RedmineScrum
       end
       
       def update_developer_stats
-        debugger
         return true unless assigned_to && sprint.commitable?
         developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
         developer_stat.update_details_for(self)
         developer_stat.save
-        true
       end
       
       def update_aging
-        debugger
         set_opened_on
         set_closed_on
-        true
       end
       
       def set_closed_on
@@ -173,7 +169,6 @@ module RedmineScrum
       end
       
       def assign_to_devteam
-        debugger
         if empty_sprint? || unassigned? && Date.today >= sprint.start_date && Date.today <= sprint.end_date
           if empty_sprint? && assigned_to_id && assigned_to.name != "Development Team"
             errors.add(:assigned_to_id, "cannot be assigned outside of the current sprint") 
@@ -182,20 +177,6 @@ module RedmineScrum
             self.assigned_to = dev_team
           end
         end
-        true
-      end
-      
-      def set_defaults_update_aging_and_stuff
-        denormalize_data
-        reset_qa
-        update_aging
-        set_mailer_flag
-      end
-      
-      def update_dev_stats_sprint_totals_and_send_mail
-        update_developer_stats
-        update_sprint_totals
-        send_mail_to_dev
       end
       
       def dev_team
@@ -203,30 +184,23 @@ module RedmineScrum
       end
       
       def denormalize_data
-        debugger
         self.sprint_name  = sprint.try(:name)
         self.story_points = estimation.try(:value)
-        true
       end
       
       def hold_backlog_rank
-        debugger
         unless backlog_rank.blank?
           @hold_rank_because_of_acts_as_list = backlog_rank
         end
-        true
       end
       
       def set_backlog_rank
-        debugger
         if @hold_rank_because_of_acts_as_list
           update_attribute(:backlog_rank, @hold_rank_because_of_acts_as_list) 
         end
-        true
       end
       
       def reset_qa
-        debugger
         return true unless status_id_changed?# || new_record?
 
         if status.is_pending? || status.is_reopened?
@@ -239,7 +213,6 @@ module RedmineScrum
           # set this so we know what to reset the qa status to
           self.qa_used_to_be = qa if qa == "Needed" || qa == "Not Needed"
         end
-        true
       end
     end    
   end
