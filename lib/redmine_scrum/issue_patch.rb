@@ -85,6 +85,7 @@ module RedmineScrum
         return unless sprint && sprint.commitable?
         sprint.set_commitments if sprint.committed_points == 0 && sprint.committed_stories == 0
         sprint.update_totals
+        true
       end
       
       def update_from_attributes(attributes)
@@ -129,12 +130,14 @@ module RedmineScrum
         developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
         developer_stat.update_details_for(self)
         developer_stat.save
+        true
       end
       
       def update_aging
         debugger
         set_opened_on
         set_closed_on
+        true
       end
       
       def set_closed_on
@@ -183,6 +186,7 @@ module RedmineScrum
             self.assigned_to = dev_team
           end
         end
+        true
       end
       
       def dev_team
@@ -193,6 +197,7 @@ module RedmineScrum
         debugger
         self.sprint_name  = sprint.try(:name)
         self.story_points = estimation.try(:value)
+        true
       end
       
       def hold_backlog_rank
@@ -200,6 +205,7 @@ module RedmineScrum
         unless backlog_rank.blank?
           @hold_rank_because_of_acts_as_list = backlog_rank
         end
+        true
       end
       
       def set_backlog_rank
@@ -207,6 +213,7 @@ module RedmineScrum
         if @hold_rank_because_of_acts_as_list
           update_attribute(:backlog_rank, @hold_rank_because_of_acts_as_list) 
         end
+        true
       end
       
       def reset_qa
@@ -223,6 +230,7 @@ module RedmineScrum
           # set this so we know what to reset the qa status to
           self.qa_used_to_be = qa if qa == "Needed" || qa == "Not Needed"
         end
+        true
       end
     end    
   end
