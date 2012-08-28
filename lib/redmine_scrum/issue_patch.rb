@@ -65,11 +65,13 @@ module RedmineScrum
       end
       
       def set_mailer_flag
+        denormalize_data
         @new_assignment = sprint.commitable? && assigned_to_id_changed? && assigned_to.try(:name) != "Development Team"
         true
       end
 
       def send_mail_to_dev
+        debugger
         StoryAssignmentMailer.deliver_issue_summary(self) if @new_assignment
         true
       end
@@ -79,6 +81,7 @@ module RedmineScrum
       end
       
       def update_sprint_totals
+        debugger
         return unless sprint && sprint.commitable?
         sprint.set_commitments if sprint.committed_points == 0 && sprint.committed_stories == 0
         sprint.update_totals
@@ -121,6 +124,7 @@ module RedmineScrum
       end
       
       def update_developer_stats
+        debugger
         return true unless assigned_to && sprint.commitable?
         developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
         developer_stat.update_details_for(self)
@@ -128,6 +132,7 @@ module RedmineScrum
       end
       
       def update_aging
+        debugger
         set_opened_on
         set_closed_on
       end
@@ -169,6 +174,7 @@ module RedmineScrum
       end
       
       def assign_to_devteam
+        debugger
         if empty_sprint? || unassigned? && Date.today >= sprint.start_date && Date.today <= sprint.end_date
           if empty_sprint? && assigned_to_id && assigned_to.name != "Development Team"
             errors.add(:assigned_to_id, "cannot be assigned outside of the current sprint") 
@@ -184,23 +190,27 @@ module RedmineScrum
       end
       
       def denormalize_data
+        debugger
         self.sprint_name  = sprint.try(:name)
         self.story_points = estimation.try(:value)
       end
       
       def hold_backlog_rank
+        debugger
         unless backlog_rank.blank?
           @hold_rank_because_of_acts_as_list = backlog_rank
         end
       end
       
       def set_backlog_rank
+        debugger
         if @hold_rank_because_of_acts_as_list
           update_attribute(:backlog_rank, @hold_rank_because_of_acts_as_list) 
         end
       end
       
       def reset_qa
+        debugger
         return true unless status_id_changed?# || new_record?
 
         if status.is_pending? || status.is_reopened?
