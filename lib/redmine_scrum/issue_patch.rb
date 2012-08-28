@@ -18,12 +18,9 @@ module RedmineScrum
         
         before_validation   :assign_to_devteam
         before_validation_on_create :hold_backlog_rank
-        before_save   :denormalize_data, :reset_qa, :update_aging
-        before_save   :set_mailer_flag
+        before_save   :set_defaults_update_aging_and_stuff
         after_create  :set_backlog_rank
-        after_save    :update_developer_stats
-        after_save    :update_sprint_totals
-        after_save    :send_mail_to_dev
+        after_save    :update_dev_stats_sprint_totals_and_send_mail
         
         named_scope   :stories, :conditions => {:tracker_id => Sprint::STORY_TRACKERS}
         named_scope   :bugs, :conditions => {:tracker_id => Sprint::BUG_TRACKERS}
@@ -124,11 +121,11 @@ module RedmineScrum
       end
       
       def update_developer_stats
-        # debugger
-        # return true unless assigned_to && sprint.commitable?
-        # developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
-        # developer_stat.update_details_for(self)
-        # developer_stat.save
+        debugger
+        return true unless assigned_to && sprint.commitable?
+        developer_stat = DeveloperStat.find_by_sprint_id_and_user_id(sprint_id, assigned_to_id) || DeveloperStat.new(:sprint => sprint, :user => assigned_to)
+        developer_stat.update_details_for(self)
+        developer_stat.save
         true
       end
       
@@ -186,6 +183,20 @@ module RedmineScrum
           end
         end
         true
+      end
+      
+      def set_defaults_update_aging_and_stuff
+        denormalize_data
+        reset_qa
+        update_aging
+        set_mailer_flag
+      end
+      
+      def update_dev_stats_sprint_totals_and_send_mail
+        update_dev_stats_sprint_totals_and_send_mail
+        update_developer_stats
+        update_sprint_totals
+        send_mail_to_dev
       end
       
       def dev_team
