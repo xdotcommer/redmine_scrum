@@ -16,9 +16,9 @@ module RedmineScrum
         has_many      :commitments
         has_many      :defects
         
-        before_validation   :assign_to_devteam
+        # before_validation   :assign_to_devteam
         before_validation_on_create :hold_backlog_rank
-        before_save   :set_defaults_update_aging_and_stuff
+        # before_save   :set_defaults_update_aging_and_stuff
         after_create  :set_backlog_rank
         # after_save    :update_dev_stats_sprint_totals_and_send_mail
         
