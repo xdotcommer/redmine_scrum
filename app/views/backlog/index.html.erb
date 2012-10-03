@@ -68,7 +68,7 @@ Change sprint:
 <% form_tag project_backlog_index_path, :method => :get do %>
   <%= hidden_field_tag "project_id", params[:project_id] %>
   <%= select_tag "sprint_id", options_for_select(@sprints.map {|s| [s.name, s.id]}, @sprint.id) %>
-  <%= select_tag "scope", options_for_select(["", "Work in Progress", "Ready for Review", "Estimated"], @scope) %>
+  <%= select_tag "scope", options_for_select(["", "Half Baked", "In Discussion", "Ready to Estimate", "Estimated"], @scope) %>
   <%= select_tag "limit", options_for_select([10, 25, 50, 100, 250, 500, 1000], @limit) %>
   <%= submit_tag "Update List" %>
   

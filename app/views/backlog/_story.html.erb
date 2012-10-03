@@ -1,7 +1,15 @@
 <% content_tag_for :li, story, :"data-story-points" => story.story_points do %>
   <span class="handle">[<%= story.backlog_rank %>]</span>
   <%= story.category %>: 
-  <a href="<%= issue_path(story) %>" style="<%= 'color: #900' unless story.ready_for_review? %>">
+  <a href="<%= issue_path(story) %>" style="<%= 
+    if story.ready_to_estimate?
+      'background-color: #9f3'
+    elsif story.in_discussion?
+      'background-color: #ff6'
+    else
+      'background-color: #f99'
+    end
+   %>">
     <%= h story.subject %>
     <span>
       <strong>#<%= story.id %> <%= story.subject %></strong>

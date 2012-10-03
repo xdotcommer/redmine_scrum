@@ -54,10 +54,12 @@ private
   end
   
   def get_stories(scope, limit)
-    if scope == "Work in Progress"
-      @sprint.issues.stories.open.work_in_progress.limit_to(limit).ordered_by_rank
-    elsif scope == "Ready for Review"
-      @sprint.issues.stories.open.ready_for_review.limit_to(limit).ordered_by_rank
+    if scope == "Half Baked"
+      @sprint.issues.stories.open.half_baked.limit_to(limit).ordered_by_rank
+    elsif scope == "Ready to Estimate"
+      @sprint.issues.stories.open.ready_to_estimate.limit_to(limit).ordered_by_rank
+    elsif scope == "In Discussion"
+      @sprint.issues.stories.open.in_discussion.limit_to(limit).ordered_by_rank
     elsif scope == "Estimated"
       @sprint.issues.stories.open.estimated.limit_to(limit).ordered_by_rank
     else

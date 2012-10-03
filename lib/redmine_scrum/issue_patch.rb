@@ -34,8 +34,9 @@ module RedmineScrum
         named_scope   :closed, :conditions => ["issue_statuses.is_closed = ?", true], :include => :status
         named_scope   :ordered_by_rank, :order => 'backlog_rank asc'
         named_scope   :limit_to, lambda { |n| {:limit => n} }
-        named_scope   :ready_for_review, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
-        named_scope   :work_in_progress, :conditions => ['(custom_values.value != ? AND custom_fields.name = ?) OR custom_values.value IS NULL', "Ready for Review", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :ready_to_estimate, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "Ready to Estimate", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :in_discussion, :conditions => ['custom_values.value = ? AND custom_fields.name = ?', "In Discussion", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
+        named_scope   :half_baked, :conditions => ['(custom_values.value = ? AND custom_fields.name = ?) OR custom_values.value IS NULL', "Half Baked", 'Story Readiness'], :include => {:custom_values =>  :custom_field}
         named_scope   :estimated, :conditions => 'estimation_id IS NOT NULL AND estimations.name != "Spike"', :include => :estimation
 
 
@@ -95,9 +96,14 @@ module RedmineScrum
         Sprint::STORY_TRACKERS.include? tracker_id
       end
       
-      def ready_for_review?
+      def in_discussion?
         value = custom_values.find(:first, :conditions => ['custom_fields.name = ?', 'Story Readiness'], :include => :custom_field)
-        value.try(:value) == "Ready for Review"
+        value.try(:value) == "In Discussion"
+      end
+      
+      def ready_to_estimate?
+        value = custom_values.find(:first, :conditions => ['custom_fields.name = ?', 'Story Readiness'], :include => :custom_field)
+        value.try(:value) == "Ready to Estimate"
       end
       
       def age
