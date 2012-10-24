@@ -1,6 +1,6 @@
 class Scrumboard
   STATUSES   = ["Open", "Reopened", "Pending Approval", "Complete"]
-  DEVELOPERS = %w(amc archana lisap marc miker mikecowden patrick dev_team)
+  DEVELOPERS = %w(archana lisap marc miker mikecowden patrick will dev_team)
 
   attr_accessor :sprint, :sprints_by_developer_and_status, :developer_boards
   
